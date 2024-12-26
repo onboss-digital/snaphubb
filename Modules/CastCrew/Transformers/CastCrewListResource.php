@@ -1,0 +1,40 @@
+<?php
+
+namespace Modules\CastCrew\Transformers;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Entertainment\Models\Entertainment;
+use Modules\Entertainment\Transformers\MoviesResource;
+
+class CastCrewListResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     */
+
+
+
+    public function toArray($request)
+    {
+
+        $cast_id=$this->id;
+
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'type' => $this->type,
+            'bio' => $this->bio,
+            'type' => 'castcrew',
+            'place_of_birth' => $this->place_of_birth,
+            'dob' => $this->dob,
+            'designation' => $this->designation,
+            'profile_image' => !empty($this->tmdb_id) ? $this->file_url : setBaseUrlWithFileName($this->file_url),
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
+            'deleted_by' => $this->deleted_by,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'deleted_at' => $this->deleted_at,
+        ];
+    }
+}
