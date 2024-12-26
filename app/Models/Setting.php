@@ -246,8 +246,8 @@ class Setting extends BaseModel implements HasMedia
             if ($userId !== null) {
                 $userData = self::where('created_by', $userId)->select('id', 'name', 'val','datatype','created_by')->get();
                 return $userData;
-            }else{
-                return collect();
+            /* }else{
+                return collect(); */
             }
         }
         return Cache::rememberForever('settings.all', function () {

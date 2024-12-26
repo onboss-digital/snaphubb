@@ -33,8 +33,9 @@ require __DIR__ . '/auth.php';
 Route::get('storage-link', function () {
     return Artisan::call('storage:link');
 });
-
-Route::get('/', [FrontendController::class, 'index'])->name('user.login');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/', [FrontendController::class, 'index'])->name('user.login');
+});
 
 Route::group(['middleware' => ['auth','admin']], function () {
     Route::get('notification-list', [NotificationsController::class, 'notificationList'])->name('notification.list');
