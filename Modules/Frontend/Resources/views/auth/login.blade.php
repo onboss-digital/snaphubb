@@ -40,7 +40,7 @@
                                 <p class="mt-2 mb-0 fw-normal">{{__('frontend.not_have_account')}}<a href="{{route('register-page')}}" class="ms-1">{{__('frontend.sign_up')}}</a></p>
                             </div>
 
-                            <div class="border-style">
+                          {{--   <div class="border-style">
                                 <span>Or</span>
                             </div>
 
@@ -73,7 +73,7 @@
                                     </span>
                                 </a>
 
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                 </div>

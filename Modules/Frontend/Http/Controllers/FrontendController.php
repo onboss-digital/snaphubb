@@ -49,6 +49,7 @@ class FrontendController extends Controller
     }
     public function index(Request $request)
     {
+
         $user_id = auth()->id();
         $profile_id=0;
         $continue_watch = [];
