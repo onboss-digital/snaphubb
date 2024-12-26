@@ -1,3 +1,3 @@
 ## Reporting a Vulnerability
 
-- Contact To hello@iqonicdesign
+- Contact To anderson@isotton.com.br
