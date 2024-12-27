@@ -53,7 +53,7 @@ Route::middleware(['checkInstallation'])->group(function () {
 
 
 
-    Route::group(['middleware' => ['auth']], function () {
+    Route::group(['middleware' => []], function () {
         Route::get('movies/genre/{genre_id}', [MovieController::class, 'moviesListByGenre'])->middleware('checkModule')->name('movies.genre');
         Route::get('movies/{language}', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies.language');
         Route::get('/movies', [MovieController::class, 'movieList'])->middleware('checkModule')->name('movies');
