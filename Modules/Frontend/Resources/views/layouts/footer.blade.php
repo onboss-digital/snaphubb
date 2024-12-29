@@ -3,7 +3,7 @@
 $footerData = getFooterData();
 @endphp
 
-<footer class="footer">
+<footer class="footer fixed-bottom">
   <div class="footer-bottom">
     <div class="container-fluid">
       <div class="text-center">
