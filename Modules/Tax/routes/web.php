@@ -41,7 +41,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get("index_list", [TaxesController::class, 'index_list'])->name("index_list");
       Route::get("index_data", [TaxesController::class, 'index_data'])->name("index_data");
       Route::get('export', [TaxesController::class, 'export'])->name('export');
-      Route::get('taxes/{' . 'taxes' . '}/edit', [TaxesController::class, 'edit'])->name('edit');
+      // Route::get('taxes/{' . 'taxes' . '}/edit', [TaxesController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [TaxesController::class, 'bulk_action'])->name('bulk_action');
       Route::post('restore/{id}', [TaxesController::class, 'restore'])->name('restore');
       Route::delete('force-delete/{id}', [TaxesController::class, 'forceDelete'])->name('force_delete');

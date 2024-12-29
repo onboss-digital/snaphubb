@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth','admin']], function () {
 
 Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function () {
     // Language Switch
-    Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
+    // Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
     Route::post('set-user-setting', [BackendController::class, 'setUserSetting'])->name('backend.setUserSetting');
     Route::post('check-in-trash', [SearchController::class, 'check_in_trash'])->name('check-in-trash');
     Route::group(['as' => 'backend.', 'middleware' => ['auth','admin']], function () {
@@ -176,7 +176,7 @@ Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function (
             \Artisan::call('config:clear');
             \Artisan::call('cache:clear');
             return response()->json(['message' => 'Cache and Config cleared']);
-        })->name('config_clear'); // Define the name for the route
+        })->name('clear-cache-config'); // Define the name for the route
     });
 
 });

@@ -84,7 +84,7 @@ Route::middleware(['checkInstallation'])->group(function () {
         Route::get('/search', [FrontendController::class, 'searchList'])->name('search');
 
         Route::get('/comingsoon', [FrontendController::class, 'comingsoon'])->name('comingsoon');
-        Route::get('/livetv', [MovcieController::class, 'livetvList'])->name('livetv');
+        Route::get('/livetv', [MovieController::class, 'livetvList'])->name('livetv');
         Route::get('/subscription-plan', [FrontendController::class, 'subscriptionPlan'])->name('subscriptionPlan');
         Route::get('/watch-list', [FrontendController::class, 'watchList'])->name('watchList');
 

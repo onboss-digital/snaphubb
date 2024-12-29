@@ -43,7 +43,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get("index_list", [WorldsController::class, 'index_list'])->name("index_list");
       Route::get("index_data", [WorldsController::class, 'index_data'])->name("index_data");
       Route::get('export', [WorldsController::class, 'export'])->name('export');
-      Route::get('worlds/{' . 'worlds' . '}/edit', [WorldsController::class, 'edit'])->name('edit');
+      // Route::get('worlds/{' . 'worlds' . '}/edit', [WorldsController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [WorldsController::class, 'bulk_action'])->name('bulk_action');
       Route::post('restore/{id}', [WorldsController::class, 'restore'])->name('restore');
       Route::delete('force-delete/{id}', [WorldsController::class, 'forceDelete'])->name('force_delete');
@@ -59,7 +59,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
         Route::get('index_list', [CountryController::class, 'index_list'])->name('index_list');
         Route::get('index_data', [CountryController::class, 'index_data'])->name('index_data');
         Route::get('export', [CountryController::class, 'export'])->name('export');
-        Route::get('country/{' . 'country' . '}/edit', [CountryController::class, 'edit'])->name('edit');
+        // Route::get('country/{' . 'country' . '}/edit', [CountryController::class, 'edit'])->name('edit');
         Route::post('bulk-action', [CountryController::class, 'bulk_action'])->name('bulk_action');
         Route::post('restore/{id}', [CountryController::class, 'restore'])->name('restore');
         Route::delete('force-delete/{id}', [CountryController::class, 'forceDelete'])->name('force_delete');
@@ -72,7 +72,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
         Route::get('index_list', [StateController::class, 'index_list'])->name('index_list');
         Route::get('index_data', [StateController::class, 'index_data'])->name('index_data');
         Route::get('export', [StateController::class, 'export'])->name('export');
-        Route::get('state/{' . 'state' . '}/edit', [StateController::class, 'edit'])->name('edit');
+        // Route::get('state/{' . 'state' . '}/edit', [StateController::class, 'edit'])->name('edit');
         Route::post('bulk-action', [StateController::class, 'bulk_action'])->name('bulk_action');
         Route::post('restore/{id}', [StateController::class, 'restore'])->name('restore');
         Route::delete('force-delete/{id}', [StateController::class, 'forceDelete'])->name('force_delete');
@@ -85,7 +85,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
         Route::get('index_list', [CityController::class, 'index_list'])->name('index_list');
         Route::get('index_data', [CityController::class, 'index_data'])->name('index_data');
         Route::get('export', [CityController::class, 'export'])->name('export');
-        Route::get('city/{' . 'city' . '}/city', [CityController::class, 'edit'])->name('edit');
+        // Route::get('city/{' . 'city' . '}/city', [CityController::class, 'edit'])->name('edit');
         Route::post('bulk-action', [CityController::class, 'bulk_action'])->name('bulk_action');
         Route::post('restore/{id}', [CityController::class, 'restore'])->name('restore');
         Route::delete('force-delete/{id}', [CityController::class, 'forceDelete'])->name('force_delete');

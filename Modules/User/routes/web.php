@@ -44,7 +44,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get("index_data", [UsersController::class, 'index_data'])->name("index_data");
       Route::get('export', [UsersController::class, 'export'])->name('export');
       Route::post('update-status/{id}', [UsersController::class, 'update_status'])->name('update_status');
-      Route::get('users/{' . 'users' . '}/edit', [UsersController::class, 'edit'])->name('edit');
+      // Route::get('users/{' . 'users' . '}/edit', [UsersController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [UsersController::class, 'bulk_action'])->name('bulk_action');
       Route::get('changepassword/{id}', [UsersController::class, 'changepassword'])->name('changepassword');
       Route::post('update-password/{id}', [UsersController::class, 'updatePassword'])->name('update_password');

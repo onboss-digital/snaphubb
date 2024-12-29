@@ -43,7 +43,6 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get("index_list", [LiveTVsController::class, 'index_list'])->name("index_list");
       Route::get("index_data", [LiveTVsController::class, 'index_data'])->name("index_data");
       Route::get('export', [LiveTVsController::class, 'export'])->name('export');
-      Route::get('livetvs/{' . 'livetvs' . '}/edit', [LiveTVsController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [LiveTVsController::class, 'bulk_action'])->name('bulk_action');
       Route::post('restore/{id}', [LiveTVsController::class, 'restore'])->name('restore');
       Route::delete('force-delete/{id}', [LiveTVsController::class, 'forceDelete'])->name('force_delete');
