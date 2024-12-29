@@ -73,6 +73,7 @@ class EntertainmentsController extends Controller
         $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] :extractFileNameFromUrl($data['thumbnail_url']);
         $data['poster_url']= !empty( $data['tmdb_id']) ?  $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
 
+        // dd('oi');
 
         if (isset($data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
@@ -197,6 +198,7 @@ class EntertainmentsController extends Controller
         $request_data['trailer_video'] = extractFileNameFromUrl($request_data['trailer_video']);
         $request_data['video_file_input'] = isset($request_data['video_file_input'])  ? extractFileNameFromUrl($request_data['video_file_input']) : null;
 
+        
         if (isset($request_data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
             $request_data['IMDb_rating'] = round($request_data['IMDb_rating'], 1);
