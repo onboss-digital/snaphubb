@@ -26,6 +26,7 @@ yarn-error.log
 # !/public/modules/.gitkeep
 # /public/mix-manifest.json
 node_modules
+package-lock.json
 /storage/media-library/**/*
 composer.lock
 
