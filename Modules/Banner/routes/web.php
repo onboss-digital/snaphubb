@@ -43,9 +43,9 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
 
       Route::get("index_data", [BannersController::class, 'index_data'])->name("index_data");
       Route::get('export', [BannersController::class, 'export'])->name('export');
-      Route::get('banners/{' . 'banners' . '}/edit', [BannersController::class, 'edit'])->name('edit');
-      Route::get('/trashed', [BannersController::class, 'trashed'])->name('trashed');
-      Route::get('/trashed/{id}', [BannersController::class, 'restore'])->name('restore');
+      // Route::get('banners/{' . 'banners' . '}/edit', [BannersController::class, 'edit'])->name('edit');
+      // Route::get('/trashed', [BannersController::class, 'trashed'])->name('trashed');
+      Route::get('/trashed/{id}', [BannersController::class, 'trashed'])->name('trashed');
       Route::post('bulk-action', [BannersController::class, 'bulk_action'])->name('bulk_action');
       Route::post('update-status/{id}', [BannersController::class, 'update_status'])->name('update_status');
       Route::post('restore/{id}', [BannersController::class, 'restore'])->name('restore');

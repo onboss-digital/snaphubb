@@ -40,12 +40,12 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
     Route::group(['prefix' => 'media-library', 'as' => 'media-library.'],function () {
       Route::get("index_list", [FilemanagersController::class, 'index_list'])->name("index_list");
       Route::post("upload", [FilemanagersController::class, 'upload'])->name("upload");
-      Route::post("store", [FilemanagersController::class, 'store'])->name("store");
+      // Route::post("store", [FilemanagersController::class, 'store'])->name("store");
       Route::get("getMediaStore", [FilemanagersController::class, 'getMediaStore'])->name("getMediaStore");
-      Route::delete("destroy", [FilemanagersController::class, 'destroy'])->name("destroy");
+      // Route::delete("destroy", [FilemanagersController::class, 'destroy'])->name("destroy");
       Route::get("index_data", [FilemanagersController::class, 'index_data'])->name("index_data");
       Route::get('export', [FilemanagersController::class, 'export'])->name('export');
-      Route::get('media-library/{' . 'media-library' . '}/edit', [FilemanagersController::class, 'edit'])->name('edit');
+      // Route::get('media-library/{' . 'media-library' . '}/edit', [FilemanagersController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [FilemanagersController::class, 'bulk_action'])->name('bulk_action');
       Route::post('restore/{id}', [FilemanagersController::class, 'restore'])->name('restore');
       Route::delete('force-delete/{id}', [FilemanagersController::class, 'forceDelete'])->name('force_delete');
