@@ -29,13 +29,13 @@
         </a>
       </li>
 
-      @if(isenablemodule('tvshow'))
+      {{-- @if(isenablemodule('tvshow'))
       <li class="nav-item">
         <a class="nav-link"  href="{{ route('tv-shows') }}">
           <span class="item-name">{{__('frontend.tvshows')}}</span>
         </a>
       </li>
-      @endif
+      @endif --}}
       @if(isenablemodule('video'))
       <li class="nav-item">
         <a class="nav-link"  href="{{ route('videos') }}">
