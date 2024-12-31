@@ -188,7 +188,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            {{ html()->label(__('setting_language_page.lbl_sandbox'))->class('form-label') }}
+                            {{ html()->label(__('setting_payment_method.lbl_sandbox'))->class('form-label') }}
                             {{ html()->select('paypal_sandbox')
                                 ->options([
                                     'sandbox' => 'SandBox',
