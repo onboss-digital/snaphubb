@@ -37,6 +37,18 @@ use PayPal\Api\Payment;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Api\NameValuePair;
+use PaypalServerSdkLib\{
+    Logging\LoggingConfigurationBuilder,
+    Logging\RequestLoggingConfigurationBuilder,
+    Logging\ResponseLoggingConfigurationBuilder,
+    Environment,
+    PaypalServerSdkClientBuilder,
+    Authentication\ClientCredentialsAuthCredentialsBuilder
+
+};
+use Psr\Log\LogLevel;
+
+// PaypalServerSDKClientBuilder;
 
 
 
@@ -44,7 +56,7 @@ class PaymentController extends Controller
 {
     use SubscriptionTrait;
 
-    public $paymentHandlers = [
+    private $paymentHandlers = [
         'stripe' => 'StripePayment',
         'razorpay' => 'RazorpayPayment',
         'paystack' => 'PaystackPayment',
@@ -57,7 +69,9 @@ class PaymentController extends Controller
         'midtrans' => 'MidtransPayment',
     ];
 
-    public $settings;
+    private $settings;
+
+    private $plan;
 
     public function getSettings($paymentMethod = null){
 
@@ -107,50 +121,51 @@ class PaymentController extends Controller
         $paymentMethod = $request->input('payment_method');
         $price = $request->input('price');
 
-        $paymentHandlers = [
-            'stripe' => 'StripePayment',
-            'razorpay' => 'RazorpayPayment',
-            'paystack' => 'PaystackPayment',
-            'paypal' => 'PayPalPayment',
-            'flutterwave' => 'FlutterwavePayment',
-            'cinet' => 'CinetPayment',
-            'sadad' => 'SadadPayment',
-            'airtel' => 'AirtelPayment',
-            'phonepe' => 'PhonePePayment',
-            'midtrans' => 'MidtransPayment',
-        ];
+        if (array_key_exists($paymentMethod, $this->paymentHandlers)) {
+            $this->getSettings($paymentMethod);
+            try {
+                $this->plan = Plan::where('id', $request->input('plan_id'))->firstOrFail();
+            } catch (ModelNotFoundException $e) {
+                return redirect()->back()->withErrors('Invalid plan selected.');
+            }
 
-        if (array_key_exists($paymentMethod, $paymentHandlers)) {
-            return $this->{$paymentHandlers[$paymentMethod]}($request, $price);
+            return $this->{$this->paymentHandlers[$paymentMethod]}($request, $price);
         }
 
         return redirect()->back()->withErrors('Invalid payment method.');
     }
 
+    
+
 
     protected function StripePayment(Request $request)
     {
+        $this->settings['stripe_debug'] = true;
+
+        $this->plan->currency = $this->plan->currency ?? 'USD';
+
         $baseURL = env('APP_URL');
-        $stripe = new StripeClient('sk_test_CG2JhAIXvVWDeFUFqtUizO4N00zmvm7o8J');
-        $price = $request->input('price'); // Get the price from the request
-        $plan_id=$request->input('plan_id');
+        $stripe = new StripeClient($this->settings['stripe_secretkey']);
+        $price = $this->plan->price; // Get the price from the request
+        $plan_id=$this->plan->id;
         $priceInCents = $price * 100;
         $checkout_session = $stripe->checkout->sessions->create([
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
-                    'currency' => 'usd',
+                    'currency' => $this->plan->currency,
                     'product_data' => [
-                        'name' => 'Subscription Plan',
+                        'name' => "Subscription Plan: {$this->plan->name} ",
                     ],
                     'unit_amount' => $priceInCents,
                 ],
                 'quantity' => 1,
             ]],
+            'customer_email'=> auth()->user()->email,
             'mode' => 'payment',
-        'metadata' => [
-                            'plan_id' => $plan_id,
-                        ],
+            'metadata' => [
+                    'plan_id' => $plan_id,
+                ],
             'success_url'=> $baseURL .'/payment/success?gateway=stripe&session_id={CHECKOUT_SESSION_ID}'
         ]);
         return response()->json(['redirect' => $checkout_session->url]);
@@ -224,85 +239,242 @@ class PaymentController extends Controller
         }
     }
 
-    protected function PayPalPayment(Request $request)
-    {
+
+    protected function PayPalPayment(Request $request){
         $this->getSettings('paypal');
         $dataRequest = $request->all();
+        //existing checkout screen?
+        if(isset($dataRequest['checkout_screen']) && $dataRequest['checkout_screen'] == true){
+            dd($dataRequest['checkout_screen']);
 
-        // dd($this->settings);
+            $paymentMethod = $dataRequest['payment_method'];
+            $price = $dataRequest['price'];
+            $plan_id = $dataRequest['plan_id'];
+            $priceInCents = $price * 100;
+            $baseURL = env('APP_URL');
+            $paypal = new PayPalClient($this->settings['paypal_clientid'], $this->settings['paypal_secretkey'], $this->settings['paypal_sandbox']);
+            $checkout_session = $paypal->createCheckoutSession($priceInCents, $plan_id, $baseURL . '/payment/success?gateway=paypal', $baseURL . '/payment/cancel');
 
-        try {
-            $plan = Plan::where('id', $dataRequest['plan_id'])->firstOrFail();
-        } catch (ModelNotFoundException $e) {
-            return redirect()->back()->withErrors('Invalid plan selected.');
+            return response()->json(['redirect' => $checkout_session->url]);
+        } else {    
+            $dataRequest['checkout_screen'] = true;
+            $dataRequest['redirect'] = route('process-payment');
+
+            dd($dataRequest);
+            
+            return response()->json($dataRequest);
         }
 
-        try {
-            $apiContext = new ApiContext(
-                new OAuthTokenCredential(
-                    $this->settings['paypal_clientid'],
-                    $this->settings['paypal_secretkey'],
-                )
-            );
-        
-            $apiContext->setConfig(
-                array(
-                    'mode' => $this->settings['paypal_sandbox'],
-                    'log.LogEnabled' => true,
-                    'log.FileName' => '../PayPal.log',
-                    'log.LogLevel' => 'DEBUG', // PLEASE USE `FINE` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
-                    'cache.enabled' => true,
-                    // 'http.CURLOPT_CONNECTTIMEOUT' => 30,
-                    // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
-                )
-            );
 
-            $payer = new Payer();
-            $payer->setPaymentMethod("paypal");
+        if($dataRequest['checkout_screen'] == true){
+            $paymentMethod = $dataRequest['payment_method'];
+            $price = $dataRequest['price'];
+            $plan_id = $dataRequest['plan_id'];
+            $priceInCents = $price * 100;
+            $baseURL = env('APP_URL');
+            $paypal = new PayPalClient($this->settings['paypal_clientid'], $this->settings['paypal_secretkey'], $this->settings['paypal_sandbox']);
+            $checkout_session = $paypal->createCheckoutSession($priceInCents, $plan_id, $baseURL . '/payment/success?gateway=paypal', $baseURL . '/payment/cancel');
 
-            $amount = new Amount();
-            $amount->setCurrency($plan->currency);
-            $amount->setTotal($plan->total_price);
+            dd($checkout_session);
+            return response()->json(['redirect' => $checkout_session->url]);
 
-            $item = new Item();
-            $item->setName($plan->name);
-            $item->setCurrency($plan->currency);
-            $item->setQuantity(1);
-            $item->setPrice($plan->total_price);
-            $item->setSku($plan->id);
-
-            $itemList = new ItemList();
-            $itemList->setItems(array($item));
-
-            $transaction = new Transaction();
-            $transaction->setAmount($amount);
-            $transaction->setItemList($itemList);
-            $transaction->setDescription($plan->description);
-            $transaction->setInvoiceNumber(uniqid());
-        
-
-            $redirectUrls = new RedirectUrls();
-            $redirectUrls->setReturnUrl(url('/payment/success?gateway=paypal'));
-            $redirectUrls->setCancelUrl(url('/payment/cancel'));
-
-            $payment = new Payment();
-            $payment->setIntent("sale");
-            $payment->setPayer($payer);
-            $payment->setRedirectUrls($redirectUrls);
-            $payment->setTransactions(array($transaction));
-
-            $payment->create($apiContext);
-
-
-        } catch (Exception $ex) {
-            return redirect()->back()->withErrors('PayPal connection failed: ' . $ex->getMessage());
         }
+        dd($dataRequest);
+        return response()->json(['payment_method' => 'paypal', 'checkout_screen' => true, 'redirect' => route('process-payment')]);
+        
 
-        Session::put('paypal_payment_id', $payment->getId());
-
-        return response()->json(['success' => true, 'redirect' => $payment->getApprovalLink()]);
-
+        return response()->json(['redirect' => $checkout_session->url]);
     }
+    
+
+    // protected function PayPalPayment(Request $request)
+    // {
+    //     $this->getSettings('paypal');
+    //     $dataRequest = $request->all();
+
+        
+
+    //     try {
+    //         $plan = Plan::where('id', $dataRequest['plan_id'])->firstOrFail();
+    //     } catch (ModelNotFoundException $e) {
+    //         return redirect()->back()->withErrors('Invalid plan selected.');
+    //     }
+
+
+
+    //     $client = PaypalServerSDKClientBuilder::init()
+    //                                             ->clientCredentialsAuthCredentials(
+    //                                                 ClientCredentialsAuthCredentialsBuilder::init(
+    //                                                     $this->settings['paypal_clientid'],
+    //                                                     $this->settings['paypal_secretkey']
+    //                                                 )
+    //                                             )
+    //                                             ->environment(($this->settings['paypal_secretkey'] == 'sandbox')?Environment::SANDBOX:Environment::SANDBOX)
+    //                                             ->build();
+
+    //     $ordersController = $client->getOrdersController();
+    //     // dd($ordersController);
+
+                                                
+    //     // $collect = [
+    //     //     // PaypalServerSdkLib\Models\Builders\OrderRequestBuilder
+    //     //     //Models\CheckoutPaymentIntent
+    //     //     //
+
+    //     //     'body' => \PaypalServerSdkLib\Models\Builders\OrderRequestBuilder::init(
+    //     //         \PaypalServerSdkLib\Models\CheckoutPaymentIntent::CAPTURE,
+    //     //         [
+    //     //             \PaypalServerSdkLib\Models\Builders\PurchaseUnitRequestBuilder::init(
+    //     //                 \PaypalServerSdkLib\Models\Builders\AmountWithBreakdownBuilder::init(
+    //     //                     'currency_code6',
+    //     //                     'value0'
+    //     //                 )->build()
+    //     //             )->build()
+    //     //         ]
+    //     //     )
+    //     //         ->payer(
+    //     //             \PaypalServerSdkLib\Models\Builders\PayerBuilder::init()
+    //     //                 ->emailAddress('anderson@isotton.com.br')
+    //     //                 ->build()
+    //     //         )
+    //     //         ->paymentSource(
+    //     //             \PaypalServerSdkLib\Models\Builders\PaymentSourceBuilder::init()
+    //     //                 ->card(
+    //     //                     \PaypalServerSdkLib\Models\Builders\CardRequestBuilder::init()->build()
+    //     //                 )
+    //     //                 ->build()
+    //     //         )
+    //     //         ->build(),
+    //     //     'paypalRequestId' => '10',
+    //     //     'paypalPartnerAttributionId' => '20',
+    //     //     'prefer' => 'return=minimal'
+    //     // ];
+
+        
+        
+    //     // $apiResponse = $ordersController->ordersCreate($collect);
+
+    //     $collect = [
+    //         'body' => \PaypalServerSdkLib\Models\Builders\OrderRequestBuilder::init(
+    //             \PaypalServerSdkLib\Models\CheckoutPaymentIntent::AUTHORIZE,
+    //             [
+    //                 \PaypalServerSdkLib\Models\Builders\PurchaseUnitRequestBuilder::init(
+    //                     \PaypalServerSdkLib\Models\Builders\AmountWithBreakdownBuilder::init(
+    //                         'BRL',
+    //                         '10'
+    //                     )->build()
+    //                 )->build()
+    //             ]
+    //         )
+    //         ->payer(
+    //             \PaypalServerSdkLib\Models\Builders\PayerBuilder::init()
+    //                 ->emailAddress('anderson@isotton.com.br')
+    //                 ->build()
+    //         )
+    //         ->paymentSource(
+    //             \PaypalServerSdkLib\Models\Builders\PaymentSourceBuilder::init()
+    //             ->card(
+    //                 \PaypalServerSdkLib\Models\Builders\CardRequestBuilder::init()->build()
+    //             )
+    //             ->build()
+    //         )
+    //         ->build(),
+    //         'prefer' => 'return=minimal'
+    //     ];
+        
+    //     $apiResponse = $ordersController->ordersCreate($collect);
+    //     $result = $apiResponse->getResult();
+    //     // DD($result->getLinks());
+    //     foreach ($result->getLinks() as $link) {
+    //         if ($link->getRel() == 'approve') {
+    //             Session::put('paypal_payment_id', $result->getId());
+    //             return response()->json(['success' => true, 'redirect' => $link->getHref()]);
+    //         }
+    //     }
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                
+
+    //     // try {
+    //     //     $apiContext = new ApiContext(
+    //     //         new OAuthTokenCredential(
+    //     //             $this->settings['paypal_clientid'],
+    //     //             $this->settings['paypal_secretkey'],
+    //     //         )
+    //     //     );
+        
+    //     //     $apiContext->setConfig(
+    //     //         array(
+    //     //             'mode' => $this->settings['paypal_sandbox'],
+    //     //             'log.LogEnabled' => true,
+    //     //             'log.FileName' => '../PayPal.log',
+    //     //             'log.LogLevel' => 'DEBUG', // PLEASE USE `FINE` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+    //     //             'cache.enabled' => true,
+    //     //             // 'http.CURLOPT_CONNECTTIMEOUT' => 30,
+    //     //             // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
+    //     //         )
+    //     //     );
+
+    //     //     $payer = new Payer();
+    //     //     $payer->setPaymentMethod("paypal");
+
+    //     //     $amount = new Amount();
+    //     //     $amount->setCurrency($plan->currency);
+    //     //     $amount->setTotal($plan->total_price);
+
+    //     //     $item = new Item();
+    //     //     $item->setName($plan->name);
+    //     //     $item->setCurrency($plan->currency);
+    //     //     $item->setQuantity(1);
+    //     //     $item->setPrice($plan->total_price);
+    //     //     $item->setSku($plan->id);
+
+    //     //     $itemList = new ItemList();
+    //     //     $itemList->setItems(array($item));
+
+    //     //     $transaction = new Transaction();
+    //     //     $transaction->setAmount($amount);
+    //     //     $transaction->setItemList($itemList);
+    //     //     $transaction->setDescription($plan->description);
+    //     //     $transaction->setInvoiceNumber(uniqid());
+        
+
+    //     //     $redirectUrls = new RedirectUrls();
+    //     //     $redirectUrls->setReturnUrl(url('/payment/success?gateway=paypal'));
+    //     //     $redirectUrls->setCancelUrl(url('/payment/cancel'));
+
+    //     //     $payment = new Payment();
+    //     //     $payment->setIntent("sale");
+    //     //     $payment->setPayer($payer);
+    //     //     $payment->setRedirectUrls($redirectUrls);
+    //     //     $payment->setTransactions(array($transaction));
+
+    //     //     $payment->create($apiContext);
+
+
+    //     // } catch (Exception $ex) {
+    //     //     return redirect()->back()->withErrors('PayPal connection failed: ' . $ex->getMessage());
+    //     // }
+
+        
+
+        
+
+    // }
 
     protected function FlutterwavePayment(Request $request)
     {
@@ -555,8 +727,9 @@ class PaymentController extends Controller
 
     protected function handleStripeSuccess(Request $request)
     {
+
         $sessionId = $request->input('session_id');
-        $stripe = new StripeClient('sk_test_CG2JhAIXvVWDeFUFqtUizO4N00zmvm7o8J');
+        $stripe = new StripeClient($this->settings['stripe_secretkey']);
 
         try {
             $session = $stripe->checkout->sessions->retrieve($sessionId);
