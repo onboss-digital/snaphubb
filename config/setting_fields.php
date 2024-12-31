@@ -1073,6 +1073,17 @@ return [
                 'value' => '', // default value if you want
                 'help' => 'Paste the only the Measurement Id of Google Analytics stream.', // Help text for the input field.
             ],
+
+            [
+                'type' => 'select', // input field type
+                'data' => 'paypal_payment_method', // data type, string
+                'name' => 'paypal_sandbox', // unique name for the field
+                'label' => 'paypalPayment', // label for the field
+                'rules' => '', // validation rules
+                'class' => '', // any class for input
+                'value' => 'sandbox', // default value
+                'options' => ['live' => 'Live', 'sandbox' => 'Sandbox'], // select options
+            ],
             [
                 'type' => 'checkbox', // input fields type
                 'data' => 'flutterwavePayment', // data type, string, int, boolean

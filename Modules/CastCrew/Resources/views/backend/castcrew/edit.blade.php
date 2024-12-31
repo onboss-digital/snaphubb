@@ -97,13 +97,12 @@
                 </div>
                 <div class="col-md-12 col-lg-4">
                     <div class="mb-3">
-                        {{ html()->label(__('castcrew.lbl_dob') . '<span class="text-danger">*</span>', 'dob')->class('form-label')}}
+                        {{ html()->label(__('castcrew.lbl_dob'), 'dob')->class('form-label')}}
                         {{
                         html()->date('dob', $cast->dob)
                             ->class('form-control datetimepicker')
                             ->id('dob')
                             ->placeholder(__('placeholder.lbl_user_date_of_birth'))
-                            ->attribute('required','required')
                         }}
                         @error('dob')
                         <span class="text-danger">{{ $message }}</span>

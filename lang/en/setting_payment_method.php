@@ -9,4 +9,5 @@ return [
     'lbl_paypal' => 'Paypal',
     'lbl_flutterwave' => 'Flutterwave',
     'lbl_client_id' => 'Client Id',
+    'lbl_sandbox'=> 'Type'
 ];

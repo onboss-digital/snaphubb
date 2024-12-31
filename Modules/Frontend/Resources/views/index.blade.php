@@ -29,15 +29,23 @@
                 </div>
             @endif
 
-            <!-- Native Tongue -->
-            @if(!empty($data['popular_language']))
-                <div id="language-section" class="section-wraper scroll-section section-hidden">
-                    @include('frontend::components.section.language',  ['popular_language' => $data['popular_language'],'title' => __('frontend.popular_language')])
+             <!-- Genres -->
+             @if(!empty($data['genres']))
+                <div id="genres-section" class="section-wraper scroll-section section-hidden">
+                    @include('frontend::components.section.geners',  ['genres' => $data['genres'],'title' => __('frontend.genres')])
                 </div>
             @endif
 
+
+            <!-- Native Tongue -->
+            {{-- @if(!empty($data['popular_language']))
+                <div id="language-section" class="section-wraper scroll-section section-hidden">
+                    @include('frontend::components.section.language',  ['popular_language' => $data['popular_language'],'title' => __('frontend.popular_language')])
+                </div>
+            @endif --}}
+
             <!-- Popular Movies -->
-            @if(isenablemodule('movie')==1 && !empty($data['popular_movie']) && !$data['popular_movie']->isEmpty())
+            {{-- @if(isenablemodule('movie')==1 && !empty($data['popular_movie']) && !$data['popular_movie']->isEmpty())
                 <div class="section-wraper scroll-section section-hidden">
                     @include('frontend::components.section.entertainment',  ['data' => $data['popular_movie'],'title' => __('frontend.popular_movie'),'type' => 'movie'])
                 </div>
@@ -48,7 +56,7 @@
                 <div id="topchannel-section" class="section-wraper scroll-section section-hidden">
                     @include('frontend::components.section.tvchannel',  ['top_channel' => $data['top_channel'],'title' => __('frontend.top_tvchannel')])
                 </div>
-            @endif
+            @endif --}}
 
             <!-- Popular TVshow -->
             @if(isenablemodule('tvshow')==1 && !empty($data['popular_tvshow']) && !$data['popular_tvshow']->isEmpty())
@@ -56,27 +64,20 @@
                     @include('frontend::components.section.entertainment',  ['data' => $data['popular_tvshow'],'title' => __('frontend.popular_tvshow'),'type' => 'tvshow'])
                 </div>
             @endif
-
             <!-- Favorite Personality -->
             @if(!empty($data['personality']))
                 <div id="favorite-personality" class="section-wraper scroll-section section-hidden">
                     @include('frontend::components.section.castcrew',  ['data' => $data['personality'],'title' => __('frontend.personality'),'entertainment_id' => 'all', 'type'=>'actor'])
                 </div>
             @endif
+            
 
-            <!-- Free Movie -->
+            {{-- <!-- Free Movie -->
             @if(isenablemodule('movie')==1 && !empty($data['free_movie']) && !$data['free_movie']->isEmpty())
                 <div class="section-wraper scroll-section section-hidden">
                     @include('frontend::components.section.entertainment',  ['data' => $data['free_movie'],'title' => __('frontend.free_movie'),'type' =>'movie' ])
                 </div>
-            @endif
-
-            <!-- Genres -->
-            @if(!empty($data['genres']))
-                <div id="genres-section" class="section-wraper scroll-section section-hidden">
-                    @include('frontend::components.section.geners',  ['genres' => $data['genres'],'title' => __('frontend.genres')])
-                </div>
-            @endif
+            @endif --}}
 
             <!-- Videos -->
             @if(isenablemodule('video')==1 && !empty($data['popular_videos'])  && !$data['popular_videos']->isEmpty())

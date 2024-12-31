@@ -41,6 +41,7 @@
                                 @php
                                     $payment_methods = [
                                         'str_payment_method' => 'stripe',
+                                        'paypal_payment_method' => 'paypal',
                                         'razor_payment_method' => 'razorpay',
                                         'paystack_payment_method' => 'paystack',
                                         'flutterwave_payment_method' => 'flutterwave',

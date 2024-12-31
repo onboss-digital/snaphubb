@@ -280,12 +280,11 @@
                     </div>
 
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger">*</span>', 'IMDb_rating')->class('form-label') }}
+                        {{ html()->label(__('movie.lbl_imdb_rating'), 'IMDb_rating')->class('form-label') }}
                         {{ html()->text('IMDb_rating')
                                 ->attribute('value', old('IMDb_rating', $data->IMDb_rating)) // Use old value or the existing movie value
                                 ->placeholder(__('movie.lbl_imdb_rating'))
-                                ->class('form-control')
-                                ->required() }}
+                                ->class('form-control') }}
 
                         @error('IMDb_rating')
                             <span class="text-danger">{{ $message }}</span>

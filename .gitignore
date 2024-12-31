@@ -28,7 +28,7 @@ yarn-error.log
 node_modules
 package-lock.json
 /storage/media-library/**/*
-composer.lock
+# composer.lock
 
 # Laravel specific
 /vendor

@@ -14,7 +14,7 @@ return [
     'lbl_status' => 'Status',
     'lbl_select_limitation' => 'Select Limitation',
     'lbl_set_limit' => 'Set Limit',
-
+    'lbl_currency' => 'Currency',
     'lbl_edit_plan' => 'Edit Plan',
     'lbl_add_new_plan' => 'Add New Plan',
     'plan_list' => 'Plan List',
