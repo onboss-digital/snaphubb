@@ -114,6 +114,10 @@ class PlanController extends Controller
                 'text' => __('movie.lbl_duration'),
             ],
             [
+                'value' => 'currency',
+                'text' => __('plan.lbl_currency'),
+            ],
+            [
                 'value' => 'price',
                 'text' => __('plan.lbl_amount'),
             ],
@@ -173,7 +177,6 @@ class PlanController extends Controller
             ->addColumn('action', function ($data) {
                 return view('subscriptions::backend.plan.action_column', compact('data'));
             })
-
             ->editColumn('price', function ($data) {
                 return Currency::format($data->price);
             })
@@ -192,6 +195,7 @@ class PlanController extends Controller
             ->editColumn('level', function ($data) {
                 return __("plan.lbl_level").' '.$data->level;
             })
+            
 
 
             ->editColumn('duration', function ($data) {
@@ -292,7 +296,11 @@ class PlanController extends Controller
 
     public function store(PlanRequest $request)
     {
+        // ->editColumn('currency', function ($data) {
+        //     return $data->currency;
+        // })
         $data = $request->all();
+        
         $data['identifier'] = strtolower(str_replace(' ', '_', $data['name']));
 
         $plan_level=Plan::max('level');
@@ -366,7 +374,6 @@ class PlanController extends Controller
         $data = Plan::findOrFail($id);
         $purchaseMethodEnabled = Setting::where('name', 'iap_payment_method')->value('val') == 1;
         $plan= Plan::max('level');
-
         $assets = ['textarea'];
 
         $plan=$plan;

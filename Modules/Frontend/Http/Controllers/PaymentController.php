@@ -13,11 +13,7 @@ use Modules\Subscriptions\Models\Subscription;
 use Modules\Subscriptions\Trait\SubscriptionTrait;
 use Modules\Tax\Models\Tax;
 use GuzzleHttp\Client;
-use PayPal\Api\Payment;
 use Stripe\StripeClient;
-use PayPal\Api\PaymentExecution;
-use PayPal\Auth\OAuthTokenCredential;
-use PayPal\Rest\ApiContext;
 use Midtrans\Snap;
 use Midtrans\Config;
 use  Modules\Subscriptions\Transformers\SubscriptionResource;
@@ -26,9 +22,60 @@ use Modules\Subscriptions\Transformers\PlanlimitationMappingResource;
 use App\Mail\SubscriptionDetail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
+
+// Require for payment with paypal
+use PayPal\Api\PaymentExecution;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\Payment;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Api\NameValuePair;
+
+
+
 class PaymentController extends Controller
 {
     use SubscriptionTrait;
+
+    public $paymentHandlers = [
+        'stripe' => 'StripePayment',
+        'razorpay' => 'RazorpayPayment',
+        'paystack' => 'PaystackPayment',
+        'paypal' => 'PayPalPayment',
+        'flutterwave' => 'FlutterwavePayment',
+        'cinet' => 'CinetPayment',
+        'sadad' => 'SadadPayment',
+        'airtel' => 'AirtelPayment',
+        'phonepe' => 'PhonePePayment',
+        'midtrans' => 'MidtransPayment',
+    ];
+
+    public $settings;
+
+    public function getSettings($paymentMethod = null){
+
+        if($paymentMethod == null && !is_null($this->settings)) {
+            return $this->settings;
+        }
+
+        if(!key_exists($paymentMethod, $this->paymentHandlers)) {
+            throw new \Exception('Invalid payment method.');
+        }
+
+        return $this->settings = collect(setting(null)->where('name', 'like', "%{$paymentMethod}%")->get()->toArray())
+            ->pluck('val', 'name')
+            ->toArray();
+    }
+
+
+
     /**
      * Display a listing of the resource.
      */
@@ -110,37 +157,39 @@ class PaymentController extends Controller
     }
 
     protected function RazorpayPayment(Request $request, $price)
-{
-    $baseURL = env('APP_URL');
-    $razorpayKey = 'rzp_test_CLw7tH3O3P5eQM';
-    $razorpaySecret = 'rzp_test_CLw7tH3O3P5eQM';
-    $plan_id = $request->input('plan_id');
-    $priceInPaise = $price * 100;
+    {
+        $baseURL = env('APP_URL');
+        $razorpayKey = 'rzp_test_CLw7tH3O3P5eQM';
+        $razorpaySecret = 'rzp_test_CLw7tH3O3P5eQM';
+        $plan_id = $request->input('plan_id');
+        $priceInPaise = $price * 100;
 
-    try {
-        $api = new \Razorpay\Api\Api($razorpayKey, $razorpaySecret);
-        $orderData = [
-            'receipt'         => 'rcptid_' . time(),
-            'amount'          => $priceInPaise,
-            'currency'        => 'INR',
-            'payment_capture' => 1
-        ];
+        try {
+            $api = new \Razorpay\Api\Api($razorpayKey, $razorpaySecret);
+            $orderData = [
+                'receipt'         => 'rcptid_' . time(),
+                'amount'          => $priceInPaise,
+                'currency'        => 'INR',
+                'payment_capture' => 1
+            ];
 
-        $razorpayOrder = $api->order->create($orderData);
-        session(['razorpay_order_id' => $razorpayOrder['id']]);
+            $razorpayOrder = $api->order->create($orderData);
+            session(['razorpay_order_id' => $razorpayOrder['id']]);
 
-        return view('razorpay.payment', [
-            'order_id' => $razorpayOrder['id'],
-            'amount' => $priceInPaise,
-            'plan_id' => $plan_id,
-            'key' => $razorpayKey,
-            'currency' => 'INR',
-            'name' => 'Subscription Plan',
-            'description' => 'Payment for subscription plan'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 400);    }
-}
+            return view('razorpay.payment', [
+                'order_id' => $razorpayOrder['id'],
+                'amount' => $priceInPaise,
+                'plan_id' => $plan_id,
+                'key' => $razorpayKey,
+                'currency' => 'INR',
+                'name' => 'Subscription Plan',
+                'description' => 'Payment for subscription plan'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);   
+        
+        }
+    }
 
     protected function PaystackPayment(Request $request)
     {
@@ -177,35 +226,81 @@ class PaymentController extends Controller
 
     protected function PayPalPayment(Request $request)
     {
-        $baseURL = env('APP_URL');
-        $price = $request->input('price');
-        $plan_id = $request->input('plan_id');
+        $this->getSettings('paypal');
+        $dataRequest = $request->all();
+        $this->settings['sandbox'] = true;
 
-        // Validate price
-        if (!is_numeric($price) || $price <= 0) {
-            return redirect()->back()->withErrors('Invalid price value.');
+        try {
+            $plan = Plan::where('id', $dataRequest['plan_id'])->firstOrFail();
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->withErrors('Invalid plan selected.');
         }
 
         try {
-            // Get Access Token
-            $accessToken = $this->getAccessToken();
+            $apiContext = new ApiContext(
+                new OAuthTokenCredential(
+                    $this->settings['paypal_clientid'],
+                    $this->settings['paypal_secretkey'],
+                )
+            );
+        
+            $apiContext->setConfig(
+                array(
+                    'mode' => ($this->settings['sandbox'] == true) ? 'sandbox' : 'live',
+                    'log.LogEnabled' => true,
+                    'log.FileName' => '../PayPal.log',
+                    'log.LogLevel' => 'DEBUG', // PLEASE USE `FINE` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
+                    'cache.enabled' => true,
+                    // 'http.CURLOPT_CONNECTTIMEOUT' => 30,
+                    // 'http.headers.PayPal-Partner-Attribution-Id' => '123123123'
+                )
+            );
 
-            // Create Payment
-            $payment = $this->createPayment($accessToken, $price, $plan_id);
+            $payer = new Payer();
+            $payer->setPaymentMethod("paypal");
 
-            if (isset($payment['links'])) {
-                foreach ($payment['links'] as $link) {
-                    if ($link['rel'] === 'approval_url') {
-                        return response()->json(['success' => true, 'redirect' => $link['href']]);
+            $amount = new Amount();
+            $amount->setCurrency($plan->currency);
+            $amount->setTotal($plan->total_price);
 
-                    }
-                }
-            }
+            $item = new Item();
+            $item->setName($plan->name);
+            $item->setCurrency($plan->currency);
+            $item->setQuantity(1);
+            $item->setPrice($plan->total_price);
+            $item->setSku($plan->id);
 
-            return redirect()->back()->withErrors('Payment creation failed.');
-        } catch (\Exception $ex) {
-            return redirect()->back()->withErrors('Payment processing failed: ' . $ex->getMessage());
+            $itemList = new ItemList();
+            $itemList->setItems(array($item));
+
+            $transaction = new Transaction();
+            $transaction->setAmount($amount);
+            $transaction->setItemList($itemList);
+            $transaction->setDescription($plan->description);
+            $transaction->setInvoiceNumber(uniqid());
+        
+
+            $redirectUrls = new RedirectUrls();
+            $redirectUrls->setReturnUrl(url('/payment/success?gateway=paypal'));
+            $redirectUrls->setCancelUrl(url('/payment/cancel'));
+
+            $payment = new Payment();
+            $payment->setIntent("sale");
+            $payment->setPayer($payer);
+            $payment->setRedirectUrls($redirectUrls);
+            $payment->setTransactions(array($transaction));
+
+            $payment->create($apiContext);
+
+
+        } catch (Exception $ex) {
+            return redirect()->back()->withErrors('PayPal connection failed: ' . $ex->getMessage());
         }
+
+        Session::put('paypal_payment_id', $payment->getId());
+
+        return response()->json(['success' => true, 'redirect' => $payment->getApprovalLink()]);
+
     }
 
     protected function FlutterwavePayment(Request $request)
@@ -350,57 +445,12 @@ class PaymentController extends Controller
         }
     }
 
-    private function getAccessToken()
-    {
-        $clientId = 'Aec0WfRHUKNVEQWRedFhD5S7OvBdaugQ7MmY7xTuhHjwZMZaHg6e62gH_3MjkfSCw7C4WBG4-er-ICLI';
-        $clientSecret = 'EAqgmm659_iD9RagRIQCV6-cupQqZjUdW9VAAC4HnNuEM4zo1ZBShSw82irmtAICjJMA5CE7H2J6Hl2A';
-
-        $client = new Client();
-        $response = $client->post('https://api.sandbox.paypal.com/v1/oauth2/token', [
-            'auth' => [$clientId, $clientSecret],
-            'form_params' => [
-                'grant_type' => 'client_credentials',
-            ],
-        ]);
-
-        $data = json_decode($response->getBody(), true);
-        return $data['access_token'];
-    }
-
-    private function createPayment($accessToken, $price, $planId)
-    {
-        $baseURL = env('APP_URL');
-        $client = new Client();
-        $response = $client->post('https://api.sandbox.paypal.com/v1/payments/payment', [
-            'headers' => [
-                'Authorization' => "Bearer $accessToken",
-                'Content-Type' => 'application/json',
-            ],
-            'json' => [
-                'intent' => 'sale',
-                'payer' => [
-                    'payment_method' => 'paypal',
-                ],
-                'transactions' => [[
-                    'amount' => [
-                        'total' => $price,
-                        'currency' => 'USD',
-                    ],
-                    'description' => 'Payment for plan ID: ' . $planId,
-                ]],
-                'redirect_urls' => [
-                    'return_url' => $baseURL . '/payment/success?gateway=paypal',
-                    'cancel_url' => $baseURL . '/payment/cancel',
-                ],
-            ],
-        ]);
-
-        return json_decode($response->getBody(), true);
-    }
 
     public function paymentSuccess(Request $request)
     {
         $gateway = $request->input('gateway');
+
+        $this->getSettings($gateway);
 
         switch ($gateway) {
             case 'stripe':
@@ -431,9 +481,9 @@ class PaymentController extends Controller
     protected function handlePaymentSuccess($plan_id, $amount, $payment_type, $transaction_id)
     {
         $plan = Plan::findOrFail($plan_id);
-       $limitation_data = PlanlimitationMappingResource::collection($plan->planLimitation);
+        $limitation_data = PlanlimitationMappingResource::collection($plan->planLimitation);
 
-       $user=Auth::user();
+        $user=Auth::user();
 
         $start_date = now();
         $end_date = $this->get_plan_expiration_date($start_date, $plan->duration, $plan->duration_value);
@@ -479,25 +529,23 @@ class PaymentController extends Controller
         ]);
 
 
-       $response = new SubscriptionResource($subscription);
+        $response = new SubscriptionResource($subscription);
 
-       $this->sendNotificationOnsubscription('new_subscription', $response);
-       if (isSmtpConfigured()) {
-           if ($user) {
-               try {
-                   Mail::to($user->email)->send(new SubscriptionDetail($response));
+        $this->sendNotificationOnsubscription('new_subscription', $response);
+        if (isSmtpConfigured()) {
+            if ($user) {
+                try {
+                    Mail::to($user->email)->send(new SubscriptionDetail($response));
 
-               } catch (\Exception $e) {
-                   Log::error('Failed to send email to ' . $user->email . ': ' . $e->getMessage());
-               }
-           } else {
-               Log::info('User object is not set. Email not sent.');
-           }
-       } else {
-           Log::error('SMTP configuration is not set correctly. Email not sent.');
-       }
-
-
+                } catch (\Exception $e) {
+                    Log::error('Failed to send email to ' . $user->email . ': ' . $e->getMessage());
+                }
+            } else {
+                Log::info('User object is not set. Email not sent.');
+            }
+        } else {
+            Log::error('SMTP configuration is not set correctly. Email not sent.');
+        }
 
         auth()->user()->update(['is_subscribe' => 1]);
 
@@ -555,13 +603,16 @@ class PaymentController extends Controller
 
    protected function handlePayPalSuccess(Request $request)
     {
+        $this->getSettings('paypal');
         $paymentId = $request->input('paymentId');
         $payerId = $request->input('PayerID');
+        $token = $request->input('token');
+        
 
         $apiContext = new ApiContext(
             new OAuthTokenCredential(
-                'Aec0WfRHUKNVEQWRedFhD5S7OvBdaugQ7MmY7xTuhHjwZMZaHg6e62gH_3MjkfSCw7C4WBG4-er-ICLI',
-                'EAqgmm659_iD9RagRIQCV6-cupQqZjUdW9VAAC4HnNuEM4zo1ZBShSw82irmtAICjJMA5CE7H2J6Hl2A'
+                $this->settings['paypal_clientid'],
+                $this->settings['paypal_secretkey']
             )
         );
 
@@ -570,9 +621,8 @@ class PaymentController extends Controller
             $execution = new PaymentExecution();
             $execution->setPayerId($payerId);
             $result = $payment->execute($execution, $apiContext);
-
-            if ($result->getState() == 'approved') {
-                $plan_id = $result->transactions[0]->item_list->items[0]->sku;
+            $plan_id = $result->transactions[0]->item_list->items[0]->sku;
+            if ($result->state == 'approved') {
                 return $this->handlePaymentSuccess($plan_id, $result->transactions[0]->amount->total, 'paypal', $paymentId);
             } else {
                 return redirect('/')->with('error', 'Payment not approved.');

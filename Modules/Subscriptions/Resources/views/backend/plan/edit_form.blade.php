@@ -24,7 +24,7 @@
                     @enderror
                     <div class="invalid-feedback" id="name-error">Name field is required</div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-4 col-lg-2">
                     {{ html()->label(__('plan.lbl_level') . '<span class="text-danger">*</span>', 'level')->class('form-label') }}
                     {{
                     html()->select('level',
@@ -39,7 +39,23 @@
                     @enderror
                     <div class="invalid-feedback" id="name-error">Level field is required</div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-4 col-lg-2">
+                    {{ html()->label(__('plan.lbl_duration_value') . '<span class="text-danger">*</span>', 'duration_value')->class('form-label') }}
+                    {{
+                            html()->input('number', 'duration_value', $data->duration_value)
+                                ->class('form-control')
+                                ->id('duration_value')
+                                ->attribute('placeholder', __('placeholder.lbl_plan_duration_value'))
+                                ->attribute('oninput', "this.value = Math.abs(this.value)")
+                                // ->attribute('min', '1')
+                                ->attribute('required','required')
+                        }}
+                    @error('duration_value')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <div class="invalid-feedback" id="name-error">Duration Value field is required</div>
+                </div>
+                <div class="col-md-4 col-lg-2">
                     {{ html()->label(__('plan.lbl_duration') . '<span class="text-danger">*</span>', 'duration')->class('form-label') }}
                     {{
                                 html()->select('duration', [
@@ -58,23 +74,41 @@
                     @enderror
                     <div class="invalid-feedback" id="name-error">Duration field is required</div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    {{ html()->label(__('plan.lbl_duration_value') . '<span class="text-danger">*</span>', 'duration_value')->class('form-label') }}
-                    {{
-                            html()->input('number', 'duration_value', $data->duration_value)
-                                ->class('form-control')
-                                ->id('duration_value')
-                                ->attribute('placeholder', __('placeholder.lbl_plan_duration_value'))
-                                ->attribute('oninput', "this.value = Math.abs(this.value)")
-                                // ->attribute('min', '1')
-                                ->attribute('required','required')
-                        }}
-                    @error('duration_value')
+
+                <div class="col-md-4 col-lg-2">
+                    {{ html()->label(__('plan.lbl_status'), 'status')->class('form-label') }}
+                    <div class="d-flex justify-content-between align-items-center form-control">
+                        {{ html()->label(__('messages.active'), 'status')->class('form-label mb-0 text-body') }}
+                        <div class="form-check form-switch">
+                            {{ html()->hidden('status', 0) }}
+                            {{
+                                    html()->checkbox('status',$data->status )
+                                        ->class('form-check-input')
+                                        ->id('status')
+                                }}
+                        </div>
+                    </div>
+                    @error('status')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
-                    <div class="invalid-feedback" id="name-error">Duration Value field is required</div>
                 </div>
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-3 col-lg-2">
+                    {{ html()->label(__('plan.lbl_currency') . '<span class="text-danger">*</span>', 'currency')->class('form-label') }}
+                    {{
+                         html()->select('currency', 
+                                        collect(Modules\Currency\Models\Currency::get()->toArray())->pluck('currency_code','currency_code'), 
+                                        $data->currency)
+                            ->class('form-control select2')
+                            ->id('currency')
+                            ->attribute('placeholder', __('placeholder.lbl_plan_currency'))
+                            ->attribute('required','required')
+                    }}
+                    @error('currency')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <div class="invalid-feedback" id="name-error">currency field is required</div>
+                </div>
+                <div class="col-md-3 col-lg-2">
                     {{ html()->label(__('plan.lbl_amount') . '<span class="text-danger">*</span>', 'price')->class('form-label') }}
                     {{
                         html()->input('number', 'price', $data->price)
