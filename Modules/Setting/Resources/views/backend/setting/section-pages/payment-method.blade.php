@@ -164,7 +164,7 @@
             <div id="paypal-fields"
                 class="ps-3 {{ old('paypal_payment_method', $settings['paypal_payment_method'] ?? 0) == 1 ? '' : 'd-none' }}">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-group">
                             <label class="form-label" for="paypal_secretkey">{{ __('setting_payment_method.lbl_secret_key') }}</label>
                             <input type="text" class="form-control @error('paypal_secretkey') is-invalid @enderror"
@@ -175,7 +175,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="form-group">
                             <label class="form-label" for="paypal_clientid">{{ __('setting_payment_method.lbl_client_id') }}</label>
                             <input type="text" class="form-control @error('paypal_clientid') is-invalid @enderror"
@@ -183,6 +183,21 @@
                                 value="{{ old('paypal_clientid', $settings['paypal_clientid'] ?? '') }}">
                             @error('paypal_clientid')
                                 <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            {{ html()->label(__('setting_language_page.lbl_sandbox'))->class('form-label') }}
+                            {{ html()->select('paypal_sandbox')
+                                ->options([
+                                    'sandbox' => 'SandBox',
+                                    'live' => 'Live',
+                                ])
+                                ->class('form-control select2')
+                                ->value(old('paypal_sandbox', $settings['paypal_sandbox'] ?? '')) }}
+                            @error('default_language')
+                            <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>

@@ -228,7 +228,8 @@ class PaymentController extends Controller
     {
         $this->getSettings('paypal');
         $dataRequest = $request->all();
-        $this->settings['sandbox'] = true;
+
+        // dd($this->settings);
 
         try {
             $plan = Plan::where('id', $dataRequest['plan_id'])->firstOrFail();
@@ -246,7 +247,7 @@ class PaymentController extends Controller
         
             $apiContext->setConfig(
                 array(
-                    'mode' => ($this->settings['sandbox'] == true) ? 'sandbox' : 'live',
+                    'mode' => $this->settings['paypal_sandbox'],
                     'log.LogEnabled' => true,
                     'log.FileName' => '../PayPal.log',
                     'log.LogLevel' => 'DEBUG', // PLEASE USE `FINE` LEVEL FOR LOGGING IN LIVE ENVIRONMENTS
