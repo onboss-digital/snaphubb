@@ -1,17 +1,32 @@
 @extends('frontend::layouts.master')
 
 @section('content')
+
+
     <!-- Main Banner -->
+
+      @php
+           $is_enable_banner = App\Models\MobileSetting::getValueBySlug('banner');
+        @endphp
+
+
     <div id="banner-section" class="section-spacing-bottom px-0">
+        @if( $is_enable_banner == 1)
         @include('frontend::components.section.banner', ['data' => $sliders ?? []])
+        @endif
     </div>
+
 
 
 
     <div class="container-fluid padding-right-0">
         <div class="overflow-hidden">
 
-            @if($user_id !=null)
+            @php
+            $is_enable_continue_watching = App\Models\MobileSetting::getValueBySlug('continue-watching');
+           @endphp
+
+            @if($user_id !=null && $is_enable_continue_watching == 1)
 
             <div id="continue-watch-section" class="section-wraper scroll-section section-hidden">
 
@@ -19,7 +34,7 @@
                     <div class="row gy-4 row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 mt-3">
                        @for ($i = 0; $i < 6; $i++)
                          <div class="shimmer-container col mb-3">
-                            <div class="continue-watch-card shimmer border rounded-3 placeholder-glow"">
+                            <div class="continue-watch-card shimmer border rounded-3 placeholder-glow">
                                 <div class="placeholder continue-watch-card-image position-relative">
                                   <div class="placeholder placeholder-glow">
                                     <a href="#" class="d-block image-link">
@@ -366,7 +381,7 @@ sections.forEach(section => {
 ;
 
 function fetchContinueWatch() {
-    fetch(`${envURL}/api/continuewatch-list`)
+    fetch(`${envURL}/api/web-continuewatch-list`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('continue-watch-section').innerHTML = data.html;

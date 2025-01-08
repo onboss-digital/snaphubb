@@ -1,6 +1,6 @@
 
 <div class="col-md-8 col-lg-9 navbar-expand-md">
-    <div class="offcanvas offcanvas-end p-0" id="offcanvas" data-bs-backdrop="false">
+    <div class="offcanvas offcanvas-end" id="offcanvas" data-bs-backdrop="false">
         <div class="offcanvas-header">
             <h4 class="offcanvas-title" id="offcanvasNavbarLabel">Setting</h4>
             <button type="button" class="btn-close" onclick="toggle()"></button>

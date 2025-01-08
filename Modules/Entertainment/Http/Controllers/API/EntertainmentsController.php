@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Entertainment\Models\Entertainment;
 use Modules\Entertainment\Transformers\MoviesResource;
-use Modules\Entertainment\Transformers\MovieDetailResource;
+use Modules\Entertainment\Transformers\MovieDetailDataResource;
 use Modules\Entertainment\Transformers\TvshowResource;
 use Modules\Entertainment\Transformers\TvshowDetailResource;
 use Modules\Entertainment\Models\Watchlist;
@@ -163,7 +163,7 @@ class EntertainmentsController extends Controller
                 $continueWatch = ContinueWatch::where('entertainment_id', $movie->id)->where('user_id', $user_id)->where('profile_id', $request->profile_id)->where('entertainment_type', 'movie')->first();
                 $movie['continue_watch'] = $continueWatch;
             }
-            $responseData = new MovieDetailResource($movie);
+            $responseData = new MovieDetailDataResource($movie);
             Cache::put($cacheKey, $responseData);
         }
 

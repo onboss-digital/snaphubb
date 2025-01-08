@@ -13,15 +13,15 @@ class LiveTvChannelResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $plans = [];
+        // $plans = [];
 
 
-        $plan = $this->plan;
+        // $plan = $this->plan;
 
 
-        if($plan){
-            $plans = Plan::where('level', '<=', $plan->level)->get();
-        }
+        // if($plan){
+        //     $plans = Plan::where('level', '<=', $plan->level)->get();
+        // }
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -34,7 +34,7 @@ class LiveTvChannelResource extends JsonResource
             'embedded' => optional($this->TvChannelStreamContentMappings)->embedded ?? null,
             'server_url' => optional($this->TvChannelStreamContentMappings)->server_url ?? null,
             'server_url1' => optional($this->TvChannelStreamContentMappings)->server_url1 ?? null,
-            'plans' => PlanResource::collection($plans),
+            // 'plans' => PlanResource::collection($plans),
             'status' => $this->status,
             'access'=>$this->access,
         ];

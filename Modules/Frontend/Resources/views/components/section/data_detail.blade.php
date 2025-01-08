@@ -85,12 +85,13 @@
                     </ul>
                     @php
 
+
                    $qualityOptions = [];
                         if($data['type']=='movie'){
                           $videoLinks = $data['video_links'];
                           $episode_id='';
                           $type=$data['video_upload_type'];
-                          $video_url= $data['video_upload_type']=== 'Local' ? setBaseUrlWithFileName($data['video_url_input']) : Crypt::encryptString($data['video_url_input']) ;
+                          $video_url= $data['video_upload_type']=== 'Local' ? setBaseUrlWithFileName($data['video_url_input']) : $data['video_url_input'] ;
 
                           foreach($videoLinks as $link) {
                             $qualityOptions[$link->quality] = [
@@ -120,6 +121,8 @@
 
                       @endphp
 
+
+
                     <div class="d-flex align-items-center flex-wrap gap-4 mt-5">
                         <div class="play-button-wrapper">
                             <button
@@ -127,7 +130,7 @@
                             id="watchNowButton"
                             data-type="{{ $data['trailer_url_type'] }}"
                             data-entertainment-id="{{ $data['id'] }}"
-                            data-entertainment-type="{{ $type }}"
+                            data-entertainment-type="{{ $data['type'] }}"
                             data-video-url="{{ $video_url }}"
                             data-movie-access="{{ $data['movie_access'] }}"
                             data-plan-id="{{ $data['plan_id'] }}"

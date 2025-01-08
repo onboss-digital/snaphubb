@@ -86,7 +86,7 @@ $footerData = getFooterData();
   <div class="footer-bottom">
     <div class="container-fluid">
       <div class="text-center">
-        © {{ now()->year }}<span class="text-primary">STREAMIT</span>. {{__('frontend.all_rights_reserved')}}.
+        © {{ now()->year }} <span class="text-primary">{{ env('APP_NAME') }}</span>. {{__('frontend.all_rights_reserved')}}.
       </div>
     </div>
   </div>

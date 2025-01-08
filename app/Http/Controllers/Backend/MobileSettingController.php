@@ -87,14 +87,15 @@ class MobileSettingController extends Controller
 
         $data = $request->all();
 
-        Cache::flush();
+         
+        if (!empty($data) && isset($data['value']) && !empty($data['value'])) {
+            
+            $data['value'] = is_array($data['value']) ? json_encode($data['value']) : $data['value'];
+        }else{
 
-        if (!$request->has('dashboard_select') || empty($request->dashboard_select)) {
-            $data['value'] = null;
-        } else {
-            $data['value'] = json_encode($request->dashboard_select);
+            $data['value'] =null;
         }
-
+        
         $result = MobileSetting::updateOrCreate(['id' => $request->id], $data);
 
         if ($result->wasRecentlyCreated) {
@@ -115,6 +116,7 @@ class MobileSettingController extends Controller
             $message = __('messages.update_form', ['form' => __($this->module_title)]);
         }
 
+        Cache::flush();
         if ($request->ajax()) {
 
             return response()->json(['success' => true, 'message' => $message]);

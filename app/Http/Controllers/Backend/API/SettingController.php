@@ -164,6 +164,11 @@ class SettingController extends Controller
         $response['enable_video'] = isset($settings['video']) ? intval($settings['video']) : 0;
         $response['enable_ads'] = isset($ads_val->value) ? (int) $ads_val->value : 0;
         $response['enable_rate_us'] = isset($rate_our_app->value) ? (int) $rate_our_app->value : 0;
+        $response['enable_in_app'] = isset($settings['iap_payment_method']) ? intval($settings['iap_payment_method']) : 0;
+        $response['entitlement_id'] = isset($settings['entertainment_id']) ? $settings['entertainment_id'] : null;
+        $response['apple_api_key'] = isset($settings['apple_api_key']) ? $settings['apple_api_key'] : null;
+        $response['google_api_key'] = isset($settings['google_api_key']) ? $settings['google_api_key'] : null;
+
         if(!empty($request->user_id)){
             $response['is_device_supported'] = $deviceTypeResponse['isDeviceSupported'];
         }

@@ -17,7 +17,7 @@
             @endif
 
 
-        @if(count($continuewatchData)>7)
+        @if(count($continuewatchData)>6)
         <a href="{{ route('continueWatchList')}}" class="view-all-button text-decoration-none flex-none"><span>{{__('frontend.view_all')}}</span> <i class="ph ph-caret-right"></i></a>
         @endif
     </div>
@@ -28,7 +28,7 @@
                 data-navigation="true" data-pagination="false" data-spacing="12">
                     @foreach (array_values($continuewatchData) as $data)
                         <div class="slick-item remove-continuewatch-card">
-                            @include('frontend::components.card.card_continue_watch' ,['value' =>$data ])
+                             @include('frontend::components.card.card_continue_watch' ,['value' =>$data ])
                         </div>
                     @endforeach
             </div>

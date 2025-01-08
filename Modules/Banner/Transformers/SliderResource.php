@@ -49,9 +49,9 @@ class SliderResource extends JsonResource
         }
 
          // Encrypt the trailer_url if needed
-         if ($data && $data->trailer_url) {
-            $data['trailer_url'] = Crypt::encryptString($data['trailer_url']);
-        }
+        //  if ($data && $data->trailer_url) {
+        //     $data['trailer_url'] = Crypt::encryptString($data['trailer_url']);
+        // }
 
         return [
             'id' => $this->id,

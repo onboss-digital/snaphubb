@@ -16,14 +16,25 @@ class MoviesResource extends JsonResource
     {
         $genre_data = [];
         $genres = $this->entertainmentGenerMappings;
-        foreach($genres as $genre){
-            $genre_data[] = $genre->genre;
+
+        if(!empty($genres)){
+
+            foreach($genres as $genre) {
+    
+                $genre_data[] = [
+                    'id' => $genre->id,
+                    'name' => $genre->genre->name ?? null,
+                ];
+            }
+
+
         }
-        $plans = [];
-        $plan = $this->plan;
-        if($plan){
-            $plans = Plan::where('level', '<=', $plan->level)->get();
-        }
+
+        // $plans = [];
+        // $plan = $this->plan;
+        // if($plan){
+        //     $plans = Plan::where('level', '<=', $plan->level)->get();
+        // }
         $userId = auth()->id();
         if($userId) {
             $isInWatchList = WatchList::where('entertainment_id',$this->id)
@@ -56,15 +67,10 @@ class MoviesResource extends JsonResource
             'poster_image' => setBaseUrlWithFileName($this->poster_url ?? null),
             'thumbnail_image' =>setBaseUrlWithFileName($this->thumbnail_url ?? null),
             'is_watch_list' => $isInWatchList ? true : false,
-            'genres' => GenresResource::collection($genre_data),
-            'plans' => PlanResource::collection($plans),
+            'genres' => $genre_data,
+            // 'plans' => PlanResource::collection($plans),
             'status' => $this->status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'deleted_by' => $this->deleted_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
+          
         ];
     }
 }

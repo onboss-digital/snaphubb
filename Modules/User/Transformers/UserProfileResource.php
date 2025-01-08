@@ -35,7 +35,7 @@ class UserProfileResource extends JsonResource
             'status' => $this->status,
             'last_notification_seen' => $this->last_notification_seen,
             'is_user_exist' => true,
-            'profile_image' => $this->file_url,
+            'profile_image' => setBaseUrlWithFileName($this->file_url),
             'media' => $this->media,
             'plan_details' => $this->plan_details ?? null,
             'watchlists' => WatchlistResource::collection($watchlist),

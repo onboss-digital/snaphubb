@@ -61,7 +61,7 @@ class VideoDetailResource extends JsonResource
             'description' => strip_tags($this->description),
             'enable_quality' => $this->enable_quality,
             'video_upload_type' => $this->video_upload_type,
-            'video_url_input' => $this->video_url_input,
+            'video_url_input' => $this->video_upload_type=='Local' ? setBaseUrlWithFileName($this->video_url_input) : $this->video_url_input,
             'download_status' => $this->download_status,
             'download_url' => $this->download_url,
             'poster_image' => setBaseUrlWithFileName($this->poster_url),

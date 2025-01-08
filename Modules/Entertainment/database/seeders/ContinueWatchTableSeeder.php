@@ -14,20 +14,21 @@ class ContinueWatchTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('continue_watch')->delete();
-        
+
         \DB::table('continue_watch')->insert(array (
-            0 => 
+            0 =>
             array (
                 'id' => 1,
                 'entertainment_id' => 28,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '00:50:00',
+                'episode_id' => NULL,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -35,7 +36,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:12:14',
                 'deleted_at' => NULL,
             ),
-            1 => 
+            1 =>
             array (
                 'id' => 2,
                 'entertainment_id' => 99,
@@ -44,6 +45,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '02:58:00',
+                'episode_id' => NULL,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -51,7 +53,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:13:01',
                 'deleted_at' => NULL,
             ),
-            2 => 
+            2 =>
             array (
                 'id' => 3,
                 'entertainment_id' => 87,
@@ -60,6 +62,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '02:30:00',
+                'episode_id' => NULL,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -67,15 +70,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:13:37',
                 'deleted_at' => NULL,
             ),
-            3 => 
+            3 =>
             array (
                 'id' => 4,
                 'entertainment_id' => 13,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:17:16',
                 'total_watched_time' => '05:25:00',
+                'episode_id' => 41,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -83,15 +87,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:14:40',
                 'deleted_at' => NULL,
             ),
-            4 => 
+            4 =>
             array (
                 'id' => 5,
                 'entertainment_id' => 4,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:02:17',
                 'total_watched_time' => '05:50:00',
+                'episode_id' => 15,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -99,15 +104,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:15:31',
                 'deleted_at' => NULL,
             ),
-            5 => 
+            5 =>
             array (
                 'id' => 6,
                 'entertainment_id' => 1,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => NULL,
+                'episode_id' => 1,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -115,15 +121,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:20:23',
                 'deleted_at' => NULL,
             ),
-            6 => 
+            6 =>
             array (
                 'id' => 7,
                 'entertainment_id' => 18,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:24:28',
                 'total_watched_time' => '06:45:00',
+                'episode_id' => 61,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -131,15 +138,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:17:54',
                 'deleted_at' => NULL,
             ),
-            7 => 
+            7 =>
             array (
                 'id' => 8,
                 'entertainment_id' => 26,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '01:20:00',
+                'episode_id' => NULL,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -147,15 +155,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:18:35',
                 'deleted_at' => NULL,
             ),
-            8 => 
+            8 =>
             array (
                 'id' => 9,
                 'entertainment_id' => 30,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '01:50:00',
+                'episode_id' => NULL,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -163,15 +172,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:19:18',
                 'deleted_at' => NULL,
             ),
-            9 => 
+            9 =>
             array (
                 'id' => 10,
                 'entertainment_id' => 2,
                 'user_id' => 3,
                 'profile_id' => 3,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => NULL,
+                'episode_id' => 9,
                 'created_by' => 3,
                 'updated_by' => 3,
                 'deleted_by' => NULL,
@@ -179,7 +189,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:19:38',
                 'deleted_at' => NULL,
             ),
-            10 => 
+            10 =>
             array (
                 'id' => 11,
                 'entertainment_id' => 80,
@@ -188,6 +198,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '02:40:00',
+                'episode_id' => NULL,
                 'created_by' => 14,
                 'updated_by' => 14,
                 'deleted_by' => NULL,
@@ -195,7 +206,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:22:09',
                 'deleted_at' => NULL,
             ),
-            11 => 
+            11 =>
             array (
                 'id' => 12,
                 'entertainment_id' => 83,
@@ -204,6 +215,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '02:45:00',
+                'episode_id' => NULL,
                 'created_by' => 14,
                 'updated_by' => 14,
                 'deleted_by' => NULL,
@@ -211,7 +223,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:23:03',
                 'deleted_at' => NULL,
             ),
-            12 => 
+            12 =>
             array (
                 'id' => 13,
                 'entertainment_id' => 63,
@@ -220,6 +232,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'entertainment_type' => 'movie',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '02:35:00',
+                'episode_id' => NULL,
                 'created_by' => 14,
                 'updated_by' => 14,
                 'deleted_by' => NULL,
@@ -227,15 +240,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:24:10',
                 'deleted_at' => NULL,
             ),
-            13 => 
+            13 =>
             array (
                 'id' => 14,
                 'entertainment_id' => 1,
                 'user_id' => 14,
                 'profile_id' => 14,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '05:20:00',
+                'episode_id' => 8,
                 'created_by' => 14,
                 'updated_by' => 14,
                 'deleted_by' => NULL,
@@ -243,15 +257,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:25:25',
                 'deleted_at' => NULL,
             ),
-            14 => 
+            14 =>
             array (
                 'id' => 15,
                 'entertainment_id' => 20,
                 'user_id' => 14,
                 'profile_id' => 14,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '05:40:00',
+                'episode_id' => 70,
                 'created_by' => 14,
                 'updated_by' => 14,
                 'deleted_by' => NULL,
@@ -259,15 +274,16 @@ class ContinueWatchTableSeeder extends Seeder
                 'updated_at' => '2024-09-26 11:26:16',
                 'deleted_at' => NULL,
             ),
-            15 => 
+            15 =>
             array (
                 'id' => 16,
                 'entertainment_id' => 19,
                 'user_id' => 14,
                 'profile_id' => 14,
-                'entertainment_type' => 'episode',
+                'entertainment_type' => 'tvshow',
                 'watched_time' => '00:00:00',
                 'total_watched_time' => '05:50:00',
+                'episode_id' => 64,
                 'created_by' => 14,
                 'updated_by' => 14,
                 'deleted_by' => NULL,
@@ -276,7 +292,7 @@ class ContinueWatchTableSeeder extends Seeder
                 'deleted_at' => NULL,
             ),
         ));
-        
-        
+
+
     }
 }

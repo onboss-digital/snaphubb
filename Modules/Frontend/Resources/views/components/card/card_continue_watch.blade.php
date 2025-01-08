@@ -1,6 +1,7 @@
 <div class="continue-watch-card">
 
     @php
+
         $duration =
             $value['duration'] ??
             ($value['entertainment_type'] == 'video' && isset($value->video['duration'])
@@ -41,10 +42,21 @@
 
         @if($value['entertainment_type'] == 'episode' || $value['entertainment_type'] == 'tvshow')
 
+        @if(isset($value['episode_id']) && $value['episode_id'] != null)
+
+            <a href="{{ route('episode-details', ['id' => $value['episode_id']]) }}"
+                class="d-block image-link">
+                <img src="{{ setBaseUrlWithFileName($poster_image) }}" alt="movie-card" class="img-fluid object-cover w-100 continue-watch-image">
+            </a>
+
+            @else
+
             <a href="{{ route('tvshow-details', ['id' => $value['entertainment_id']]) }}"
                 class="d-block image-link">
                 <img src="{{ setBaseUrlWithFileName($poster_image) }}" alt="movie-card" class="img-fluid object-cover w-100 continue-watch-image">
             </a>
+            @endif
+
         @endif
 
         @if($value['entertainment_type'] == 'movie')
@@ -75,10 +87,21 @@
 
         @if($value['entertainment_type'] == 'episode' || $value['entertainment_type'] == 'tvshow')
 
+        @if(isset($value['episode_id']) && $value['episode_id'] != null)
+
+        <a href="{{ route('episode-details', ['id' => $value['episode_id']]) }}"
+            class="title-wrapper">
+            <h5 class="mb-1 font-size-18 title line-count-1">{{ $name }}</h5>
+        </a>
+
+
+        @else
+
         <a href="{{ route('tvshow-details', ['id' => $value['entertainment_id']]) }}"
             class="title-wrapper">
             <h5 class="mb-1 font-size-18 title line-count-1">{{ $name }}</h5>
         </a>
+        @endif
     @endif
 
     @if($value['entertainment_type'] == 'movie')

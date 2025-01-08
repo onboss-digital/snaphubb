@@ -264,7 +264,7 @@ class DashboardController extends Controller
 
     public function GetGener()
     {
-         $cacheKey = 'genres';
+        $cacheKey = 'genres';
         $genres = Cache::get($cacheKey);
 
        $html='';
@@ -444,31 +444,39 @@ class DashboardController extends Controller
 
     }
 
-   
     public function ContinuewatchList(Request $request){
 
-      $user=Auth::user();
+        $user=Auth::user();
 
-      $profile_id=getCurrentProfile($user->id, $request);
+        $profile_id=getCurrentProfile($user->id, $request);
 
-      $html='';
+        $html='';
 
-      $continueWatchList = ContinueWatch::where('user_id', $user->id)->where('profile_id',$profile_id)->with('entertainment', 'episode', 'video')->orderBy('id','desc')->get();
-       $continue_watch = $continueWatchList->map(function ($item) {
-           return new ContinueWatchResource($item);
-       })->toArray();
+        $continueWatchList = ContinueWatch::where('user_id', $user->id)
+        ->whereNotNull('watched_time')
+        ->whereNotNull('total_watched_time')
+        ->where('profile_id', $profile_id)
+        ->whereHas('entertainment', function ($query) {
+            $query->where('status', 1);
+        })
+        ->with(['entertainment', 'episode', 'video'])
+        ->orderBy('id', 'desc')
+        ->get();
+         $continue_watch = $continueWatchList->map(function ($item) {
+             return new ContinueWatchResource($item);
+         })->toArray();
 
-      if(!empty($continue_watch)){
+        if(!empty($continue_watch)){
 
-          $html = view('frontend::components.section.continue_watch',  ['continuewatchData' =>  $continue_watch])->render();
+            $html = view('frontend::components.section.continue_watch',  ['continuewatchData' =>  $continue_watch])->render();
 
-         }
-    return response()->json(['html' => $html]);
+           }
+      return response()->json(['html' => $html]);
 
-  }
-
+    }
 
 }
+
 
 
 

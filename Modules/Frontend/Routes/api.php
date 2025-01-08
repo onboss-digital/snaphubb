@@ -15,6 +15,7 @@ use Modules\Frontend\Http\Controllers\DashboardController;
     |
 */
 
+
 Route::get('top-10-movie', [DashboardController::class, 'Top10Movies']);
 Route::get('latest-movie', [DashboardController::class, 'LatestMovies']);
 Route::get('fetch-languages', [DashboardController::class, 'FetchLanguages']);
@@ -32,7 +33,7 @@ Route::get('country-tranding-movie', [DashboardController::class, 'TrandingInCou
 Route::get('favorite-genres', [DashboardController::class, 'FavoriteGenres']);
 Route::get('user-favorite-personality', [DashboardController::class, 'UserfavoritePersonality']);
 
-Route::get('continuewatch-list', [DashboardController::class, 'ContinuewatchList']);
+Route::get('web-continuewatch-list', [DashboardController::class, 'ContinuewatchList']);
 
 
 

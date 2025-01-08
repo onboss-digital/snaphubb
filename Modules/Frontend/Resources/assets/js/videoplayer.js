@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return // Stop further execution
           }
         }
-
+       
         if (accessType === 'free') {
           playVideo(videoUrl, qualityOptions, lastWatchedTime)
         } else {
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function playVideo(videoUrl, qualityOptions, lastWatchedTime) {
     const datatype = watchNowButton?.getAttribute('data-type') || seasonWatchBtn?.getAttribute('data-type')
     if(datatype === 'Local') {
-      const videoSource = document.getElementById('videoSource');
+      const videoSource = document.querySelectorAll('#videoSource');
     videoSource.src = videoUrl;
 
     const videoPlayer = videojs('videoPlayer');
@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
       player.controlBar.el().appendChild(qualitySelector)
     }
     } else{
-
+      
       fetch(`${baseUrl}/video/stream/${encodeURIComponent(videoUrl)}`)
         .then((response) => response.json())
         .then((data) => {
@@ -312,6 +312,10 @@ document.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('beforeunload', async function () {
     const entertainmentId = watchNowButton?.getAttribute('data-entertainment-id') || seasonWatchBtn?.getAttribute('data-entertainment-id')
     const entertainmentType = watchNowButton?.getAttribute('data-entertainment-type') || seasonWatchBtn?.getAttribute('data-entertainment-type')
+    const EpisodeId = watchNowButton?.getAttribute('data-episode-id') || seasonWatchBtn?.getAttribute('data-episode-id')
+
+
+
 
     if (isAuthenticated && currentVideoUrl && entertainmentId && entertainmentType) {
       const currentTime = player.currentTime()
@@ -327,6 +331,8 @@ document.addEventListener('DOMContentLoaded', function () {
           entertainment_id: entertainmentId,
           entertainment_type: entertainmentType,
           total_watched_time: totalWatchedTime,
+          watched_time:totalWatchedTime,
+          episode_id:EpisodeId,
           video_url: currentVideoUrl
         })
       })

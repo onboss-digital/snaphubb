@@ -735,9 +735,12 @@ function isSmtpConfigured()
 
 function decryptVideoUrl($encryptedUrl)
 {
+
+
     try {
         // Decrypt the URL
         $decryptedUrl = Crypt::decryptString(urldecode($encryptedUrl));
+
         // Check if the URL is a YouTube link
         preg_match("/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^\"&?\/ ]{11})/", $decryptedUrl, $youtubeMatches);
         if (isset($youtubeMatches[1])) {

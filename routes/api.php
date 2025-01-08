@@ -34,6 +34,7 @@ Route::post('/store-access-token', [SettingController::class, 'storeToken']);
 Route::post('/token-revoke', [SettingController::class, 'revokeToken']);
 
 Route::get('dashboard-detail', [DashboardController::class, 'DashboardDetail']);
+Route::get('dashboard-detail-data', [DashboardController::class, 'DashboardDetailData']);
 Route::get('get-tranding-data', [DashboardController::class, 'getTrandingData']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {

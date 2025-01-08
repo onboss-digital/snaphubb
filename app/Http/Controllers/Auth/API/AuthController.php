@@ -200,7 +200,7 @@ class AuthController extends Controller
                     $device_limit = $planlimitation->where('limitation_slug', 'device-limit')->first();
                     $device = $device_limit ? $device_limit->limit : 0;
 
-                    if ($count == $device) {
+                    if ($count >= $device) {
                         return response()->json([
                             'error' => 'Your device limit has been reached.',
                             'other_device'=> $other_device
@@ -208,7 +208,7 @@ class AuthController extends Controller
                     }
                 }else{
 
-                    if ($count >1) {
+                    if ($count >=1) {
 
                         return response()->json([
                             'error' => 'Your device limit has been reached.',
