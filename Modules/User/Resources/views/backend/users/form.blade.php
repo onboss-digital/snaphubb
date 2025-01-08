@@ -46,7 +46,7 @@
                     </div>
                     <div class="uploaded-image" id="selectedImageContainerThumbnail">
                         @if(old('file_url', isset($data) ? $data->file_url : ''))
-                            <img src="{{ old('file_url', isset($data) ? $data->file_url : '') }}" class="img-fluid mb-2" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ old('file_url', isset($data) ? setBaseUrlWithFileName($data->file_url) : '') }}" class="img-fluid mb-2" style="max-width: 100px; max-height: 100px;">
                             <span class="remove-media-icon"
                               style="cursor: pointer; font-size: 24px; position: absolute; top: 0; right: 0; color: red;"
                               onclick="removeImage('file_url_image', 'remove_image_flag')">×</span>
@@ -229,7 +229,7 @@ flatpickr('.datetimepicker', {
     //                 var email = document.querySelector('input[type="email"]');
     //                 var emailError = document.getElementById('email-error-required');
     //                 var emailPatternError = document.getElementById('email-error-format');
-                
+
     //                 if (email.value === '') {
     //                     emailError.style.display = 'block';
     //                     emailPatternError.style.display = 'none';

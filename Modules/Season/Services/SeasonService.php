@@ -75,8 +75,7 @@ class SeasonService
         return $datatable->eloquent($query)
                 ->editColumn('poster_url', function ($data) {
                     $type = 'season';
-                    $imageUrl = !empty($data['tmdb_id']) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
-                    // $imageUrl = getImageUrlOrDefault( $data->poster_url);
+                    $imageUrl = setBaseUrlWithFileName($data->poster_url);
                     return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'type' => $type])->render();
                 })
 
@@ -113,16 +112,16 @@ class SeasonService
                 ->editColumn('status', function ($row) {
                     $checked = $row->status ? 'checked="checked"' : ''; // Check if the status is active
                     $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
-                
+
                     return '
                         <div class="form-check form-switch ">
-                            <input type="checkbox" data-url="' . route('backend.seasons.update_status', $row->id) . '" 
-                                   data-token="' . csrf_token() . '" class="switch-status-change form-check-input"  
-                                   id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" 
+                            <input type="checkbox" data-url="' . route('backend.seasons.update_status', $row->id) . '"
+                                   data-token="' . csrf_token() . '" class="switch-status-change form-check-input"
+                                   id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '"
                                    ' . $checked . ' ' . $disabled . '>
                         </div>
                     ';
-                })                
+                })
             ->orderColumns(['id'], '-:column $1')
             ->rawColumns(['action', 'status', 'check','poster_url','entertainment_id','plan_id'])
             ->toJson();

@@ -116,7 +116,13 @@ class SubscriptionController extends Controller
             ->editColumn('name', function ($data) {
                 return $data->name;
             })
-
+            ->filterColumn('status', function($query, $keyword) {
+                if ($keyword == 'inactive') {
+                    $query->where('status', 'inactive');
+                } else if ($keyword == 'active') {
+                    $query->where('status', 'active');
+                }
+            })
             ->filterColumn('user_id', function($query, $keyword) {
                 if (!empty($keyword)) {
                     $query->whereHas('user', function($q) use ($keyword) {

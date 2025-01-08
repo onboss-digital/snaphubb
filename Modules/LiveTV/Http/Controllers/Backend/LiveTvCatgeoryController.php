@@ -11,6 +11,7 @@ use Modules\LiveTV\Models\LiveTvCategory;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Modules\LiveTV\Http\Requests\TvCategoryRequest;
+use Illuminate\Support\Facades\Cache;
 
 class LiveTvCatgeoryController extends Controller
 {
@@ -78,6 +79,7 @@ class LiveTvCatgeoryController extends Controller
         $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
         $moduleName = 'Tv Category'; // Adjust as necessary for dynamic use
+        Cache::flush();
 
         return $this->performBulkAction(LiveTvCategory::class, $ids, $actionType, $moduleName);
     }
@@ -108,7 +110,7 @@ class LiveTvCatgeoryController extends Controller
             })
             ->editColumn('image', function ($data) {
                 $type = 'livetvcategory';
-                $imageUrl = getImageUrlOrDefault($data->file_url);
+                $imageUrl = setBaseUrlWithFileName($data->file_url);
                 return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'type' => $type])->render();
             })
             ->editColumn('description', function ($row) {
@@ -120,7 +122,7 @@ class LiveTvCatgeoryController extends Controller
             ->editColumn('status', function ($row) {
                 $checked = $row->status ? 'checked="checked"' : ''; // Check if status is active
                 $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
-            
+
                 return '
                     <div class="form-check form-switch ">
                         <input type="checkbox" data-url="' . route('backend.tv-category.update_status', $row->id) . '"
@@ -128,7 +130,7 @@ class LiveTvCatgeoryController extends Controller
                             id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" ' . $checked . ' ' . $disabled . '>
                     </div>
                 ';
-            })       
+            })
             ->editColumn('updated_at', function ($data) {
                 $module_name = $this->module_name;
 
@@ -148,6 +150,7 @@ class LiveTvCatgeoryController extends Controller
     public function update_status(Request $request, LiveTvCategory $id)
     {
         $id->update(['status' => $request->status]);
+        Cache::flush();
 
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
@@ -194,7 +197,7 @@ class LiveTvCatgeoryController extends Controller
     public function edit($id)
     {
         $category = LiveTvCategory::where('id',$id)->first();
-        $category->file_url  = getImageUrlOrDefault($category->file_url );
+        $category->file_url  = setBaseUrlWithFileName($category->file_url );
         $assets = ['textarea'];
         $module_title = __('livetv.edit_title');
         $mediaUrls = getMediaUrls();
@@ -227,6 +230,8 @@ class LiveTvCatgeoryController extends Controller
 
         $data->delete();
 
+        Cache::flush();
+
         $message = __('messages.delete_form', ['form' => __($this->module_title)]);
 
         return response()->json(['message' => $message, 'status' => true], 200);
@@ -235,6 +240,7 @@ class LiveTvCatgeoryController extends Controller
     public function restore($id)
     {
         $data = LiveTvCategory::withTrashed()->where('id', $id)->first();
+        Cache::flush();
         $data->restore();
         $message = trans('messages.restore_form', ['form' => __($this->module_title)]);
         return response()->json(['message' => $message, 'status' => true], 200);
@@ -243,6 +249,7 @@ class LiveTvCatgeoryController extends Controller
     public function forceDelete($id)
     {
         $data = LiveTvCategory::withTrashed()->where('id', $id)->first();
+        Cache::flush();
         $data->forceDelete();
         $message = trans('messages.permanent_delete_form', ['form' =>  __($this->module_title)]);
         return response()->json(['message' => $message, 'status' => true], 200);

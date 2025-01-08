@@ -102,6 +102,11 @@ class EnvironmentManager
         'APP_DEBUG='.$request->app_debug."\n".
         'APP_LOG_LEVEL='.$request->app_log_level."\n".
         'APP_URL='.$request->app_url."\n\n".
+        'MIX_ASSET_URL='.$request->app_url."\n\n".
+        'IS_FAKE_DATA='.'false'."\n\n".
+        'IS_DUMMY_DATA='.'true'."\n\n".
+        'IS_DUMMY_DATA_IMAGE='.'true'."\n\n".
+        'IS_DEMO='.'false'."\n\n".
         'DB_CONNECTION='.$request->database_connection."\n".
         'DB_HOST='.$request->database_hostname."\n".
         'DB_PORT='.$request->database_port."\n".

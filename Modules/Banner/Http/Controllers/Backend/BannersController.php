@@ -14,6 +14,7 @@ use Modules\Entertainment\Models\Entertainment;
 use Modules\LiveTV\Models\LiveTV;
 use Modules\LiveTV\Models\LiveTvChannel;
 use Modules\Banner\Services\BannerService;
+use Illuminate\Support\Facades\Cache;
 
 class BannersController extends Controller
 {
@@ -77,12 +78,16 @@ class BannersController extends Controller
         $actionType = $request->action_type;
         $moduleName = __('banner.title');
 
+        Cache::flush();
+
         return $this->performBulkAction(Banner::class, $ids, $actionType, $moduleName);
     }
 
     public function update_status(Request $request, Banner $id)
     {
         $id->update(['status' => $request->status]);
+
+        Cache::flush();
 
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
@@ -104,11 +109,8 @@ class BannersController extends Controller
 
         foreach ($names as &$value) {
 
-            if ($value['tmdb_id']==null ) {
-
                 $value['thumbnail_url'] = setBaseUrlWithFileName($value['thumbnail_url']);
                 $value['poster_url'] = setBaseUrlWithFileName($value['poster_url']);
-            }
 
         }
 
@@ -146,7 +148,7 @@ class BannersController extends Controller
 
             ->addColumn('image', function ($data) {
                 $type = 'banner';
-                $imageUrl = getImageUrlOrDefault($data->file_url);
+                $imageUrl = setBaseUrlWithFileName($data->file_url);
                 return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->title, 'type' => $type])->render();
 
             })
@@ -159,12 +161,12 @@ class BannersController extends Controller
             ->editColumn('status', function ($data) {
                 $checked = '';
                 $disabled = '';
-            
+
                 // Check if the status is active
                 if ($data->status) {
                     $checked = 'checked="checked"';
                 }
-            
+
                 // Check if the record is soft-deleted and disable the checkbox if true
                 if ($data->trashed()) {
                     $disabled = 'disabled';
@@ -243,8 +245,8 @@ class BannersController extends Controller
         $names = [];
 
         $banner['name_id'] = $banner->type_id;
-        $banner->file_url  = getImageUrlOrDefault($banner->file_url);
-        $banner->poster_url = getImageUrlOrDefault($banner->poster_url);
+        $banner->file_url  = setBaseUrlWithFileName($banner->file_url);
+        $banner->poster_url = setBaseUrlWithFileName($banner->poster_url);
 
         $mediaUrls = getMediaUrls();
 

@@ -50,8 +50,7 @@
         "symfony/http-foundation": "^7.0"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.14",
-        "barryvdh/laravel-ide-helper": "^3.0",
+      "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.9.1",
         "friendsofphp/php-cs-fixer": "^3.40",
         "laravel/breeze": "^2.0",

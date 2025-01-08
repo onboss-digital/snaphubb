@@ -41,7 +41,6 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get("index_list", [FAQSController::class, 'index_list'])->name("index_list");
       Route::get("index_data", [FAQSController::class, 'index_data'])->name("index_data");
       Route::get('export', [FAQSController::class, 'export'])->name('export');
-      // Route::get('faqs/{' . 'faqs' . '}/edit', [FAQSController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [FAQSController::class, 'bulk_action'])->name('bulk_action');
       Route::post('restore/{id}', [FAQSController::class, 'restore'])->name('restore');
       Route::delete('force-delete/{id}', [FAQSController::class, 'forceDelete'])->name('force_delete');

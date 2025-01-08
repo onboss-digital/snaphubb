@@ -62,7 +62,13 @@ class SubscriptionController extends Controller
 
         $taxes=Tax::where('status',1)->get();
 
-        $baseAmount = $plan->price; // Assuming the plan amount is your base for tax calculation
+        $baseAmount = $plan->price;
+
+        if($plan['discount_percentage']>0){
+
+            $baseAmount = $plan->price -($plan->price*$plan['discount_percentage']/100);
+        }
+
         $totalTax = 0;
 
         foreach ($taxes as $tax) {

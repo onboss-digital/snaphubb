@@ -209,32 +209,84 @@
       }
     }
 
+    function clearCache() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Are you sure you want to clear the cache?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, Clear it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('{{ route('backend.settings.clear-cache') }}', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Cache Clear successfully', // Use the dynamic message from the server
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An unexpected error occurred.',
+                        icon: 'error',
+                        showConfirmButton: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error clearing cache:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while clearing the cache.',
+                    icon: 'error',
+                    showConfirmButton: true
+                });
+            });
+        }
+    });
+}
+
+
 
 
     // Function to clear cache
-    function clearCache() {
-      if (confirm('Are you sure you want to clear the cache?')) {
-        fetch('{{ route('backend.settings.clear-cache') }}', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            alert('Cache cleared successfully.');
-          } else {
-            alert('Failed to clear cache.');
-          }
-        })
-        .catch(error => {
-          console.error('Error clearing cache:', error);
-          alert('An error occurred while clearing the cache.');
-        });
-      }
-    }
+    // function clearCache() {
+    //   if (confirm('Are you sure you want to clear the cache?')) {
+    //     fetch('{{ route('backend.settings.clear-cache') }}', {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    //       }
+    //     })
+    //     .then(response => response.json())
+    //     .then(data => {
+    //       if (data.success) {
+    //         alert('Cache cleared successfully.');
+    //       } else {
+    //         alert('Failed to clear cache.');
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Error clearing cache:', error);
+    //       alert('An error occurred while clearing the cache.');
+    //     });
+    //   }
+    // }
 
 
 

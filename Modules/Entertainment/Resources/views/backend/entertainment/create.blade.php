@@ -773,7 +773,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         return;
                     }
 
-                    var baseUrl = "{{ env('APP_URL') }}";
+                    var baseUrl = "{{ url('/') }}";
                     var url = baseUrl + '/app/movies/import-movie/' + movieId;
 
                     $('#loader').show();

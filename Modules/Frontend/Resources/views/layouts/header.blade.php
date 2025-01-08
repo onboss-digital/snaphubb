@@ -78,7 +78,7 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-sm-end dropdown-menu-language mt-0">
                                         @foreach (config('app.available_locales') as $locale => $title)
-                                            <a class="dropdown-item" href="{{ route('language.switch', $locale) }}">
+                                            <a class="dropdown-item" href="{{ route('frontend.language.switch', $locale) }}">
                                                 <span class="d-flex align-items-center gap-3">
                                                     <img src="{{ asset('flags/' . $locale . '.png') }}" alt="flag" class="img-fluid mr-2"style="width: 20px;height: auto;min-width: 15px;">
                                                     <span> {{ $title }}</span>
@@ -110,13 +110,13 @@
                                     <li class="nav-item flex-shrink-0 dropdown dropdown-user-wrapper">
                                         <a class="nav-link dropdown-user" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                                             aria-expanded="false">
-                                            <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url)?? setDefaultImage(auth()->user()->file_url) }}" class="img-fluid user-image rounded-circle" alt="user image">
+                                            <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url)}}" class="img-fluid user-image rounded-circle" alt="user image">
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end dropdown-user-menu border border-gray-900" aria-labelledby="navbarDropdown">
                                             <div class="bg-body p-3 d-flex justify-content-between align-items-center gap-3 rounded mb-4">
                                                 <div class="d-inline-flex align-items-center gap-3">
                                                     <div class="image flex-shrink-0">
-                                                        <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url)?? setDefaultImage(auth()->user()->file_url) }}" class="img-fluid dropdown-user-menu-image" alt="">
+                                                        <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url) }}" class="img-fluid dropdown-user-menu-image" alt="">
                                                     </div>
                                                     <div class="content">
                                                         <h6 class="mb-1"> {{ auth()->user()->full_name ?? default_user_name() }}</h6>
@@ -185,7 +185,7 @@
                                     </li>
                                 @else
                                     <li class="nav-item">
-                                        <a href="{{ url('/login') }}" class="btn btn-primary font-size-14 login-btn">
+                                        <a href="{{ route('login') }}" class="btn btn-primary font-size-14 login-btn">
                                             {{__('frontend.login')}}
                                         </a>
                                     </li>

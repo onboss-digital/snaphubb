@@ -64,6 +64,9 @@ class EntertainmentsController extends Controller
         $actionType = $request->action_type;
         $moduleName = 'Entertainment'; // Adjust as necessary for dynamic use
 
+        Cache::flush();
+
+
         return $this->performBulkAction(Entertainment::class, $ids, $actionType, $moduleName);
     }
 
@@ -104,6 +107,8 @@ class EntertainmentsController extends Controller
     {
         $id->update(['status' => $request->status]);
 
+        Cache::flush();
+
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
 
@@ -124,10 +129,10 @@ class EntertainmentsController extends Controller
                 'entertainmentTalentMappings'
             ])
             ->first();
-                
+
         $tmdb_id = $data->tmdb_id;
-        $data->thumbnail_url = !empty($data->tmdb_id) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->thumbnail_url = setBaseUrlWithFileName($data->thumbnail_url);
+        $data->poster_url =setBaseUrlWithFileName($data->poster_url);
 
         if($data->trailer_url_type =='Local'){
 
@@ -306,19 +311,17 @@ class EntertainmentsController extends Controller
 
         ])->findOrFail($id);
 
-        
+
        foreach ($data->entertainmentTalentMappings as $talentMapping) {
     $talentProfile = $talentMapping->talentprofile;
 
     if ($talentProfile) {
         if (in_array($talentProfile->type, ['actor', 'director'])) {
-            $talentProfile->file_url = !empty($talentProfile->tmdb_id) 
-                ? $talentProfile->file_url 
-                : getImageUrlOrDefault($talentProfile->file_url);
+            $talentProfile->file_url =  setBaseUrlWithFileName($talentProfile->file_url);
         }
     }
 }
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->poster_url =setBaseUrlWithFileName($data->poster_url);
 
         $data->formatted_release_date = Carbon::parse($data->release_date)->format('d M, Y');
         if($data->type == "movie"){

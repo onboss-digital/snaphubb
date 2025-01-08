@@ -232,6 +232,8 @@
       removedFlag.value = 1;
     }
 
+    window.removeImage = removeImage;
+
     $('#removeImageBtn1').click(function () {
       removeImage('selectedImageContainer1', 'file_url1', 'remove_image_flag1');
     });
@@ -241,6 +243,6 @@
     });
   });
 
-
+  
 </script>
 @endpush

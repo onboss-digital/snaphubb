@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
  <div class="card-body">
-    {{ html()->form('POST' ,route('backend.media-library.store'))->attribute('enctype', 'multipart/form-data')->attribute('data-toggle', 'validator')->open() }}
+    {{ html()->form('POST' ,route('backend.media-library.store-data'))->attribute('enctype', 'multipart/form-data')->attribute('data-toggle', 'validator')->open() }}
       @csrf
       <div class="row">
           <div class="col-sm-6 mb-3">

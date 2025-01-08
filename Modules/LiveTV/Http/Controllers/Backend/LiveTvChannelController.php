@@ -16,6 +16,8 @@ use Modules\LiveTV\Models\LiveTvCategory;
 use Modules\LiveTV\Http\Requests\TvChannelRequest;
 use Modules\LiveTV\Models\TvChannelStreamContentMapping;
 use Modules\LiveTV\Services\LiveTvChannelService;
+use Illuminate\Support\Facades\Cache;
+
 
 class LiveTvChannelController extends Controller
 {
@@ -92,6 +94,8 @@ class LiveTvChannelController extends Controller
         $actionType = $request->action_type;
         $moduleName = 'Tv Channel'; // Adjust as necessary for dynamic use
 
+        Cache::flush();
+
         return $this->performBulkAction(LiveTvChannel::class, $ids, $actionType, $moduleName);
     }
 
@@ -119,7 +123,7 @@ class LiveTvChannelController extends Controller
         return $datatable->eloquent($query)
             ->editColumn('image', function ($data) {
                 $type = 'livetvchannel';
-                $imageUrl = getImageUrlOrDefault( $data->poster_url);
+                $imageUrl = setBaseUrlWithFileName( $data->poster_url);
                 return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'type' => $type])->render();
             })
             ->editColumn('name', fn($data) => $data->name)
@@ -145,17 +149,17 @@ class LiveTvChannelController extends Controller
                 return view('livetv::backend.channel.action', compact('data'));
             })
             ->editColumn('status', function ($data) {
-                $checked = $data->status ? 'checked="checked"' : ''; 
-                $disabled = $data->trashed() ? 'disabled' : '';       
+                $checked = $data->status ? 'checked="checked"' : '';
+                $disabled = $data->trashed() ? 'disabled' : '';
                 return '
                     <div class="form-check form-switch">
-                        <input type="checkbox" data-url="' . route('backend.tv-channel.update_status', $data->id) . '" 
-                               data-token="' . csrf_token() . '" class="switch-status-change form-check-input" 
-                               id="datatable-row-' . $data->id . '" name="status" value="' . $data->id . '" 
+                        <input type="checkbox" data-url="' . route('backend.tv-channel.update_status', $data->id) . '"
+                               data-token="' . csrf_token() . '" class="switch-status-change form-check-input"
+                               id="datatable-row-' . $data->id . '" name="status" value="' . $data->id . '"
                                ' . $checked . ' ' . $disabled . '>
                     </div>
                 ';
-            })            
+            })
             ->editColumn('updated_at', fn($data) => $this->formatUpdatedAt($data->updated_at))
             ->rawColumns(['action', 'status', 'check', 'image', 'plan_id','category_name'])
             ->orderColumns(['id'], '-:column $1')
@@ -171,6 +175,8 @@ class LiveTvChannelController extends Controller
     public function update_status(Request $request, LiveTvChannel $id)
     {
         $id->update(['status' => $request->status]);
+
+        Cache::flush();
 
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
@@ -227,7 +233,7 @@ class LiveTvChannelController extends Controller
     public function edit($id)
     {
         $data = LiveTvChannel::withTrashed()->with('TvChannelStreamContentMappings')->findOrFail($id);
-        $data->poster_url = getImageUrlOrDefault($data->poster_url );
+        $data->poster_url = setBaseUrlWithFileName($data->poster_url );
         $plan = Plan::where('status', 1)->get();
         $tvcategory = LiveTvCategory::where('status', 1)->get();
         $embedded = Constant::where('type', 'STREAM_TYPE')->where('name', 'Embedded')->get();
@@ -247,6 +253,8 @@ class LiveTvChannelController extends Controller
         $data['poster_url'] = extractFileNameFromUrl($data['poster_url']);
 
         $liveTvChannel = LiveTvChannel::findOrFail($id);
+
+
 
         if ($request->type === 't_url') {
             $data['stream_type'] = $request->input('stream_type');
@@ -274,6 +282,8 @@ class LiveTvChannelController extends Controller
                 'server_url1' => $data['server_url1'],
             ]);
         }
+
+        Cache::flush();
 
         $message = trans('messages.update_form', ['form' => 'Tv Channel']);
         return redirect()->route('backend.tv-channel.index')->with('success', $message);

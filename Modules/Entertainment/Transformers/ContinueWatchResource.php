@@ -56,8 +56,8 @@ class ContinueWatchResource extends JsonResource
             'download_status' => $entertainment->download_status ?? null,
             'enable_quality' => $entertainment->enable_quality ?? null,
             'download_url' => $entertainment->download_url ?? null,
-            'poster_image' => !empty($entertainment->tmdb_id) ? $entertainment->poster_url : setBaseUrlWithFileName($entertainment->poster_url ?? null ),
-            'thumbnail_image' => !empty($entertainment->tmdb_id) ? $entertainment->thumbnail_url : setBaseUrlWithFileName($entertainment->thumbnail_url ?? null),
+            'poster_image' =>  setBaseUrlWithFileName($entertainment->poster_url ?? null ),
+            'thumbnail_image' =>setBaseUrlWithFileName($entertainment->thumbnail_url ?? null),
             'plans' => $plans ? PlanResource::collection($plans) : [],
             'status' => $entertainment->status ?? null,
         ];

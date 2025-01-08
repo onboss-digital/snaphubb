@@ -128,17 +128,19 @@ class WatchlistController extends Controller
 
         $ids = $request->is_ajax == 1 ? $request->id : explode(',', $request->id);
 
-        $entertainment = Entertainment::whereIn('id',$ids)->get();
+        // $entertainment = Entertainment::whereIn('id',$ids)->get();
 
-        foreach($entertainment as $e){
+        // foreach($entertainment as $e){
 
-         $cacheKey = $e->type === 'movie'
-                     ? 'movie_' . $e->id.'_'.$request->profile_id
-                     : 'tvshow_' . $e->id.'_'.$request->profile_id;
+        //  $cacheKey = $e->type === 'movie'
+        //              ? 'movie_' . $e->id.'_'.$request->profile_id
+        //              : 'tvshow_' . $e->id.'_'.$request->profile_id;
 
-           Cache::forget($cacheKey);
+        //    Cache::forget($cacheKey);
 
-        }
+        // }
+
+        Cache::flush();
         $watchlist = Watchlist::whereIn('entertainment_id', $ids)->where('user_id', $user->id)->forceDelete();
 
         if ($watchlist == null) {

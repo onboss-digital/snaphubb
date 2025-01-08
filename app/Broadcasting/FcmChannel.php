@@ -31,6 +31,7 @@ class FcmChannel
 
     public function send($notifiable, Notification $notification)
     {
+
         $notification->tofcm($notifiable, $notification);
     }
 }

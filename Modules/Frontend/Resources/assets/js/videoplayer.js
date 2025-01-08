@@ -140,17 +140,18 @@ document.addEventListener('DOMContentLoaded', function () {
       await handleWatchButtonClick(watchNowButton)
     })
   }
+  const buttons = document.querySelectorAll('.season-watch-btn');
 
-  if (seasonWatchBtn) {
-    seasonWatchBtn.addEventListener('click', async function (e) {
-      e.preventDefault()
-      if (!isAuthenticated) {
-        window.location.href = loginUrl // Redirect to login if not authenticated
-        return // Stop further execution
-      }
-      await handleWatchButtonClick(seasonWatchBtn)
+    buttons.forEach(button => {
+      button.addEventListener('click', async function (e) {
+        e.preventDefault()
+        if (!isAuthenticated) {
+          window.location.href = loginUrl // Redirect to login if not authenticated
+          return // Stop further execution
+        }
+        await handleWatchButtonClick(button)
     })
-  }
+  });
 
   function playVideo(videoUrl, qualityOptions, lastWatchedTime) {
     const datatype = watchNowButton?.getAttribute('data-type') || seasonWatchBtn?.getAttribute('data-type')

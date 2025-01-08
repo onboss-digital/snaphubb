@@ -28,7 +28,7 @@ class CastCrewListResource extends JsonResource
             'place_of_birth' => $this->place_of_birth,
             'dob' => $this->dob,
             'designation' => $this->designation,
-            'profile_image' => !empty($this->tmdb_id) ? $this->file_url : setBaseUrlWithFileName($this->file_url),
+            'profile_image' => setBaseUrlWithFileName($this->file_url),
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,

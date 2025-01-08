@@ -84,41 +84,42 @@ class MobileSettingController extends Controller
      */
     public function store(MobileSettingRequest $request)
     {
+
         $data = $request->all();
-    
+
         Cache::flush();
-    
+
         if (!$request->has('dashboard_select') || empty($request->dashboard_select)) {
             $data['value'] = null;
         } else {
             $data['value'] = json_encode($request->dashboard_select);
         }
-    
+
         $result = MobileSetting::updateOrCreate(['id' => $request->id], $data);
-    
+
         if ($result->wasRecentlyCreated) {
-    
+
             $result['slug'] = strtolower(Str::slug($result->name, '-'));
-    
+
             $result->save();
-    
+
             if (in_array($result->slug, ['banner', 'continue-watching', 'advertisement', 'rate-our-app'])) {
-    
+
                 $result->value = 1;
-    
+
                 $result->save();
             }
-    
+
             $message = __('messages.create_form', ['form' => __($this->module_title)]);
         } else {
             $message = __('messages.update_form', ['form' => __($this->module_title)]);
         }
-    
+
         if ($request->ajax()) {
-    
+
             return response()->json(['success' => true, 'message' => $message]);
         }
-    
+
         return redirect()->route('backend.mobile-setting.index')->with('success', $message);
     }
 
@@ -181,7 +182,7 @@ class MobileSettingController extends Controller
                     ->orderBy('total', 'desc')
                     ->take(10)
                     ->pluck('entertainment_id');
-                $value = Entertainment::whereIn('id', $topEntertainmentIds)->get();
+                $value = Entertainment::whereIn('id', $topEntertainmentIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
 
                 if (!empty($selectedIds)) {
                     $selected_values = Entertainment::whereIn('id', $selectedIds)->get();
@@ -195,7 +196,7 @@ class MobileSettingController extends Controller
                     ->get();
 
                 if (!empty($selectedIds)) {
-                    $selected_values = Entertainment::whereIn('id', $selectedIds)->get();
+                    $selected_values = Entertainment::whereIn('id', $selectedIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
                 }
                 break;
             case 'enjoy-in-your-native-tongue':
@@ -209,14 +210,14 @@ class MobileSettingController extends Controller
                 $value = Entertainment::where('type', 'movie')->where('IMDb_rating', '>', 5)->orderBy('IMDb_rating', 'desc')->take(10)->get();
 
                 if (!empty($selectedIds)) {
-                    $selected_values = Entertainment::whereIn('id', $selectedIds)->get();
+                    $selected_values = Entertainment::whereIn('id', $selectedIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
                 }
                 break;
             case 'popular-tvshows':
                 $value = Entertainment::where('type', 'tvshow')->where('IMDb_rating', '>', 5)->orderBy('IMDb_rating', 'desc')->take(20)->get();
 
                 if (!empty($selectedIds)) {
-                    $selected_values = Entertainment::whereIn('id', $selectedIds)->get();
+                    $selected_values = Entertainment::whereIn('id', $selectedIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
                 }
                 break;
             // case 'popular-tvcategories':
@@ -230,14 +231,14 @@ class MobileSettingController extends Controller
                 $value = Video::all();
 
                 if (!empty($selectedIds)) {
-                    $selected_values = Video::whereIn('id', $selectedIds)->get();
+                    $selected_values = Video::whereIn('id', $selectedIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
                 }
                 break;
             case 'top-channels':
                 $value = LiveTvChannel::take(10)->get();
 
                 if (!empty($selectedIds)) {
-                    $selected_values = LiveTvChannel::whereIn('id', $selectedIds)->get();
+                    $selected_values = LiveTvChannel::whereIn('id', $selectedIds)->where('status',1)->get();
                 }
                 break;
             case 'your-favorite-personality':
@@ -251,7 +252,7 @@ class MobileSettingController extends Controller
                 $value = Entertainment::where('type', 'movie')->where('movie_access', 'free')->take(10)->get();
 
                 if (!empty($selectedIds)) {
-                    $selected_values = Entertainment::whereIn('id', $selectedIds)->get();
+                    $selected_values = Entertainment::whereIn('id', $selectedIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
                 }
                 break;
             case 'genre':
@@ -296,13 +297,14 @@ class MobileSettingController extends Controller
                     ->orderBy('total', 'desc')
                     ->take(10)
                     ->pluck('entertainment_id');
-                $value = Entertainment::whereIn('id', $topEntertainmentIds)->get();
+                $value = Entertainment::whereIn('id', $topEntertainmentIds)->whereDate('release_date', '<=', now())->where('status',1)->get();
 
                 break;
             case 'latest-movies':
                 $value = Entertainment::where('type', 'movie')
                     ->whereDate('release_date', '<=', now())
                     ->orderBy('release_date', 'desc')
+                    ->where('status',1)
                     ->take(10)
                     ->get();
 
@@ -314,12 +316,12 @@ class MobileSettingController extends Controller
 
                 break;
             case 'popular-movies':
-                $value = Entertainment::where('type', 'movie')->where('IMDb_rating', '>', 5)->orderBy('IMDb_rating', 'desc')->take(10)->get();
+                $value = Entertainment::where('type', 'movie')->where('IMDb_rating', '>', 5)->whereDate('release_date', '<=', now())->where('status',1)->orderBy('IMDb_rating', 'desc')->take(10)->get();
 
 
                 break;
             case 'popular-tvshows':
-                $value = Entertainment::where('type', 'tvshow')->where('IMDb_rating', '>', 5)->orderBy('IMDb_rating', 'desc')->take(20)->get();
+                $value = Entertainment::where('type', 'tvshow')->where('IMDb_rating', '>', 5)->orderBy('IMDb_rating', 'desc')->whereDate('release_date', '<=', now())->where('status',1)->take(20)->get();
 
 
                 break;
@@ -329,12 +331,12 @@ class MobileSettingController extends Controller
 
             //     break;
             case 'popular-videos':
-                $value = Video::all();
+                $value = Video::whereDate('release_date', '<=', now())->where('status',1)->get();
 
 
                 break;
             case 'top-channels':
-                $value = LiveTvChannel::take(10)->get();
+                $value = LiveTvChannel::take(10)->where('status',1)->get();
 
 
                 break;
@@ -343,12 +345,12 @@ class MobileSettingController extends Controller
 
                 break;
             case '500-free-movies':
-                $value = Entertainment::where('type', 'movie')->where('movie_access', 'free')->take(10)->get();
+                $value = Entertainment::where('type', 'movie')->where('movie_access', 'free')->whereDate('release_date', '<=', now())->where('status',1)->take(10)->get();
 
 
                 break;
             case 'genre':
-                $value = Genres::take(10)->get();
+                $value = Genres::take(10)->where('status',1)->get();
 
                 break;
         }
@@ -358,11 +360,16 @@ class MobileSettingController extends Controller
     public function addNewRequest(MobileAddSettingRequest $request)
     {
 
-        Cache::flush();
+         Cache::flush();
 
         if ($request->has('type') && $request->type != null) {
 
-            $value = json_encode($request->optionvalue);
+            if ($request->has('optionvalue') && !empty($request->optionvalue)) {
+                $value = json_encode($request->optionvalue);
+            } else {
+                $value = null;
+            }
+
             $maxPosition = (int) MobileSetting::max('position');
             $mobileSetting = MobileSetting::find($request->id);
 

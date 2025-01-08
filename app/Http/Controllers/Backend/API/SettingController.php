@@ -131,6 +131,7 @@ class SettingController extends Controller
 
         $taxes = Tax::active()->get();
         $ads_val= MobileSetting::where('slug', 'banner')->first();
+        $rate_our_app= MobileSetting::where('slug', 'rate-our-app')->first();
 
         if (isset($settings['isForceUpdate']) && isset($settings['version_code'])) {
             $response['isForceUpdate'] = intval($settings['isForceUpdate']);
@@ -162,6 +163,7 @@ class SettingController extends Controller
         $response['enable_tvshow'] = isset($settings['tvshow']) ? intval($settings['tvshow']) : 0;
         $response['enable_video'] = isset($settings['video']) ? intval($settings['video']) : 0;
         $response['enable_ads'] = isset($ads_val->value) ? (int) $ads_val->value : 0;
+        $response['enable_rate_us'] = isset($rate_our_app->value) ? (int) $rate_our_app->value : 0;
         if(!empty($request->user_id)){
             $response['is_device_supported'] = $deviceTypeResponse['isDeviceSupported'];
         }

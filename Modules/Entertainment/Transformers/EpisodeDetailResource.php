@@ -95,7 +95,7 @@ class EpisodeDetailResource extends JsonResource
             'download_url' => $this->download_url,
             'enable_download_quality' => $this->enable_download_quality,
             'download_quality' => $downloadMappings,
-            'poster_image' => !empty($this->tmdb_id) ? $this->poster_url : setBaseUrlWithFileName($this->poster_url),
+            'poster_image' =>setBaseUrlWithFileName($this->poster_url),
             'language' => optional($this->entertainmentdata)->language,
             'video_links' => $this->EpisodeStreamContentMapping ?? null,
             'plan' => new PlanResource($this->plan),

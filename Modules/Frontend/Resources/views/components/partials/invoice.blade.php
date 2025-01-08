@@ -18,7 +18,8 @@
             margin: 0;
         }
         body {
-            font-family: "Roboto", sans-serif;
+            /* font-family: "Roboto", sans-serif; */
+            font-family: 'DejaVu Sans';
             color: #6B6B6B;
             font-size: 16px;
         }
@@ -186,7 +187,8 @@
         @if($data->discount_percentage >0)
 
           @php
-              $discout_amount= $data->amount*$data->discount_percentage/100;
+              $discount_amount= $data->amount*$data->discount_percentage/100;
+              $amount_after_discount = $data->amount - $discount_amount;
           @endphp
 
         <tr>
@@ -194,7 +196,7 @@
             <td></td>
             <td></td>
             <td>Discount ({{ $data->discount_percentage }}%)</td>
-            <td class="c-text-end">{{ \Currency::format($discout_amount) }}</td>
+            <td class="c-text-end">{{ \Currency::format($discount_amount) }}</td>
 
         </tr>
 
@@ -207,7 +209,7 @@
             $totalTaxAmount = 0;
             foreach ($taxData as $tax) {
                 if (strtolower($tax['type']) == 'percentage') {
-                    $totalTaxAmount += ($data->amount * $tax['value']) / 100;
+                    $totalTaxAmount += ($amount_after_discount * $tax['value']) / 100;
                 } elseif (strtolower($tax['type']) == 'fixed') {
                     $totalTaxAmount += $tax['value'];
                 }
@@ -220,7 +222,7 @@
         @foreach ($taxData as $tax)
             @php
                 if (strtolower($tax['type']) == 'percentage') {
-                    $taxAmount = ($data->amount * $tax['value']) / 100;
+                    $taxAmount = ($amount_after_discount * $tax['value']) / 100;
                 } elseif (strtolower($tax['type']) == 'fixed') {
                     $taxAmount = $tax['value'];
                 } else {

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
-    'version' => '1.0.0',
+    'version' => '1.1.0',
 
     /*
     |--------------------------------------------------------------------------
@@ -189,6 +189,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        // Barryvdh\DomPDF\ServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -219,7 +221,6 @@ return [
         Modules\Frontend\Providers\FrontendServiceProvider::class,
         App\Providers\StreamContentServiceProvider::class,
         App\Providers\ChatGTPServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
     /*
@@ -240,7 +241,6 @@ return [
         'MultiVendor' => App\MultiVendor\MultiVendorFacades::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

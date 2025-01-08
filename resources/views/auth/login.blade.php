@@ -1,7 +1,6 @@
 <x-auth-layout>
   <x-slot name="title">
     @lang('Login')
-
   </x-slot>
 
   <x-auth-card>

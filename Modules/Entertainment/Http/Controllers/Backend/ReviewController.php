@@ -13,6 +13,7 @@ use Modules\Entertainment\Trait\ImportMovieTrait;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 
 class ReviewController extends Controller
@@ -200,6 +201,8 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         $data = Review::findOrFail($id);
+
+        Cache::flush();
         $data->delete();
         $formtitle = __('review.title');
         $message = trans('messages.delete_form', ['form' => $formtitle]);
@@ -209,7 +212,9 @@ class ReviewController extends Controller
     public function restore($id)
     {
         $data = Review::withTrashed()->findOrFail($id);
+
         $data->restore();
+        Cache::flush();
         $formtitle = __('review.title');
         $message = trans('messages.restore_form', ['form' => $formtitle]);
         return response()->json(['message' => $message, 'status' => true], 200);
@@ -219,6 +224,7 @@ class ReviewController extends Controller
     {
         $data = Review::withTrashed()->findOrFail($id);
         $data->forceDelete();
+        Cache::flush();
         $formtitle = __('review.title');
         $message = trans('messages.permanent_delete_form', ['form' => $formtitle]);
         return response()->json(['message' => $message, 'status' => true], 200);

@@ -2,6 +2,7 @@
 
 @section('content')
     <div id="login">
+
         <div class="vh-100" style="background-image: url('{{ asset('/dummy-images/login_banner.jpg') }}')">
             <div class="container">
                 <div class="row justify-content-center align-items-center height-self-center vh-100">
@@ -81,6 +82,7 @@
 
 
                             </div>
+
                             <!-- OTP Verification Form -->
                             <div id="otp-form" style="display: none;">
                                 <form id="verify-otp-form" class="requires-validation" data-toggle="validator" novalidate>

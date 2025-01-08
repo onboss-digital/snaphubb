@@ -22,11 +22,7 @@
                             <div class="input-group flex-nowrap">
                             </div>
 
-                            @hasPermission('add_page')
-                            <x-buttons.offcanvas target='#form-offcanvas'
-                                title="{{ __('messages.create') }} {{ __('page.lbl_role') }}">{{ __('messages.create') }}
-                                {{ __('page.lbl_role') }}</x-buttons.offcanvas>
-                            @endhasPermission
+
                         </x-slot>
                     </x-backend.section-header>
 

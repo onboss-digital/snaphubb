@@ -72,7 +72,7 @@ class CastCrewService
         ->editColumn('image', function ($data) {
             $designation = $data->designation;
             $type = 'castcrew';
-            $imageUrl = !empty($data['tmdb_id']) ? $data->file_url : getImageUrlOrDefault($data->file_url);
+            $imageUrl = setBaseUrlWithFileName($data->file_url);
             return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'designation' => $designation, 'type' => $type])->render();
         })
 

@@ -158,7 +158,7 @@ const columns = [
                 url: '{{ route("backend.$module_name.index_data") }}',
                 finalColumns,
                 orderColumn: [
-                     [4, "desc"]
+                     [5, "desc"]
              ],
 
              advanceFilter: () => {

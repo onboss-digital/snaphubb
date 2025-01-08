@@ -10,6 +10,7 @@ use App\Trait\ModuleTrait;
 use AWS\CRT\HTTP\Request as HTTPRequest;
 use Modules\CastCrew\Services\CastCrewService;
 use App\Services\ChatGTPService;
+use Illuminate\Support\Facades\Cache;
 
 class CastCrewController extends Controller
 {
@@ -97,6 +98,7 @@ class CastCrewController extends Controller
         $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
         $moduleName = 'Cast Crew';
+        Cache::flush();
 
         return $this->performBulkAction(CastCrew::class, $ids, $actionType, $moduleName);
     }

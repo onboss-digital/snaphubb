@@ -180,83 +180,7 @@ function getAccessToken()
 
     return $token['access_token'];
 }
-function timeAgoInt($date)
-{
-    if ($date == null) {
-        return '-';
-    }
-    $datetime = new \DateTime($date);
-    $datetime->setTimezone(new \DateTimeZone(setting('default_time_zone') ?? 'UTC'));
-    $diff_time = \Carbon\Carbon::parse($datetime)->diffInHours();
 
-    return $diff_time;
-}
-function timeAgo($date)
-{
-    if ($date == null) {
-        return '-';
-    }
-    $datetime = new \DateTime($date);
-    $datetime->setTimezone(new \DateTimeZone(setting('default_time_zone') ?? 'UTC'));
-    $diff_time = \Carbon\Carbon::parse($datetime)->diffForHumans();
-
-    return $diff_time;
-}
-function dateAgo($date, $type2 = '')
-{
-    if ($date == null || $date == '0000-00-00 00:00:00') {
-        return '-';
-    }
-    $diff_time1 = \Carbon\Carbon::createFromTimeStamp(strtotime($date))->diffForHumans();
-    $datetime = new \DateTime($date);
-    $datetime->setTimezone(new \DateTimeZone(setting('default_time_zone') ?? 'UTC'));
-    $diff_time = \Carbon\Carbon::parse($datetime->format('Y-m-d H:i:s'))->isoFormat('LLL');
-    if ($type2 != '') {
-        return $diff_time;
-    }
-
-    return $diff_time1 . ' on ' . $diff_time;
-}
-
-function customDate($date, $format = 'd-m-Y h:i A')
-{
-    if ($date == null || $date == '0000-00-00 00:00:00') {
-        return '-';
-    }
-    $datetime = new \DateTime($date);
-    $la_time = new \DateTimeZone(setting('default_time_zone') ?? 'UTC');
-    $datetime->setTimezone($la_time);
-    $newDate = $datetime->format('Y-m-d H:i:s');
-    $diff_time = \Carbon\Carbon::createFromTimeStamp(strtotime($newDate))->format($format);
-
-    return $diff_time;
-}
-
-function saveDate($date)
-{
-    if ($date == null || $date == '0000-00-00 00:00:00') {
-        return null;
-    }
-    $datetime = new \DateTime($date);
-    // $la_time = new \DateTimeZone(\Auth::check() ? \Auth::user()->time_zone ?? 'UTC' : 'UTC');
-    $la_time = new \DateTimeZone(setting('default_time_zone') ?? 'UTC');
-    $datetime->setTimezone($la_time);
-    $newDate = $datetime->format('Y-m-d H:i:s');
-    $diff_time = \Carbon\Carbon::createFromTimeStamp(strtotime($newDate));
-
-    return $diff_time;
-}
-function strtotimeToDate($date)
-{
-    if ($date == null || $date == '0000-00-00 00:00:00') {
-        return '-';
-    }
-    $datetime = new \DateTime($date);
-    $datetime->setTimezone(new \DateTimeZone(setting('default_time_zone') ?? 'UTC'));
-    $diff_time = \Carbon\Carbon::createFromTimeStamp($datetime);
-
-    return $diff_time;
-}
 function formatOffset($offset)
 {
     $hours = $offset / 3600;
@@ -403,66 +327,7 @@ if (!function_exists('label_case')) {
     }
 }
 
-/*
- *
- * show_column_value
- *
- * ------------------------------------------------------------------------
- */
-if (!function_exists('show_column_value')) {
-    /**
-     * Return Column values as Raw and formatted.
-     *
-     * @param  string  $valueObject  Model Object
-     * @param  string  $column  Column Name
-     * @param  string  $return_format  Return Type
-     * @return string Raw/Formatted Column Value
-     */
-    function show_column_value($valueObject, $column, $return_format = '')
-    {
-        $column_name = $column->Field;
-        $column_type = $column->Type;
 
-        $value = $valueObject->$column_name;
-
-        if ($return_format == 'raw') {
-            return $value;
-        }
-
-        if (($column_type == 'date') && $value != '') {
-            $datetime = \Carbon\Carbon::parse($value);
-
-            return $datetime->isoFormat('LL');
-        } elseif (($column_type == 'datetime' || $column_type == 'timestamp') && $value != '') {
-            $datetime = \Carbon\Carbon::parse($value);
-
-            return $datetime->isoFormat('LLLL');
-        } elseif ($column_type == 'json') {
-            $return_text = json_encode($value);
-        } elseif ($column_type != 'json' && \Illuminate\Support\Str::endsWith(strtolower($value), ['png', 'jpg', 'jpeg', 'gif', 'svg'])) {
-            $img_path = asset($value);
-
-            $return_text = '<figure class="figure">
-                                <a href="' . $img_path . '" data-lightbox="image-set" data-title="Path: ' . $value . '">
-                                    <img src="' . $img_path . '" style="max-width:200px;" class="figure-img img-fluid rounded img-thumbnail" alt="">
-                                </a>
-                                <figcaption class="figure-caption">Path: ' . $value . '</figcaption>
-                            </figure>';
-        } else {
-            $return_text = $value;
-        }
-
-        return $return_text;
-    }
-}
-
-/*
- *
- * fielf_required
- * Show a * if field is required
- *
- * ------------------------------------------------------------------------
- */
 if (!function_exists('fielf_required')) {
     /**
      * Prepare the Column Name for Lables.
@@ -521,47 +386,7 @@ if (!function_exists('humanFilesize')) {
     }
 }
 
-/*
- *
- * Encode Id to a Hashids\Hashids
- *
- * ------------------------------------------------------------------------
- */
-if (!function_exists('encode_id')) {
-    /**
-     * Prepare the Column Name for Lables.
-     */
-    function encode_id($id)
-    {
-        $hashids = new Hashids\Hashids(config('app.salt'), 3, 'abcdefghijklmnopqrstuvwxyz1234567890');
-        $hashid = $hashids->encode($id);
 
-        return $hashid;
-    }
-}
-
-/*
- *
- * Decode Id to a Hashids\Hashids
- *
- * ------------------------------------------------------------------------
- */
-if (!function_exists('decode_id')) {
-    /**
-     * Prepare the Column Name for Lables.
-     */
-    function decode_id($hashid)
-    {
-        $hashids = new Hashids\Hashids(config('app.salt'), 3, 'abcdefghijklmnopqrstuvwxyz1234567890');
-        $id = $hashids->decode($hashid);
-
-        if (count($id)) {
-            return $id[0];
-        } else {
-            abort(404);
-        }
-    }
-}
 
 /*
  *
@@ -609,51 +434,7 @@ if (!function_exists('icon')) {
     }
 }
 
-/*
- *
- * Decode Id to a Hashids\Hashids
- *
- * ------------------------------------------------------------------------
- */
-if (!function_exists('generate_rgb_code')) {
-    /**
-     * Prepare the Column Name for Lables.
-     */
-    function generate_rgb_code($opacity = '0.9')
-    {
-        $str = '';
-        for ($i = 1; $i <= 3; $i++) {
-            $num = mt_rand(0, 255);
-            $str .= "$num,";
-        }
-        $str .= "$opacity,";
-        $str = substr($str, 0, -1);
 
-        return $str;
-    }
-}
-
-/*
- *
- * Return Date with weekday
- *
- * ------------------------------------------------------------------------
- */
-if (!function_exists('date_today')) {
-    /**
-     * Return Date with weekday.
-     *
-     * Carbon Locale will be considered here
-     * Example:
-     * Friday, July 24, 2020
-     */
-    function date_today()
-    {
-        $str = \Carbon\Carbon::now()->isoFormat('dddd, LL');
-
-        return $str;
-    }
-}
 
 if (!function_exists('language_direction')) {
     /**
@@ -694,17 +475,7 @@ if (!function_exists('language_direction')) {
     }
 }
 
-if (!function_exists('module_exist')) {
-    /**
-     * return value for module exist or not.
-     *
-     * @return bool
-     */
-    function module_exist($module_name)
-    {
-        return \Module::find($module_name)?->isEnabled() ?? false;
-    }
-}
+
 
 
 function getCustomizationSetting($name, $key = 'customization_json')
@@ -787,66 +558,6 @@ function formatCurrency($number, $noOfDecimal, $decimalSeparator, $thousandSepar
     return $currencyString;
 }
 
-function timeAgoFormate($date)
-{
-    if ($date == null) {
-        return '-';
-    }
-
-    // date_default_timezone_set('UTC');
-
-    $diff_time = \Carbon\Carbon::createFromTimeStamp(strtotime($date))->diffForHumans();
-
-    return $diff_time;
-}
-
-
-function setNamePrefix($user)
-{
-    $display_name = $user->first_name . " " . $user->last_name;
-    $gender = $user->gender === 'male' ? 'Mr.' : 'Ms.';
-    return $gender . $display_name;
-}
-
-
-
-function getFileExistsCheck($media)
-{
-    $mediaCondition = false;
-
-    if ($media) {
-        if ($media->disk == 'public') {
-            $mediaCondition = file_exists($media->getPath());
-        } else {
-            $mediaCondition = \Storage::disk($media->disk)->exists($media->getPath());
-        }
-    }
-
-    return $mediaCondition;
-}
-
-function getAttachmentArray($attchments)
-{
-    $files = [];
-    if (count($attchments) > 0) {
-        foreach ($attchments as $attchment) {
-            if (getFileExistsCheck($attchment)) {
-                $file = [
-                    'id' => $attchment->id,
-                    'url' => $attchment->getFullUrl()
-                ];
-                array_push($files, $file);
-            }
-        }
-    }
-
-    return $files;
-}
-
-function storeMediaImage($model, $file, $collectionName)
-{
-    return $model->addMedia($file)->toMediaCollection($collectionName);
-}
 
 function formatUpdatedAt($updatedAt)
 {
@@ -893,7 +604,7 @@ function storeMediaFile($module, $files, $key = 'file_url')
 function getMediaUrls($searchQuery = null, $perPage = 21, $page = 1)
 {
     $activeDisk = DB::table('settings')->where('name', 'disc_type')->value('val') ?? env('ACTIVE_STORAGE','local');
-    // $activeDisk = env('ACTIVE_STORAGE'); // set on live server
+   // $activeDisk = env('ACTIVE_STORAGE'); // set on live server
 
     $folder = $activeDisk === 'local' ? 'public/streamit-laravel' : 'streamit-laravel';
     $files = Storage::disk($activeDisk)->files($folder);
@@ -942,22 +653,6 @@ function getMediaUrls($searchQuery = null, $perPage = 21, $page = 1)
 }
 
 
-
-
-if (!function_exists('setDefaultImage')) {
-    function setDefaultImage($fileUrl = '')
-    {
-        $defaultImagePath = '/default-image/Default-Image.jpg';
-        $defaultImage = asset($defaultImagePath);
-
-        if (empty($fileUrl)) {
-            return $defaultImage;
-        }
-
-        return $fileUrl;
-    }
-
-
     if (!function_exists('setDefaultImage')) {
         function setDefaultImage($fileUrl = '')
         {
@@ -971,7 +666,7 @@ if (!function_exists('setDefaultImage')) {
             return $fileUrl;
         }
     }
-}
+
 
 
 if (!function_exists('getImageUrlOrDefault')) {
@@ -1083,45 +778,92 @@ function extractFileNameFromUrl($url = '')
 }
 
 
+// function setBaseUrlWithFileName($url = '')
+// {
+
+
+//     if (empty($url)) {
+//         return setDefaultImage();
+//     }
+
+//     $isRemote = filter_var($url, FILTER_VALIDATE_URL) !== false;
+
+//     if($isRemote){
+
+//         if (checkImageExists($url)) {
+//             return $url;
+//         }
+//     } else {
+
+//         $fileName = basename($url);
+//         $activeDisk = env('ACTIVE_STORAGE', 'local');
+
+//         if ($activeDisk === 'local') {
+//             $filePath = public_path("storage/streamit-laravel/$fileName");
+//             if (file_exists($filePath)) {
+//                 return asset("storage/streamit-laravel/$fileName");
+//             }
+//         } else {
+
+//             $baseUrl = rtrim(env('DO_SPACES_URL'), '/');
+//             $filePath = "$baseUrl/streamit-laravel/$fileName";
+
+//             if (checkImageExists($filePath)) {
+//                 return $filePath;
+//             }
+//         }
+//     }
+//     return setDefaultImage();
+// }
+
 function setBaseUrlWithFileName($url = '')
 {
-
+    // Return a default image if the URL is empty
     if (empty($url)) {
-        return setDefaultImage(); // Return default image if no URL is provided
+        return setDefaultImage();
     }
 
-    $fileName = basename(parse_url($url, PHP_URL_PATH));
+    // Check if the URL is remote
+    $isRemote = filter_var($url, FILTER_VALIDATE_URL) !== false;
 
+    // Handle remote URL
+    if ($isRemote) {
+        // Return immediately if the remote image exists
+        return $url;
 
+       return checkImageExists($url) ? $url : setDefaultImage();
+    }
+
+    // Extract the file name
+    $fileName = basename($url);
     $activeDisk = env('ACTIVE_STORAGE', 'local');
 
-    if ($activeDisk == 'local') {
-        $baseUrl = env('APP_URL');
-        $filePath = $baseUrl . '/storage/streamit-laravel/' . $fileName;
+    // Handle local storage
+    if ($activeDisk === 'local') {
+        $filePath = public_path("storage/streamit-laravel/$fileName");
 
-        $relativePath = str_replace(url('/storage'), 'public', $filePath);
-
-        if (Storage::exists($relativePath)) {
-            return $filePath;
+        // Return local asset path if the file exists
+        if (file_exists($filePath)) {
+            return asset("storage/streamit-laravel/$fileName");
         }
-
     } else {
+        // Handle remote storage
+        $baseUrl = rtrim(env('DO_SPACES_URL'), '/');
+        $filePath = "$baseUrl/streamit-laravel/$fileName";
 
-        $baseUrl = env('DO_SPACES_URL');
-        $filePath = $baseUrl . 'streamit-laravel/' . $fileName;
-
-
+        // Return remote file URL if it exists
         if (checkImageExists($filePath)) {
             return $filePath;
         }
     }
 
+    // Return a default image as fallback
     return setDefaultImage();
 }
 
+
 function checkImageExists($url)
 {
-
     $headers = @get_headers($url);
 
     if ($headers && strpos($headers[0], '200') !== false) {
@@ -1162,7 +904,7 @@ function setavatarBaseUrl($url = '')
 
     if ($url != '') {
 
-        $baseUrl = env('APP_URL');
+        $baseUrl =  url('/');
 
         return $baseUrl . $url;
 
@@ -1178,6 +920,7 @@ function translate($text)
     $currentLang = app()->getLocale();
     return GoogleTranslate::trans($text, $currentLang);
 }
+
 
 if (!function_exists('isActive')) {
     /**

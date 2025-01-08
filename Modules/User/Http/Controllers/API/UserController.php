@@ -61,6 +61,10 @@ class UserController extends Controller
                 }
             }
 
+        }else{
+
+            $device = Device::where('user_id', $userId)->first();
+            $your_device = $device;
         }
 
         $user['your_device']= $your_device;
@@ -129,7 +133,7 @@ class UserController extends Controller
     public function logoutAll(Request $request){
         $userId = auth()->user()->id;
 
-        $device = Device::where('user_id', $userId)->delete();
+        $device = Device::where('user_id', $userId)->where('device_id','!=', $request->device_id)->delete();
 
         return response()->json([
             'status' => true,

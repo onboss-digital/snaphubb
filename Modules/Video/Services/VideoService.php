@@ -72,7 +72,7 @@ class VideoService
 
         ->editColumn('poster_url', function ($data) {
             $type = 'video';
-            $imageUrl = getImageUrlOrDefault($data->poster_url);
+            $imageUrl = setBaseUrlWithFileName($data->poster_url);
             return view('components.media-item', ['thumbnail' => $imageUrl , 'name' => $data->name, 'type' => $type])->render();
         })
 
@@ -100,16 +100,16 @@ class VideoService
             ->editColumn('status', function ($row) {
                 $checked = $row->status ? 'checked="checked"' : ''; // Check if the status is true
                 $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
-            
+
                 return '
                     <div class="form-check form-switch ">
-                        <input type="checkbox" data-url="' . route('backend.videos.update_status', $row->id) . '" 
-                               data-token="' . csrf_token() . '" class="switch-status-change form-check-input"  
-                               id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" 
+                        <input type="checkbox" data-url="' . route('backend.videos.update_status', $row->id) . '"
+                               data-token="' . csrf_token() . '" class="switch-status-change form-check-input"
+                               id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '"
                                ' . $checked . ' ' . $disabled . '>
                     </div>
                 ';
-            })            
+            })
         ->editColumn('updated_at', fn($data) =>formatUpdatedAt($data->updated_at))
         ->rawColumns(['action', 'status', 'check','poster_url','plan_id','access'])
         ->orderColumns(['id'], '-:column $1')

@@ -19,14 +19,14 @@
                @endphp
 
 
-            <button class="season-watch-btn" id="seasonWatchBtn"
+            <button class="season-watch-btn" id="seasonWatchBtn_{{  $data['id'] }}"
                             data-entertainment-id="{{ $data['entertainment_id'] }}"
                             data-entertainment-type="tvshow"
                             data-video-url="{{ Crypt::encryptString($data['video_url_input']) }}"
                             data-movie-access="{{ $data['access'] }}"
                             data-plan-id="{{ $data['plan_id'] }}"
                             data-user-id="{{ auth()->id() }}"
-                           data-profile-id="{{ getCurrentProfile(auth()->id(),request()) }}"
+                            data-profile-id="{{ getCurrentProfile(auth()->id(),request()) }}"
                             data-episode-id="{{ $data['id'] }}"
                             data-first-episode-id="{{ $index+1 }}"
                             data-quality-options={{ $qualityOptionsJson }}>

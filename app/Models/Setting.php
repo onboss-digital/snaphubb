@@ -79,7 +79,7 @@ class Setting extends BaseModel implements HasMedia
      * @param  string  $type
      * @return bool
      */
-    public static function set($key, $val, $type = 'string',$currentUser,$datatype)
+    public static function set($key, $val, $type = 'string',$currentUser,$datatype='')
     {
         $datatype = $datatype ? $datatype : null;
         $userId = $currentUser ? $currentUser->id : auth()->id();
@@ -246,8 +246,8 @@ class Setting extends BaseModel implements HasMedia
             if ($userId !== null) {
                 $userData = self::where('created_by', $userId)->select('id', 'name', 'val','datatype','created_by')->get();
                 return $userData;
-            /* }else{
-                return collect(); */
+            }else{
+                return collect();
             }
         }
         return Cache::rememberForever('settings.all', function () {
