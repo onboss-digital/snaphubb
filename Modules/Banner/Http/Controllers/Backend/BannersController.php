@@ -149,6 +149,7 @@ class BannersController extends Controller
             ->addColumn('image', function ($data) {
                 $type = 'banner';
                 $imageUrl = setBaseUrlWithFileName($data->file_url);
+
                 return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->title, 'type' => $type])->render();
 
             })
@@ -220,17 +221,14 @@ class BannersController extends Controller
     public function store(BannerRequest $request)
     {
         $data = $request->all();
-        $data['file_url'] = extractFileNameFromUrl($data['file_url']);
-        $data['poster_url'] = extractFileNameFromUrl($data['poster_url']);
+        $data['file_url'] = $data['file_url'];
+        $data['poster_url'] = $data['poster_url'];
 
         $this->bannerService->create($data, $request);
         $title = __('banner.title');
         $message = trans('messages.create_form', ['form' => $title]);
         return redirect()->route('backend.banners.index')->with('success', $message);
     }
-
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -278,8 +276,8 @@ class BannersController extends Controller
         $data['type_id'] = $request->input('type_id');
         $data['type_name'] = $request->input('type_name');
 
-        $data['file_url'] = extractFileNameFromUrl($data['file_url']);
-        $data['poster_url'] = extractFileNameFromUrl($data['poster_url']);
+        $data['file_url'] = $data['file_url'];
+        $data['poster_url'] = $data['poster_url'];
 
         $banner->update($data);
 
@@ -287,8 +285,6 @@ class BannersController extends Controller
         $message = trans('messages.update_form', ['form' => $title]);
         return redirect()->route('backend.banners.index')->with('success', $message);
     }
-
-
 
     /**
      * Remove the specified resource from storage.

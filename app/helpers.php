@@ -882,6 +882,27 @@ function getIdsBySlug($slug)
     return json_decode(App\Models\MobileSetting::getValueBySlug($slug));
 }
 
+function GetpaymentMethod($name)
+{
+
+    if($name){
+        $payment_key = Setting::where('name', $name)->value('val');
+        return $payment_key !== null ? $payment_key : null;
+    }
+    return null;
+}
+
+function GetSettingValue($key)
+{
+
+    if($key){
+        $data = Setting::where('name', $key)->value('val');
+        return $data !== null ? $data : null;
+    }
+    return null;
+}
+
+
 function getResourceCollection($model, $ids, $resource, $toArray = false)
 {
 

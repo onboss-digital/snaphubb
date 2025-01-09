@@ -10,7 +10,11 @@
                     <div class="col-lg-5 col-md-8 col-11 align-self-center">
                         <div class="user-login-card card my-5">
                             <div class="text-center auth-heading">
-                                <img src="{{ asset(setting('logo')) }}" class="img-fluid logo h-4 mb-4">
+                                @php
+                                  $logo=GetSettingValue('dark_logo') ??  asset(setting('dark_logo'));
+                                 @endphp
+
+                                <img src="{{ $logo }}" class="img-fluid logo h-4 mb-4">
 
                                 <h5>{{ __('frontend.sign_in_title') }}</h5>
                                 <p class="fs-14">{{ __('frontend.sign_in_sub_title') }}</p>
@@ -28,7 +32,7 @@
                                 <form id="send-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-phone"></i></span>
-                                        <input type="tel" id="mobile" value="1234567890" class="form-control"
+                                        <input type="tel" id="mobile" value="" class="form-control"
                                             pattern="[0-9]{10}" placeholder="{{ __('frontend.enter_mobile') }}" required
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                                         <div class="invalid-feedback" id="mobile-error">Mobile number field is required.
@@ -77,7 +81,7 @@
                                         </span>
                                     </a>
 
-                                    <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a>
+                                    {{-- <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a> --}}
                                 </div>
 
 
@@ -88,7 +92,7 @@
                                 <form id="verify-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
-                                        <input type="text" name="otp" class="form-control"  value="123456"
+                                        <input type="text" name="otp" class="form-control"  value=""
                                             placeholder="{{ __('frontend.enter_otp') }}" aria-describedby="basic-addon1"
                                             id="otp" required>
                                         <div class="invalid-feedback" id="otp-error">OTP field is required.</div>

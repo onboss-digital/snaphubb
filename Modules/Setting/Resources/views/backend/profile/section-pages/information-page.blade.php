@@ -19,7 +19,7 @@
     @endif -->
 
     <!-- <form method="POST" action="{{ route('backend.profile.information-update') }}" enctype="multipart/form-data"> -->
-    {{ html()->form('POST' ,route('backend.profile.information-update'))->attribute('enctype', 'multipart/form-data')->attribute('data-toggle', 'validator')           
+    {{ html()->form('POST' ,route('backend.profile.information-update'))->attribute('enctype', 'multipart/form-data')->attribute('data-toggle', 'validator')
     ->attribute('id', 'form-submit')  // Add the id attribute here
     ->class('requires-validation')  // Add the requires-validation class
     ->attribute('novalidate', 'novalidate')  // Disable default browser validation
@@ -47,7 +47,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label class="form-label" for="email">{{ __('profile.lbl_email') }} <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control " id="email" name="email" value="{{ old('email', $user->email) }}" required readonly>
+                            <input type="email" class="form-control " id="email" name="email" value="{{ old('email', $user->email) }}" required >
                             @error('email')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -86,17 +86,17 @@
                     </div>
                     <div class="uploaded-image" id="selectedImageContainerCastcerw">
                         @if(old('file_url', isset($user) ? $user->file_url : ''))
-                            <img id="profileImage" src="{{ old('file_url', isset($user) ? $user->file_url : '') }}" class="img-fluid mb-2">
+                            <img id="profileImage" src="{{ old('file_url', isset($user) ? setBaseUrlWithFileName($user->file_url) : '') }}" class="img-fluid mb-2">
                             <span class="remove-media-icon"
                                   style="cursor: pointer; font-size: 24px; color: red;"
                                   onclick="removeProfileImage()">×</span>
                         @endif
                     </div>
-                    
-                    {{ html()->hidden('file_url')->id('file_url_image')->value(old('file_url', isset($user) ? $user->file_url : '')) }}                   
+
+                    {{ html()->hidden('file_url')->id('file_url_image')->value(old('file_url', isset($user) ? $user->file_url : '')) }}
                 </div>
 
-              
+
                 <div class="form-group col-md-4">
                     <label class="form-label" for="" class="w-100">{{ __('profile.lbl_gender') }}</label>
                     <div class="d-flex align-items-center gap-3">
@@ -145,10 +145,10 @@
         const reader = new FileReader();
         reader.onload = function() {
             const container = document.getElementById('selectedImageContainerCastcerw');
-            container.innerHTML = ''; 
+            container.innerHTML = '';
 
-            const imgElement = document.createElement('img'); 
-            imgElement.src = reader.result; 
+            const imgElement = document.createElement('img');
+            imgElement.src = reader.result;
             imgElement.classList.add('img-fluid', 'mb-2');
 
             const removeIcon = document.createElement('span');
@@ -159,8 +159,8 @@
             removeIcon.textContent = '×';
             removeIcon.onclick = removeProfileImage;
 
-            container.appendChild(imgElement); 
-            container.appendChild(removeIcon); 
+            container.appendChild(imgElement);
+            container.appendChild(removeIcon);
         }
         reader.readAsDataURL(event.target.files[0]);
     }
@@ -169,8 +169,8 @@
         const container = document.getElementById('selectedImageContainerCastcerw');
         const hiddenInput = document.getElementById('file_url_image');
 
-        container.innerHTML = ''; 
-        hiddenInput.value = ''; 
+        container.innerHTML = '';
+        hiddenInput.value = '';
     }
 </script>
 @endpush

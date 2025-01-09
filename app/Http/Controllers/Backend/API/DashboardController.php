@@ -56,13 +56,12 @@ class DashboardController extends Controller
         );
 
 
-       $topMovieIds = MobileSetting::getValueBySlug('top-10');
-       $topMovies = !empty($topMovieIds) ? Entertainment::whereIn('id', json_decode($topMovieIds, true))->with('entertainmentGenerMappings')
-           ->where('status', 1)
-           ->whereDate('release_date', '<=', Carbon::now())
-           ->get() : collect();
-       $top_10 = CommanResource::collection($topMovies)->toArray(request());
-
+        $topMovieIds = MobileSetting::getValueBySlug('top-10');
+        $topMovies = !empty($topMovieIds) ? Entertainment::whereIn('id', json_decode($topMovieIds, true))->with('entertainmentGenerMappings')
+            ->where('status', 1)
+            ->whereDate('release_date', '<=', Carbon::now())
+            ->get() : collect();
+        $top_10 = CommanResource::collection($topMovies)->toArray(request());
 
 
        $responseData = [

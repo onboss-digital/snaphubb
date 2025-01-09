@@ -84,7 +84,10 @@ class PaymentController extends Controller
     protected function StripePayment(Request $request)
     {
         $baseURL = env('APP_URL');
-        $stripe = new StripeClient('sk_test_CG2JhAIXvVWDeFUFqtUizO4N00zmvm7o8J');
+
+        $stripe_secret_key=GetpaymentMethod('stripe_secretkey');
+
+        $stripe = new StripeClient($stripe_secret_key);
         $price = $request->input('price'); // Get the price from the request
         $plan_id=$request->input('plan_id');
         $priceInCents = $price * 100;
@@ -112,8 +115,8 @@ class PaymentController extends Controller
     protected function RazorpayPayment(Request $request, $price)
 {
     $baseURL = env('APP_URL');
-    $razorpayKey = 'rzp_test_CLw7tH3O3P5eQM';
-    $razorpaySecret = 'rzp_test_CLw7tH3O3P5eQM';
+    $razorpayKey = GetpaymentMethod('razorpay_publickey');
+    $razorpaySecret = GetpaymentMethod('razorpay_secretkey');
     $plan_id = $request->input('plan_id');
     $priceInPaise = $price * 100;
 
@@ -145,7 +148,7 @@ class PaymentController extends Controller
     protected function PaystackPayment(Request $request)
     {
         $baseURL = env('APP_URL');
-        $paystackSecretKey = 'sk_test_9b5bf65070d9773c7a2b3aa7dd8d41310c5fc03c';
+        $paystackSecretKey = GetpaymentMethod('paystack_secretkey');
         $price = $request->input('price');
         $plan_id = $request->input('plan_id');
         $priceInKobo = $price * 100; // Paystack uses kobo
@@ -211,7 +214,7 @@ class PaymentController extends Controller
     protected function FlutterwavePayment(Request $request)
     {
         $baseURL = env('APP_URL');
-        $flutterwaveKey = 'FLWSECK_TEST-76e58fc4d85dd2c3fc01ea7ef5b9e2bb-X';
+        $flutterwaveKey = GetpaymentMethod('flutterwave_secretkey');
         $price = $request->input('price');
         $plan_id = $request->input('plan_id');
         $priceInKobo = $price * 100;
@@ -252,7 +255,7 @@ class PaymentController extends Controller
     protected function CinetPayment(Request $request)
     {
         $baseURL = env('APP_URL');
-        $cinetApiKey = 'YOUR_CINET_API_KEY';
+        $cinetApiKey = GetpaymentMethod('cinet_Secret_key');
         $price = $request->input('price');
         $plan_id = $request->input('plan_id');
         $priceInCents = $price * 100;
@@ -322,8 +325,8 @@ class PaymentController extends Controller
 
     protected function MidtransPayment(Request $request)
     {
-        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
+        Config::$serverKey = GetpaymentMethod(' midtrans_client_id');
+        // Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
 
         $price = $request->input('price');
         $plan_id = $request->input('plan_id');
@@ -352,8 +355,8 @@ class PaymentController extends Controller
 
     private function getAccessToken()
     {
-        $clientId = 'Aec0WfRHUKNVEQWRedFhD5S7OvBdaugQ7MmY7xTuhHjwZMZaHg6e62gH_3MjkfSCw7C4WBG4-er-ICLI';
-        $clientSecret = 'EAqgmm659_iD9RagRIQCV6-cupQqZjUdW9VAAC4HnNuEM4zo1ZBShSw82irmtAICjJMA5CE7H2J6Hl2A';
+        $clientId =  GetpaymentMethod('paypal_clientid');
+        $clientSecret =GetpaymentMethod('paypal_secretkey');
 
         $client = new Client();
         $response = $client->post('https://api.sandbox.paypal.com/v1/oauth2/token', [
@@ -507,7 +510,8 @@ class PaymentController extends Controller
     protected function handleStripeSuccess(Request $request)
     {
         $sessionId = $request->input('session_id');
-        $stripe = new StripeClient('sk_test_CG2JhAIXvVWDeFUFqtUizO4N00zmvm7o8J');
+        $stripe_secret_key=GetpaymentMethod('stripe_secretkey');
+        $stripe = new StripeClient($stripe_secret_key);
 
         try {
             $session = $stripe->checkout->sessions->retrieve($sessionId);
@@ -523,8 +527,9 @@ class PaymentController extends Controller
     $razorpayOrderId = session('razorpay_order_id');
     $plan_id = $request->input('plan_id');
 
-    $razorpayKey = 'rzp_test_CLw7tH3O3P5eQM';
-    $razorpaySecret = 'rzp_test_CLw7tH3O3P5eQM';
+    $razorpayKey = GetpaymentMethod('razorpay_publickey');
+    $razorpaySecret = GetpaymentMethod('razorpay_secretkey');
+
     $api = new \Razorpay\Api\Api($razorpayKey, $razorpaySecret);
     $payment = $api->payment->fetch($paymentId);
 
@@ -538,7 +543,8 @@ class PaymentController extends Controller
    protected function handlePaystackSuccess(Request $request)
     {
         $reference = $request->input('reference');
-        $paystackSecretKey = 'sk_test_9b5bf65070d9773c7a2b3aa7dd8d41310c5fc03c';
+
+        $paystackSecretKey = GetpaymentMethod('paystack_secretkey');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $paystackSecretKey,
@@ -558,10 +564,14 @@ class PaymentController extends Controller
         $paymentId = $request->input('paymentId');
         $payerId = $request->input('PayerID');
 
+        $paypal_secretkey=GetpaymentMethod('paypal_secretkey');
+        $paypal_clientid=GetpaymentMethod('paypal_clientid');
+
+
         $apiContext = new ApiContext(
             new OAuthTokenCredential(
-                'Aec0WfRHUKNVEQWRedFhD5S7OvBdaugQ7MmY7xTuhHjwZMZaHg6e62gH_3MjkfSCw7C4WBG4-er-ICLI',
-                'EAqgmm659_iD9RagRIQCV6-cupQqZjUdW9VAAC4HnNuEM4zo1ZBShSw82irmtAICjJMA5CE7H2J6Hl2A'
+                $paypal_secretkey,
+                $paypal_clientid
             )
         );
 
@@ -585,7 +595,7 @@ class PaymentController extends Controller
     protected function handleFlutterwaveSuccess(Request $request)
     {
         $tx_ref = $request->input('tx_ref');
-        $flutterwaveKey = env('FLUTTERWAVE_SECRET_KEY');
+        $flutterwaveKey = GetpaymentMethod('flutterwave_secretkey');
 
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $flutterwaveKey,
@@ -642,6 +652,8 @@ class PaymentController extends Controller
 
     protected function makeSadadPaymentRequest($price, $plan_id)
     {
+        $sadad_Sadadkey=GetpaymentMethod('sadad_Sadadkey');
+
         $url = 'https://api.sadad.com/payment';
         $data = [
             'amount' => $price,
@@ -653,7 +665,7 @@ class PaymentController extends Controller
         $response = $client->post($url, [
             'json' => $data,
             'headers' => [
-                'Authorization' => 'Bearer ' . env('SADAD_API_KEY'),
+                'Authorization' => 'Bearer ' . $sadad_Sadadkey,
             ]
         ]);
 
@@ -708,6 +720,10 @@ class PaymentController extends Controller
     }
     protected function makeAirtelPaymentRequest($price, $plan_id)
     {
+
+        $airtel_money_secretkey=GetpaymentMethod('airtel_money_secretkey');
+
+
         $url = 'https://api.airtel.com/payment';
         $data = [
             'amount' => $price,
@@ -719,7 +735,7 @@ class PaymentController extends Controller
         $response = $client->post($url, [
             'json' => $data,
             'headers' => [
-                'Authorization' => 'Bearer ' . env('AIRTEL_API_KEY'),
+                'Authorization' => 'Bearer ' .  $airtel_money_secretkey,
             ]
         ]);
 

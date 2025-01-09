@@ -43,6 +43,10 @@ class PermissionRoleTableSeeder extends Seeder
                 }
             }
 
+            if ($module['module_name'] === 'Clinic Categories') {
+                $permission_name = 'view_' . $module_name;
+                Permission::firstOrCreate(['name' => $permission_name, 'is_fixed' => true]);
+            }
         }
 
         // Assign Permissions to Roles

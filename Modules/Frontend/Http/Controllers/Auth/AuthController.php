@@ -24,7 +24,6 @@ class AuthController extends Controller
      */
     public function login()
     {
-
         return view('frontend::auth.login');
     }
 
@@ -46,7 +45,6 @@ class AuthController extends Controller
      */
     public function store(Request $request)
     {
-
         $data = $request->all();
 
         $validator = Validator::make($request->all(), [

@@ -8,10 +8,10 @@
 
          @else
 
-         <img src="{{setBaseUrlWithFileName($data->user['file_url'])}}" alt="user" class="img-fluid user-img rounded-circle">
+         <img src="{{setBaseUrlWithFileName($data->user['file_url'] ?? null)}}" alt="user" class="img-fluid user-img rounded-circle">
 
          @endif
-         
+
           <div>
             @if(!empty($data->user['first_name']))
             <h6 class="line-count-1 font-size-18">{{($data->user['first_name'] . ' ' . $data->user['last_name'])}}</h6>

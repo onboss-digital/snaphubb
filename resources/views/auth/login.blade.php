@@ -138,7 +138,7 @@
 
   <script type="text/javascript">
      window.onload = function() {
-        getSelectedOption();
+        // getSelectedOption();
     };
 
     $(document).ready(function() {

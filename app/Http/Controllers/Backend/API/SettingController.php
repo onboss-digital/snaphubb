@@ -9,6 +9,7 @@ use Modules\Currency\Models\Currency;
 use Modules\Tax\Models\Tax;
 use App\Models\MobileSetting;
 use Modules\Subscriptions\Models\Subscription;
+use App\Models\Device;
 
 class SettingController extends Controller
 {
@@ -168,7 +169,15 @@ class SettingController extends Controller
         $response['entitlement_id'] = isset($settings['entertainment_id']) ? $settings['entertainment_id'] : null;
         $response['apple_api_key'] = isset($settings['apple_api_key']) ? $settings['apple_api_key'] : null;
         $response['google_api_key'] = isset($settings['google_api_key']) ? $settings['google_api_key'] : null;
+        $response['is_login'] = 0;
 
+        if ($request->has('device_id') && $request->device_id != null && $request->has('user_id') && $request->user_id) {
+            $device = Device::where('user_id', $request->user_id)
+                ->where('device_id', $request->device_id)
+                ->first();
+
+            $response['is_login'] = $device ? 1 : 0;
+        }
         if(!empty($request->user_id)){
             $response['is_device_supported'] = $deviceTypeResponse['isDeviceSupported'];
         }

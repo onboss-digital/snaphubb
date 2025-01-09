@@ -58,7 +58,7 @@ class Subscription extends BaseModel
         ->orderBY('id','desc')
         ->first();
         $agent = new Agent();
-    
+
         // Determine device type
         if ($agent->isMobile()) {
             $deviceType = 'mobile';
@@ -69,14 +69,19 @@ class Subscription extends BaseModel
         } else {
             $deviceType = 'unknown'; // For any unsupported device types
         }
-    
+
         // If there's no active subscription, only allow mobile
         if (!$currentSubscription) {
 
             return response()->json(['isDeviceSupported' => $deviceType === 'mobile', 'device_name' => $deviceType]);
         }
 
-        $planLimitation = optional(optional($user->subscriptionPackage)->plan)->planLimitation;
+        if ($user && $user->subscriptionPackage && $user->subscriptionPackage->plan) {
+            $planLimitation = $user->subscriptionPackage->plan->planLimitation;
+        } else {
+            $planLimitation = [];
+        }
+
         if(!empty($planLimitation )){
             $deviceLimits = $planLimitation->where('limitation_slug', 'supported-device-type')->first();
 
