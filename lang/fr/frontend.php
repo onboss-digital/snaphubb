@@ -162,7 +162,7 @@ return[
     'data_deletion_request' => 'Demande de Suppression de Données',
     'faq' => 'FAQ',
     'suggested_channels' => 'Chaînes Suggérées',
-    'device_not_support' => 'Malheureusement, votre appareil n\'est pas pris en charge pour cette fonctionnalité. Veuillez essayer d\'utiliser un autre appareil.',
+    'device_not_support' => "Pour continuer à profiter d'un accès illimité à notre contenu, veuillez vous abonner à l'un de nos plans. Passez à l'abonnement supérieur dès maintenant pour une expérience de visionnage améliorée!",
     'footer_content' => 'StreamIt : Votre Destination Ultime pour des Films et des Émissions Illimités !',
     'download_app' => 'Téléchargez Notre Application',
     'download_app_reason' => 'Téléchargez notre application pour un accès instantané aux meilleurs films et émissions !',

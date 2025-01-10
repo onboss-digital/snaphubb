@@ -996,6 +996,10 @@ if (!function_exists('getFooterData')) {
                         ->get();
                 }
                 $data['pages'] = \Modules\Page\Models\Page::where('status', 1)->get();
+
+                $data['app_store_url']=GetSettingValue('ios_url');
+                $data['play_store_url']=GetSettingValue('android_url');
+                
                 Cache::put($cacheKey, $data);
            }
         return $data;

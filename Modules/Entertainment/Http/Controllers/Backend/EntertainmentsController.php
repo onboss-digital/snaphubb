@@ -13,6 +13,7 @@ use Modules\Genres\Models\Genres;
 use Modules\CastCrew\Models\CastCrew;
 use Modules\Entertainment\Services\EntertainmentService;
 use Modules\World\Models\Country;
+use Illuminate\Support\Facades\Cache;
 
 class EntertainmentsController extends Controller
 {
@@ -72,6 +73,7 @@ class EntertainmentsController extends Controller
 
     public function store(EntertainmentRequest $request)
      {
+
         $data = $request->all();
         $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] :extractFileNameFromUrl($data['thumbnail_url']);
         $data['poster_url']= !empty( $data['tmdb_id']) ?  $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
@@ -92,6 +94,9 @@ class EntertainmentsController extends Controller
         $entertainment = $this->entertainmentService->create($data);
         $type = $entertainment->type;
         $message = trans('messages.create_form', ['type' =>ucfirst($type)]);
+
+
+        Cache::flush();
 
         if($type=='movie'){
 
@@ -196,6 +201,8 @@ class EntertainmentsController extends Controller
 
     public function update(EntertainmentRequest $request, $id)
     {
+
+        Cache::flush();
         $request_data=$request->all();
         $request_data['thumbnail_url'] = !empty($request_data['tmdb_id']) ? $request_data['thumbnail_url'] :extractFileNameFromUrl($request_data['thumbnail_url']);
         $request_data['poster_url'] = !empty($request_data['tmdb_id']) ? $request_data['poster_url'] : extractFileNameFromUrl($request_data['poster_url']);
@@ -234,6 +241,8 @@ class EntertainmentsController extends Controller
         }
         $data = $this->entertainmentService->update($id, $request_data);
 
+        Cache::flush();
+
 
         $type = $entertainment->type;
         $message = trans('messages.update_form', ['Form' =>ucfirst($type)]);
@@ -254,6 +263,7 @@ class EntertainmentsController extends Controller
        $type=$entertainment->type;
        $entertainment->delete();
        $message = trans('messages.delete_form', ['form' => $type]);
+       Cache::flush();
        return response()->json(['message' => $message, 'status' => true], 200);
     }
 
@@ -263,6 +273,7 @@ class EntertainmentsController extends Controller
         $type=$entertainment->type;
         $entertainment->restore();
         $message = trans('messages.restore_form', ['form' =>$type]);
+        Cache::flush();
         return response()->json(['message' => $message, 'status' => true], 200);
 
     }
@@ -273,6 +284,7 @@ class EntertainmentsController extends Controller
         $type=$entertainment->type;
         $entertainment->forceDelete();
         $message = trans('messages.permanent_delete_form', ['form' =>$type]);
+        Cache::flush();
         return response()->json(['message' => $message, 'status' => true], 200);
     }
 
@@ -284,6 +296,7 @@ class EntertainmentsController extends Controller
 
         $upload_url_type=Constant::where('type','upload_type')->get();
         $video_quality=Constant::where('type','video_quality')->get();
+        Cache::flush();
 
         return view('entertainment::backend.entertainment.download', compact('data','module_title','upload_url_type','video_quality'));
 
@@ -295,6 +308,7 @@ class EntertainmentsController extends Controller
         $data = $request->all();
         $this->entertainmentService->storeDownloads($data, $id);
         $message = trans('messages.set_download_url');
+        Cache::flush();
 
         return redirect()->route('backend.movies.index')->with('success', $message);
     }

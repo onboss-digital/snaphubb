@@ -181,7 +181,8 @@ class EntertainmentsController extends Controller
         $tvshowList = Entertainment::query()
         ->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')
         ->where('type', 'tvshow')
-        ->whereHas('episode');
+        ->whereDate('release_date', '<=', Carbon::now()) 
+        ->whereHas('episode');  
 
         if ($request->has('search')) {
             $searchTerm = $request->search;

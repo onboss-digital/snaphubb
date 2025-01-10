@@ -32,7 +32,7 @@
                                 <form id="send-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-phone"></i></span>
-                                        <input type="tel" id="mobile" value="" class="form-control"
+                                        <input type="tel" id="mobile" value="1234567890" class="form-control"
                                             pattern="[0-9]{10}" placeholder="{{ __('frontend.enter_mobile') }}" required
                                             oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
                                         <div class="invalid-feedback" id="mobile-error">Mobile number field is required.
@@ -81,7 +81,7 @@
                                         </span>
                                     </a>
 
-                                    {{-- <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a> --}}
+                                    <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a>
                                 </div>
 
 
@@ -92,7 +92,7 @@
                                 <form id="verify-otp-form" class="requires-validation" data-toggle="validator" novalidate>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
-                                        <input type="text" name="otp" class="form-control"  value=""
+                                        <input type="text" name="otp" class="form-control"  value="123456"
                                             placeholder="{{ __('frontend.enter_otp') }}" aria-describedby="basic-addon1"
                                             id="otp" required>
                                         <div class="invalid-feedback" id="otp-error">OTP field is required.</div>
@@ -228,54 +228,74 @@
 
 
         function sendCode() {
-            var number = iti.getNumber()
+    var number = iti.getNumber();
 
-            if (iti.isValidNumber()) {
-                document.getElementById('send-otp-button').disabled = true;
-                document.getElementById('send-button-text').classList.add('d-none');
-                document.getElementById('send-button-spinner').classList.remove('d-none');
+    if (iti.isValidNumber()) {
+        // Disable the button and show spinner while processing
+        document.getElementById('send-otp-button').disabled = true;
+        document.getElementById('send-button-text').classList.add('d-none');
+        document.getElementById('send-button-spinner').classList.remove('d-none');
 
-                firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier).then(function(confirmationResult) {
-                    window.confirmationResult = confirmationResult;
-                    coderesult = confirmationResult;
+        // Initiate Firebase sign-in with phone number
+        firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
+            .then(function(confirmationResult) {
+                // Successfully sent OTP
+                window.confirmationResult = confirmationResult;
+                coderesult = confirmationResult;
 
-                    $('#mobile-form').hide();
-                    $('#otp_error_message').text("");
-                    $('#otp-form').show();
+                $('#mobile-form').hide();
+                $('#otp_error_message').text("");
+                $('#otp-form').show();
 
-                    $('#otp_title').text('Verify OTP');
-                    $('#otp_subtitle').text('We’ve sent an OTP to your mobile number. Please enter it to proceed');
+                $('#otp_title').text('Verify OTP');
+                $('#otp_subtitle').text('We’ve sent an OTP to your mobile number. Please enter it to proceed.');
 
-                    startOtpTimer();
+                startOtpTimer();
+            })
+            .catch(function(error) {
+                // Initialize error message variable
+                let errorMessage;
 
-
-                }).catch(function(error) {
-
-                    if (error.code == 'auth/invalid-phone-number') {
-
-                        $('#otp_error_message').text("Enter a valid mobile number");
-                    } else {
-
-                        $('#otp_error_message').text(error.message);
-
+                // Handle invalid phone number error
+                if (error.code === 'auth/invalid-phone-number') {
+                    errorMessage = "Enter a valid mobile number";
+                } else {
+                    // Handle other errors, especially when error.message is a JSON string
+                    try {
+                        const errorData = JSON.parse(error.message);
+                        if (errorData.error && errorData.error.errors && Array.isArray(errorData.error.errors)) {
+                            const specificError = errorData.error.errors.find(err => err.message === "BILLING_NOT_ENABLED");
+                            if (specificError) {
+                                errorMessage = "Currently, you can use only demo login credentials. Please upgrade your Firebase billing details.";
+                            }
+                        }
+                    } catch (e) {
+                        // JSON parsing failed, fallback to raw error message
+                        console.error("Error parsing error.message:", e);
                     }
 
+                    // Fallback to the original error message if no specific error is found
+                    if (!errorMessage) {
+                        errorMessage = error.message || "An unexpected error occurred.";
+                    }
+                }
 
-                    $('#otp_error_message').show();
+                // Display the error message
+                $('#otp_error_message').text(errorMessage).show();
+            })
+            .finally(function() {
+                // Re-enable the button and hide the spinner after the process completes
+                document.getElementById('send-otp-button').disabled = false;
+                document.getElementById('send-button-text').classList.remove('d-none');
+                document.getElementById('send-button-spinner').classList.add('d-none');
+            });
+    } else {
+        // Invalid phone number case
+        $('#mobile-error').text('Invalid phone number');
+        $('#mobile-error').show();
+    }
+}
 
-                }).finally(function() {
-                    // Re-enable the button and hide the spinner after the process completes
-                    document.getElementById('send-otp-button').disabled = false;
-                    document.getElementById('send-button-text').classList.remove('d-none');
-                    document.getElementById('send-button-spinner').classList.add('d-none');
-                });;
-            } else {
-                $('#mobile-error').text('Invalid phone number');
-                $('#mobile-error').show();
-            }
-
-
-        }
 
 
         function startOtpTimer() {

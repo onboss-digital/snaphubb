@@ -49,7 +49,8 @@ class DashboardController extends Controller
                 $topMovies = Entertainment::whereIn('id', json_decode($topMovieIds))->where('status', 1)->get();
                 $top_10 = MoviesResource::collection($topMovies);
                 $top_10 = $top_10->toArray(request());
-            }
+
+              }
 
             Cache::put($cacheKey, $top_10);
         }

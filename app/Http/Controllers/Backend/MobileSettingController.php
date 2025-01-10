@@ -87,7 +87,12 @@ class MobileSettingController extends Controller
 
         $data = $request->all();
 
-         
+        if($request->has('dashboard_select')){
+
+            $data['value']=$data['dashboard_select'];
+
+        }
+
         if (!empty($data) && isset($data['value']) && !empty($data['value'])) {
             
             $data['value'] = is_array($data['value']) ? json_encode($data['value']) : $data['value'];

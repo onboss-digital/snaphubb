@@ -12,6 +12,7 @@ use Modules\Entertainment\Models\ContinueWatch;
 use Modules\Entertainment\Models\Like;
 use Modules\Entertainment\Models\EntertainmentDownload;
 use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
 
 
 class VideosController extends Controller
@@ -19,7 +20,7 @@ class VideosController extends Controller
     public function videoList(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        $videoList = Video::query()->with('VideoStreamContentMappings', 'plan');
+        $videoList = Video::whereDate('release_date', '<=', Carbon::now()) ->with('VideoStreamContentMappings', 'plan');
 
         $videoList = $videoList->where('status', 1);
 

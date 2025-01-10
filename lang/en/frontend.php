@@ -162,7 +162,7 @@ return[
     'data_deletion_request'=>'Data deletion request',
     'faq'=>'FAQ',
     'suggested_channels'=>'Suggested Channels',
-    'device_not_support'=>'Unfortunately, your device is not supported for this feature. Please try using a different device.',
+    'device_not_support'=>'To continue enjoying unlimited access to our content, please subscribe to one of our plans. Upgrade now for an enhanced viewing experience!',
     'footer_content'=>' StreamIt: Your Ultimate Destination for Unlimited Movies and Shows!',
     'download_app'=>'Download Our App',
     'download_app_reason'=>'Download our app for instant access to the best movies and shows!',

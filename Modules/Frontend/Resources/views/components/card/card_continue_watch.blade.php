@@ -36,6 +36,7 @@
     $totalDurationInSeconds = convertSeconds($total_watched_time);
     $watchedTime = $value['watched_time'] ?? '00:00:00';
     $watchedTimeInSeconds = convertSeconds($watchedTime);
+    
     $progressPercentage = $totalDurationInSeconds > 0 ? ($watchedTimeInSeconds / $totalDurationInSeconds) * 100 : 0;
     @endphp
     <div class="continue-watch-card-image position-relative">

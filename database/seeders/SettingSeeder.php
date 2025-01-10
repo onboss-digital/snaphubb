@@ -746,7 +746,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 51,
                 'name' => 'ios_url',
-                'val' => 'https://www.iosurl.com',
+                'val' => null,
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -760,7 +760,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 52,
                 'name' => 'android_url',
-                'val' => 'https://www.androidurl.com',
+                'val' => 'https://play.google.com/store/apps/details?id=com.iqonic.streamitlaravel&pcampaignid=web_share',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,

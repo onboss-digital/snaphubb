@@ -133,7 +133,11 @@ class SettingController extends Controller
         $taxes = Tax::active()->get();
         $ads_val= MobileSetting::where('slug', 'banner')->first();
         $rate_our_app= MobileSetting::where('slug', 'rate-our-app')->first();
+        $ads_val= MobileSetting::where('slug', 'banner')->first();
+        $continue_watch= MobileSetting::where('slug', 'continue-watching')->first();
+       
 
+      
         if (isset($settings['isForceUpdate']) && isset($settings['version_code'])) {
             $response['isForceUpdate'] = intval($settings['isForceUpdate']);
 
@@ -164,6 +168,7 @@ class SettingController extends Controller
         $response['enable_tvshow'] = isset($settings['tvshow']) ? intval($settings['tvshow']) : 0;
         $response['enable_video'] = isset($settings['video']) ? intval($settings['video']) : 0;
         $response['enable_ads'] = isset($ads_val->value) ? (int) $ads_val->value : 0;
+        $response['continue_watch'] = isset($continue_watch->value) ? (int) $continue_watch->value : 0;
         $response['enable_rate_us'] = isset($rate_our_app->value) ? (int) $rate_our_app->value : 0;
         $response['enable_in_app'] = isset($settings['iap_payment_method']) ? intval($settings['iap_payment_method']) : 0;
         $response['entitlement_id'] = isset($settings['entertainment_id']) ? $settings['entertainment_id'] : null;

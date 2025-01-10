@@ -68,16 +68,21 @@ $footerData = getFooterData();
           <p class="mb-5">{{__('frontend.download_app_reason')}}</p>
 
           <ul class="app-icon list-inline m-0 p-0 d-flex align-items-center gap-3">
+
+            @if($footerData['play_store_url'])
             <li>
-              <a href="#" class="btn btn-link p-0">
+              <a href="{{$footerData['play_store_url']}}" class="btn btn-link p-0">
               <img src="{{ asset('img/web-img/play_store.png') }}" alt="play store" class="img-fluid">
               </a>
             </li>
+            @endif
+            @if($footerData['app_store_url'])
             <li>
-            <a href="#" class="btn btn-link p-0">
+            <a href="{{$footerData['app_store_url']}}" class="btn btn-link p-0" target="_blank" >
               <img src="{{ asset('img/web-img/app_store.png') }}" alt="app store" class="img-fluid">
               </a>
             </li>
+            @endif
           </ul>
         </div>
       </div>

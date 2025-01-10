@@ -219,6 +219,14 @@
             window.location.href = `${envURL}/search?query=${encodeURIComponent(query)}`;
         }
     });
+
+    // Add event listener for Enter key press
+    searchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            searchButton.click();
+        }
+    });
 };
 
 </script>

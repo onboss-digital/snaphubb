@@ -14,7 +14,14 @@
                             <a  class="overly-images" href="{{ $data['type'] == 'tvshow' ? route('tvshow-details', ['id' => $data['id']]) : route('movie-details', ['id' => $data['id']]) }}">
                                 <img src="{{ $data['poster_image'] }}" alt="movie-card" class="img-fluid object-cover top-ten-img">
                                 @if($data['movie_access']=='paid')
-                                <button type="button" class="product-premium border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Premium"><i class="ph ph-crown-simple"></i></button>
+                                    @php
+                                        $current_user_plan =auth()->user() ? auth()->user()->subscriptionPackage : null;
+                                        $current_plan_level= $current_user_plan->level ?? 0;
+                                        $video_plan_level= $data['plan_level'];
+                                    @endphp
+                                    @if($video_plan_level > $current_plan_level)
+                                        <button type="button" class="product-premium border-0" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Premium"><i class="ph ph-crown-simple"></i></button>
+                                    @endif
                                 @endif
                             </a>
                             <span class="top-ten-numbers texture-text" style="background-image: url('{{ asset('img/web-img/texture.jpg') }}');">
