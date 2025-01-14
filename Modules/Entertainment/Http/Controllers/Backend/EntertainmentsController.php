@@ -13,7 +13,6 @@ use Modules\Genres\Models\Genres;
 use Modules\CastCrew\Models\CastCrew;
 use Modules\Entertainment\Services\EntertainmentService;
 use Modules\World\Models\Country;
-use Illuminate\Support\Facades\Cache;
 
 class EntertainmentsController extends Controller
 {
@@ -65,19 +64,16 @@ class EntertainmentsController extends Controller
         $actionType = $request->action_type;
         $moduleName = 'Entertainment'; // Adjust as necessary for dynamic use
 
-        Cache::flush();
-
-
         return $this->performBulkAction(Entertainment::class, $ids, $actionType, $moduleName);
     }
 
     public function store(EntertainmentRequest $request)
      {
-
         $data = $request->all();
         $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] :extractFileNameFromUrl($data['thumbnail_url']);
         $data['poster_url']= !empty( $data['tmdb_id']) ?  $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
 
+        // dd('oi');
 
         if (isset($data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
@@ -95,9 +91,6 @@ class EntertainmentsController extends Controller
         $type = $entertainment->type;
         $message = trans('messages.create_form', ['type' =>ucfirst($type)]);
 
-
-        Cache::flush();
-
         if($type=='movie'){
 
             return redirect()->route('backend.movies.index')->with('success', $message);
@@ -111,8 +104,6 @@ class EntertainmentsController extends Controller
     public function update_status(Request $request, Entertainment $id)
     {
         $id->update(['status' => $request->status]);
-
-        Cache::flush();
 
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
@@ -134,10 +125,10 @@ class EntertainmentsController extends Controller
                 'entertainmentTalentMappings'
             ])
             ->first();
-
+                
         $tmdb_id = $data->tmdb_id;
-        $data->thumbnail_url = setBaseUrlWithFileName($data->thumbnail_url);
-        $data->poster_url =setBaseUrlWithFileName($data->poster_url);
+        $data->thumbnail_url = !empty($data->tmdb_id) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
+        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
 
         if($data->trailer_url_type =='Local'){
 
@@ -201,14 +192,13 @@ class EntertainmentsController extends Controller
 
     public function update(EntertainmentRequest $request, $id)
     {
-
-        Cache::flush();
         $request_data=$request->all();
         $request_data['thumbnail_url'] = !empty($request_data['tmdb_id']) ? $request_data['thumbnail_url'] :extractFileNameFromUrl($request_data['thumbnail_url']);
         $request_data['poster_url'] = !empty($request_data['tmdb_id']) ? $request_data['poster_url'] : extractFileNameFromUrl($request_data['poster_url']);
         $request_data['trailer_video'] = extractFileNameFromUrl($request_data['trailer_video']);
         $request_data['video_file_input'] = isset($request_data['video_file_input'])  ? extractFileNameFromUrl($request_data['video_file_input']) : null;
 
+        
         if (isset($request_data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
             $request_data['IMDb_rating'] = round($request_data['IMDb_rating'], 1);
@@ -241,8 +231,6 @@ class EntertainmentsController extends Controller
         }
         $data = $this->entertainmentService->update($id, $request_data);
 
-        Cache::flush();
-
 
         $type = $entertainment->type;
         $message = trans('messages.update_form', ['Form' =>ucfirst($type)]);
@@ -263,7 +251,6 @@ class EntertainmentsController extends Controller
        $type=$entertainment->type;
        $entertainment->delete();
        $message = trans('messages.delete_form', ['form' => $type]);
-       Cache::flush();
        return response()->json(['message' => $message, 'status' => true], 200);
     }
 
@@ -273,7 +260,6 @@ class EntertainmentsController extends Controller
         $type=$entertainment->type;
         $entertainment->restore();
         $message = trans('messages.restore_form', ['form' =>$type]);
-        Cache::flush();
         return response()->json(['message' => $message, 'status' => true], 200);
 
     }
@@ -284,7 +270,6 @@ class EntertainmentsController extends Controller
         $type=$entertainment->type;
         $entertainment->forceDelete();
         $message = trans('messages.permanent_delete_form', ['form' =>$type]);
-        Cache::flush();
         return response()->json(['message' => $message, 'status' => true], 200);
     }
 
@@ -296,7 +281,6 @@ class EntertainmentsController extends Controller
 
         $upload_url_type=Constant::where('type','upload_type')->get();
         $video_quality=Constant::where('type','video_quality')->get();
-        Cache::flush();
 
         return view('entertainment::backend.entertainment.download', compact('data','module_title','upload_url_type','video_quality'));
 
@@ -308,7 +292,6 @@ class EntertainmentsController extends Controller
         $data = $request->all();
         $this->entertainmentService->storeDownloads($data, $id);
         $message = trans('messages.set_download_url');
-        Cache::flush();
 
         return redirect()->route('backend.movies.index')->with('success', $message);
     }
@@ -325,17 +308,19 @@ class EntertainmentsController extends Controller
 
         ])->findOrFail($id);
 
-
+        
        foreach ($data->entertainmentTalentMappings as $talentMapping) {
     $talentProfile = $talentMapping->talentprofile;
 
     if ($talentProfile) {
         if (in_array($talentProfile->type, ['actor', 'director'])) {
-            $talentProfile->file_url =  setBaseUrlWithFileName($talentProfile->file_url);
+            $talentProfile->file_url = !empty($talentProfile->tmdb_id) 
+                ? $talentProfile->file_url 
+                : getImageUrlOrDefault($talentProfile->file_url);
         }
     }
 }
-        $data->poster_url =setBaseUrlWithFileName($data->poster_url);
+        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
 
         $data->formatted_release_date = Carbon::parse($data->release_date)->format('d M, Y');
         if($data->type == "movie"){
