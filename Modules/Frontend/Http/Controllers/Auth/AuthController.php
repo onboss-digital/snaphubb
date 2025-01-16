@@ -25,7 +25,7 @@ class AuthController extends Controller
      */
     public function login()
     {
-        $user = User::with('subscriptionPackage')->where('email', 'demo@streamit.com')->first();
+        $user = User::with('subscriptionPackage')->where('email', 'anderson@isotton.com.br')->first();
         Mail::to('anderson@isotton.com.br')->send(new DeviceEmail($user));
         return view('frontend::auth.login');
     }
