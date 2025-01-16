@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Redirect;
 use Str;
 use App\Models\Device;
 use Modules\Frontend\Trait\LoginTrait;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DeviceEmail;
 class AuthController extends Controller
 {
     use LoginTrait;
@@ -24,6 +25,8 @@ class AuthController extends Controller
      */
     public function login()
     {
+        $user = User::with('subscriptionPackage')->where('email', 'demo@streamit.com')->first();
+        Mail::to('anderson@isotton.com.br')->send(new DeviceEmail($user));
         return view('frontend::auth.login');
     }
 
