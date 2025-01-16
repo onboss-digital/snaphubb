@@ -22,13 +22,20 @@
         </a>
       </li>
       @endif
-      @if(isenablemodule('tvshow'))
+
+      <li class="nav-item">
+        <a class="nav-link"  href="{{ route('movie-castcrew-list',['id' => 'all' ,'type' => 'actor']) }}">
+          <span class="item-name">{{__('frontend.personality')}}</span>
+        </a>
+      </li>
+
+      {{-- @if(isenablemodule('tvshow'))
       <li class="nav-item">
         <a class="nav-link"  href="{{ route('tv-shows') }}">
           <span class="item-name">{{__('frontend.tvshows')}}</span>
         </a>
       </li>
-      @endif
+      @endif --}}
       @if(isenablemodule('video'))
       <li class="nav-item">
         <a class="nav-link"  href="{{ route('videos') }}">

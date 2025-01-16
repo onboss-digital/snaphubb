@@ -74,6 +74,7 @@ return[
     'edit_profile_details' => 'تعديل تفاصيل الملف الشخصي',
     'update_profile' => 'تحديث الملف الشخصي',
     'popular_videos' => 'مقاطع الفيديو الشائعة',
+    'free_videos' => 'مقاطع الفيديو المجانية',
     'top_channel_list' => 'قوائم القنوات الأعلى',
     'personality' => 'الشخصيات',
     'personality_list' => 'قائمة الشخصيات المفضلة لديك',

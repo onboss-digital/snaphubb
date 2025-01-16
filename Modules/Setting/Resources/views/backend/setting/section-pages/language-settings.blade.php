@@ -271,12 +271,6 @@ $("#form_btn").click(function(e) {
     submitForm(e);
 });
 
-
-    $("#form_btn").click(function(e){
-
-        e.preventDefault();
-        submitForm(e)
-    });
 </script>
 
 @endpush

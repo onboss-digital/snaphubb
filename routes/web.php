@@ -33,7 +33,6 @@ require __DIR__ . '/auth.php';
 Route::get('storage-link', function () {
     return Artisan::call('storage:link');
 });
-
 Route::get('/', [FrontendController::class, 'index'])->name('user.login');
 
 Route::group(['middleware' => ['auth','admin']], function () {
@@ -76,7 +75,7 @@ Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function (
             Route::get('settings/{vue_capture?}', [SettingController::class, 'index'])->name('settings')->where('vue_capture', '^(?!storage).*$');
             Route::get('settings-data', [SettingController::class, 'index_data']);
             Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
-           // Route::post('setting-update', [SettingController::class, 'update'])->name('setting.update');
+            // Route::post('setting-update', [SettingController::class, 'update'])->name('setting.update');
             Route::get('clear-cache', [SettingController::class, 'clear_cache'])->name('clear-cache');
             Route::post('verify-email', [SettingController::class, 'verify_email'])->name('verify-email');
         });

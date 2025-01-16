@@ -1,7 +1,6 @@
 <div class="slick-banner main-banner" data-speed="1000" data-autoplay="true" data-center="false" data-infinite="false" data-navigation="true" data-pagination="true" data-spacing="0">
 
     @foreach($data as $slider)
-
       @php
           $data = $slider['data']->toArray(request());
       @endphp
@@ -29,13 +28,13 @@
                   <p class="mb-0 font-size-14 line-count-3">{{ $data['description'] }}</p>
                   <ul class="list-inline mt-4 mb-0 mx-0 p-0 d-flex align-items-center flex-wrap gap-3">
 
-                    <li>
+                    {{-- <li>
                         @if(!empty($data['release_date']))
                       <span class="d-flex align-items-center gap-2">
                         <span class="fw-medium">{{ date('Y', strtotime($data['release_date'])) }}</span>
                       </span>
                       @endif
-                    </li>
+                    </li> --}}
                     <li>
                         @if(!empty($data['language']))
                       <span class="d-flex align-items-center gap-2">
@@ -56,7 +55,7 @@
                     <li>
                       <span class="d-flex align-items-center gap-2">
                         <span><i class="ph ph-star lh-base"></i></span>
-                        <span class="fw-medium">{{ $data['imdb_rating'] }}(IMDB)</span>
+                        <span class="fw-medium">{{ $data['imdb_rating'] }}</span>
                       </span>
                     </li>
                     @endif

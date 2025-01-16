@@ -64,9 +64,6 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get('notification-configuration', [SettingsController::class, 'notificationConfiguration'])->name('notification-configuration');
       Route::get('storage-settings', [SettingsController::class, 'storageSettings'])->name('storage-settings');
 
-
-
-
     });
 
     Route::group(['prefix' => 'profile', 'as' => 'profile.'],function () {

@@ -1,6 +1,7 @@
 <x-auth-layout>
   <x-slot name="title">
     @lang('Login')
+
   </x-slot>
 
   <x-auth-card>
@@ -57,7 +58,7 @@
       </div>
 
     </form>
-    <div class="d-none">
+    {{-- <div class="d-none">
       <h6 class="text-center border-top py-3 mt-3">Demo Accounts</h6>
       <div class="parent">
 
@@ -66,7 +67,7 @@
           <option value="12345678,admin@streamit.com">Admin</option>
           <option value="12345678,demo@streamit.com"  selected>Demo Admin</option>
           <option value="secret,john@streamit.com">User</option>
-      </select>
+      </select> --}}
 
 </div>
 
@@ -138,7 +139,7 @@
 
   <script type="text/javascript">
      window.onload = function() {
-        // getSelectedOption();
+        getSelectedOption();
     };
 
     $(document).ready(function() {

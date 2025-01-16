@@ -3,8 +3,7 @@
 @section('content')
 
 <div id="login" >
-
-    <div class="vh-100" style="background: url('../img/web-img/authbg.png'); background-size: cover; background-repeat: no-repeat; position: relative;min-height:500px">
+    <div class="vh-100" style="background: url('dummy-images/login_banner.jpg'); background-size: cover; background-repeat: no-repeat; position: relative;min-height:500px">
         <div class="container">
             <div class="row justify-content-center align-items-center height-self-center vh-100">
                 <div class="col-lg-5 col-md-8 col-11 align-self-center">
@@ -40,7 +39,7 @@
                                 <p class="mt-2 mb-0 fw-normal">{{__('frontend.not_have_account')}}<a href="{{route('register-page')}}" class="ms-1">{{__('frontend.sign_up')}}</a></p>
                             </div>
 
-                            <div class="border-style">
+                            {{-- <div class="border-style">
                                 <span>Or</span>
                             </div>
 
@@ -73,7 +72,7 @@
                                     </span>
                                 </a>
 
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                 </div>
