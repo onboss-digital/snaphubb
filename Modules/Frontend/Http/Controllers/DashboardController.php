@@ -318,7 +318,7 @@ class DashboardController extends Controller
 
         if (!empty($popular_videos)) {
 
-            $html = view('frontend::components.section.video', ['data' => $popular_videos, 'title' => __('frontend._videos')])->render();
+            $html = view('frontend::components.section.video', ['data' => $popular_videos, 'title' => __('frontend.free_videos')])->render();
 
         }
 
