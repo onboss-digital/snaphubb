@@ -9,5 +9,5 @@ return [
     'lbl_paypal' => 'PayPal',
     'lbl_flutterwave' => 'Flutterwave',
     'lbl_client_id' => 'ID Client',
-
+    'lbl_sandbox' => 'Bac à Sable',
 ];

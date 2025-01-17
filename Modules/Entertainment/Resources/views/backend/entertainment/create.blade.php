@@ -244,7 +244,7 @@
 </div>
 
 
-                    <div class="col-md-6 col-lg-4">
+                    {{-- <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger">*</span>', 'IMDb_rating')->class('form-label') }}
                         {{ html()->text('IMDb_rating')
                                 ->attribute('value', old('IMDb_rating'))
@@ -256,8 +256,8 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="invalid-feedback" id="imdb-error">IMDB Rating field is required</div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
+                    </div> --}}
+                    {{-- <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_content_rating') . '<span class="text-danger">*</span>', 'content_rating')->class('form-label') }}
 
                         {{ html()->text('content_rating')->attribute('value', old('content_rating'))->placeholder(__('placeholder.lbl_content_rating'))->class('form-control')->attribute('required','required') }}
@@ -266,7 +266,7 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="invalid-feedback" id="name-error">Content Rating field is required</div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_duration') . ' <span class="text-danger">*</span>', 'duration')->class('form-label') }}
                         {{ html()->time('duration')->attribute('value', old('duration'))->placeholder(__('movie.lbl_duration'))->class('form-control  min-datetimepicker-time')->attribute('required', 'required')->id('duration') }}
@@ -283,7 +283,7 @@
                        @enderror
                        <div class="invalid-feedback" id="release_date-error">Release Date field is required</div>
                    </div>
-                    <div class="col-md-6 col-lg-4">
+                    {{-- <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_age_restricted'), 'is_restricted')->class('form-label') }}
                         <div class="d-flex justify-content-between align-items-center form-control">
                             {{ html()->label(__('movie.lbl_child_content'), 'is_restricted')->class('form-label mb-0 text-body') }}
@@ -295,7 +295,7 @@
                         @error('is_restricted')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                    </div>
+                    </div> --}}
                         <div class="col-md-6 col-lg-4">
                             {{ html()->label(__('movie.lbl_download_status'), 'download_status')->class('form-label') }}
                             <div class="d-flex justify-content-between align-items-center form-control">

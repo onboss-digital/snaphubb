@@ -1,10 +1,10 @@
 <?php
 
 return[
-    'title' => 'Export Data',
-    'lbl_date' => 'Date',
-    'lbl_select_file_type' => 'Select File Type',
-    'lbl_select_columns' => 'Select Columns',
-    'download' => 'Download',
-    'cancel' => 'Cancel',
+    'title' => 'Exportar Dados',
+    'lbl_date' => 'Data',
+    'lbl_select_file_type' => 'Selecione o Tipo de Arquivo',
+    'lbl_select_columns' => 'Selecione as Colunas',
+    'download' => 'Baixar',
+    'cancel' => 'Cancelar',
 ];
