@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use Modules\Frontend\Http\Controllers\MovieController;
 use Modules\Frontend\Http\Controllers\FrontendController;
@@ -28,6 +29,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->name('verification.verify');
+
 Route::middleware(['checkInstallation'])->group(function () {
 
 // Login with Applelo
@@ -52,6 +57,7 @@ Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/store-user', [AuthController::class, 'store'])->name('store-user');
 Route::get('/register', [AuthController::class, 'registration'])->name('register-page');
 Route::get('/forget-password', [AuthController::class, 'forgetpassword'])->name('forget-password');
+
 
 
 

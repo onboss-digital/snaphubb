@@ -14,19 +14,25 @@
                             @if(session()->has('error'))
                                 <span class="text-danger">{{session()->get('error')}}</span>
                             @endif
+                            @if(session()->has('info'))
+                                <span class="text-info">{{session()->get('info')}}</span>
+                            @endif
+                            @if(session()->has('success'))
+                                <span class="text-success">{{ session()->get('success') }}</span>
+                            @endif
                         </div>
                         <p class="text-danger" id="login_error_message"></p>
                         <form action="post" id="login-form" class="requires-validation" data-toggle="validator" novalidate>
                             <div class="input-group">
                                 <span class="input-group-text px-0"><i class="ph ph-envelope"></i></span>
                                 <input type="email" name="email" class="form-control" placeholder="{{__('frontend.enter_email')}}"  aria-describedby="basic-addon1" required>
-                                <div class="invalid-feedback" id="name-error">Email field is required.</div>
+                                <div class="invalid-feedback" id="name-error">{{ __('auth.email_required') }}</div>
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
                                 <input type="password" name="password" class="form-control" id="password" placeholder="{{__('messages.enter_password')}}" aria-describedby="basic-addon1" required>
                                 <span class="input-group-text px-0" id="togglePassword"> <i class="ph ph-eye"></i></span>
-                                <div class="invalid-feedback" id="password-error">Password field is required.</div>
+                                <div class="invalid-feedback" id="password-error">{{ __('auth.password_required') }}</div>
                             </div>
                             <div class="d-flex flex-wrap align-items-center justify-content-between">
                                 <label class="list-group-item d-flex align-items-center"><input class="form-check-input m-0 me-2" type="checkbox">{{__('frontend.remember_me')}}</label>

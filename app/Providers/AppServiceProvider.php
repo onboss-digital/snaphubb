@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Translation\Translator;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -64,5 +66,17 @@ class AppServiceProvider extends ServiceProvider
 
             return $trans;
         });
+
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+
+            $url = str_replace('/admin','', $url);
+            return (new MailMessage)
+                ->subject('Verify Email Address')
+                ->view('emails.verify-email', [
+                    'user' => $notifiable,
+                    'actionUrl'=> $url
+                ]);
+        });
+
     }
 }

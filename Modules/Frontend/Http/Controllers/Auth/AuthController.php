@@ -3,6 +3,10 @@
 namespace Modules\Frontend\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
@@ -20,14 +24,43 @@ use App\Mail\DeviceEmail;
 class AuthController extends Controller
 {
     use LoginTrait;
+    use MustVerifyEmail;
     /**
      * Display a listing of the resource.
      */
     public function login()
     {
-        // $user = User::with('subscriptionPackage')->where('email', 'anderson@isotton.com.br')->first();
-        // Mail::to('anderson@isotton.com.br')->send(new DeviceEmail($user));
         return view('frontend::auth.login');
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $user = User::find($request->route('id'));
+        if (!$user) {
+            return redirect()
+                ->route('login')
+                ->with('error', __('auth.user_not_found'));
+        }
+
+        if (!hash_equals(sha1($user->getEmailForVerification()), $request->route('hash'))) {
+            return redirect()
+                ->route('login')
+                ->with('error', __('auth.invalid_verification_link'));
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()
+                ->route('login')
+                ->with('info', __('auth.email_already_verified'));
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new UserRegistered($user));
+        }
+
+        return redirect()
+            ->route('login')
+            ->with('success', __('auth.email_verified_successfully'));
     }
 
     /**
@@ -86,8 +119,9 @@ class AuthController extends Controller
         return response()->json(['status' => true, 'message' => __('messages.successfully_register')]);
     }
 
-    public function Logout(Request $request){
-        $user=Auth::user();
+    public function Logout(Request $request)
+    {
+        $user = Auth::user();
 
         Auth::logout();
 
@@ -132,23 +166,23 @@ class AuthController extends Controller
     }
 
 
-     // Redirect to Google
-     public function redirectToGoogle()
-     {
+    // Redirect to Google
+    public function redirectToGoogle()
+    {
 
-         return Socialite::driver('google')->redirect();
-     }
+        return Socialite::driver('google')->redirect();
+    }
 
-     // Handle Google Callback
-     public function handleGoogleCallback(Request $request)
-     {
+    // Handle Google Callback
+    public function handleGoogleCallback(Request $request)
+    {
 
-         try {
-             $googleUser = Socialite::driver('google')->stateless()->user();
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
 
-             $user = User::where('email', $googleUser->getEmail())->first();
+            $user = User::where('email', $googleUser->getEmail())->first();
 
-             if (!$user) {
+            if (!$user) {
 
                 $fullName = $googleUser->getName();
 
@@ -161,7 +195,7 @@ class AuthController extends Controller
                 $data = [
                     'first_name' => $firstName,
                     'last_name' => $lastName,
-                    'email' =>  $googleUser->getEmail(),
+                    'email' => $googleUser->getEmail(),
                     'password' => Hash::make(Str::random(8)),
                     'user_type' => 'user',
                     'login_type' => 'google'
@@ -176,50 +210,48 @@ class AuthController extends Controller
                 $user->assignRole($data['user_type']);
 
                 $user->save();
-             }
+            }
 
-             if($user->login_type == 'google'){
-                $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
-                $response=$this->CheckDeviceLimit($user, $current_device);
+            if ($user->login_type == 'google') {
+                $current_device = $request->has('device_id') ? $request->device_id : $request->getClientIp();
+                $response = $this->CheckDeviceLimit($user, $current_device);
 
-                if(isset($response['error'])) {
+                if (isset($response['error'])) {
                     return Redirect::to('/login')->with('error', $response['error']);
                 }
 
-                 $this->setDevice($user,$request);
-                 $user1=Auth::login($user);
+                $this->setDevice($user, $request);
+                $user1 = Auth::login($user);
 
-             }
-             else
-             {
-                $user=Auth::user();
+            } else {
+                $user = Auth::user();
                 Auth::logout();
                 $this->removeDevice($user, $request);
                 return Redirect::to('/login')->with('error', 'Something went wrong! During login');
-             }
+            }
 
-             return redirect()->intended('/'); // Redirect to intended page
-         } catch (\Exception $e) {
-             return Redirect::to('/login')->with('error', 'Something went wrong!');
-         }
-     }
+            return redirect()->intended('/'); // Redirect to intended page
+        } catch (\Exception $e) {
+            return Redirect::to('/login')->with('error', 'Something went wrong!');
+        }
+    }
 
 
-     // Redirect to Apple
-     public function redirectToApple()
-     {
-         return Socialite::driver('apple')->redirect();
-     }
+    // Redirect to Apple
+    public function redirectToApple()
+    {
+        return Socialite::driver('apple')->redirect();
+    }
 
-     // Handle Apple Callback
-     public function handleAppleCallback(Request $request)
-     {
+    // Handle Apple Callback
+    public function handleAppleCallback(Request $request)
+    {
 
-         try {
-             $appleUser = Socialite::driver('apple')->stateless()->user();
-             $user = User::where('email', $appleUser->getEmail())->first();
+        try {
+            $appleUser = Socialite::driver('apple')->stateless()->user();
+            $user = User::where('email', $appleUser->getEmail())->first();
 
-             if (!$user) {
+            if (!$user) {
 
                 $fullName = $appleUser->getName();
 
@@ -234,7 +266,7 @@ class AuthController extends Controller
                 $data = [
                     'first_name' => $firstName,
                     'last_name' => $lastName,
-                    'email' =>  $appleUser->getEmail(),
+                    'email' => $appleUser->getEmail(),
                     'password' => Hash::make(Str::random(8)),
                     'user_type' => 'user',
                     'login_type' => 'google'
@@ -248,34 +280,31 @@ class AuthController extends Controller
                 $user->assignRole($data['user_type']);
                 $user->createOrUpdateProfileWithAvatar();
                 $user->save();
-             }
+            }
 
-             if($user->login_type == 'apple')
-             {
-                $current_device=$request->has('device_id')?$request->device_id:$request->getClientIp();
-                $response=$this->CheckDeviceLimit($user, $current_device);
+            if ($user->login_type == 'apple') {
+                $current_device = $request->has('device_id') ? $request->device_id : $request->getClientIp();
+                $response = $this->CheckDeviceLimit($user, $current_device);
 
-                if(isset($response['error'])) {
+                if (isset($response['error'])) {
 
                     return Redirect::to('/login')->with('error', $response['error']);
 
                 }
-                 $this->setDevice($user, $request);
-                 Auth::login($user);
-             }
-             else
-             {
-                $user=Auth::user();
+                $this->setDevice($user, $request);
+                Auth::login($user);
+            } else {
+                $user = Auth::user();
                 Auth::logout();
                 $this->removeDevice($user, $request);
                 return Redirect::to('/login')->with('error', 'Something went wrong! During login');
-             }
+            }
 
-             return redirect()->intended('/'); // Redirect to intended page
-         } catch (\Exception $e) {
-             return Redirect::to('/login')->with('error', 'Something went wrong!');
-         }
-     }
+            return redirect()->intended('/'); // Redirect to intended page
+        } catch (\Exception $e) {
+            return Redirect::to('/login')->with('error', 'Something went wrong!');
+        }
+    }
 
 
 }

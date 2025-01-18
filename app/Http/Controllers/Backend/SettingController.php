@@ -41,7 +41,7 @@ class SettingController extends Controller
     public function index_data(Request $request)
     {
         if (!isset($request->fields)) {
-            return response()->json($data, 404);
+            return response()->json([], 404);
         }
         $fields = explode(',', $request->fields);
         $data = Setting::whereIn('name', $fields)->get();
