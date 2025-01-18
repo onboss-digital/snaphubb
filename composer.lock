@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b62a5f105afaeab4e9855b084150940d",
+    "content-hash": "658862eb2c301e603a428ff723c5bb93",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.337.0",
+            "version": "3.337.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "7e40cecb3ce66749bbd5eaa9f370de48c16acd6c"
+                "reference": "f885dd803a257da9d54e72a4750bba73e1196aee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/7e40cecb3ce66749bbd5eaa9f370de48c16acd6c",
-                "reference": "7e40cecb3ce66749bbd5eaa9f370de48c16acd6c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f885dd803a257da9d54e72a4750bba73e1196aee",
+                "reference": "f885dd803a257da9d54e72a4750bba73e1196aee",
                 "shasum": ""
             },
             "require": {
@@ -154,9 +154,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.337.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.337.2"
             },
-            "time": "2025-01-15T19:58:52+00:00"
+            "time": "2025-01-17T19:10:04+00:00"
         },
         {
             "name": "barryvdh/laravel-dompdf",
@@ -7784,16 +7784,16 @@
         },
         {
             "name": "spatie/image",
-            "version": "3.7.5",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image.git",
-                "reference": "8a4f258e01f080218b2e13b42981ad220e919c40"
+                "reference": "06cf293f66c833704935ba18e16c784d7e8433a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image/zipball/8a4f258e01f080218b2e13b42981ad220e919c40",
-                "reference": "8a4f258e01f080218b2e13b42981ad220e919c40",
+                "url": "https://api.github.com/repos/spatie/image/zipball/06cf293f66c833704935ba18e16c784d7e8433a7",
+                "reference": "06cf293f66c833704935ba18e16c784d7e8433a7",
                 "shasum": ""
             },
             "require": {
@@ -7841,7 +7841,7 @@
                 "spatie"
             ],
             "support": {
-                "source": "https://github.com/spatie/image/tree/3.7.5"
+                "source": "https://github.com/spatie/image/tree/3.8.0"
             },
             "funding": [
                 {
@@ -7853,7 +7853,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-13T13:19:27+00:00"
+            "time": "2025-01-17T10:19:44+00:00"
         },
         {
             "name": "spatie/image-optimizer",
@@ -8824,6 +8824,72 @@
                 }
             ],
             "time": "2025-01-03T09:35:48+00:00"
+        },
+        {
+            "name": "srmklive/paypal",
+            "version": "3.0.32",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/srmklive/laravel-paypal.git",
+                "reference": "031d69d7c99f9ef0874a34cb85326ede28cd7aed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/srmklive/laravel-paypal/zipball/031d69d7c99f9ef0874a34cb85326ede28cd7aed",
+                "reference": "031d69d7c99f9ef0874a34cb85326ede28cd7aed",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "guzzlehttp/guzzle": "~7.0",
+                "illuminate/support": "~6.0|~7.0|~8.0|~9.0|^10.0|^11.0",
+                "nesbot/carbon": "~2.0|^3.0",
+                "php": ">=7.2|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^8.0|^9.0|^10.0|^11.0",
+                "symfony/var-dumper": "~5.0|^6.0|^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "PayPal": "Srmklive\\PayPal\\Facades\\PayPal"
+                    },
+                    "providers": [
+                        "Srmklive\\PayPal\\Providers\\PayPalServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Srmklive\\PayPal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raza Mehdi",
+                    "email": "srmk@outlook.com"
+                }
+            ],
+            "description": "Laravel plugin For Processing Payments Through Paypal Express Checkout. Can Be Used Independently With Other Applications.",
+            "keywords": [
+                "http",
+                "laravel paypal",
+                "paypal",
+                "rest",
+                "web service"
+            ],
+            "support": {
+                "issues": "https://github.com/srmklive/laravel-paypal/issues",
+                "source": "https://github.com/srmklive/laravel-paypal/tree/3.0.32"
+            },
+            "time": "2024-06-24T14:34:51+00:00"
         },
         {
             "name": "stichoza/google-translate-php",
@@ -12891,16 +12957,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.68.0",
+            "version": "v3.68.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "73f78d8b2b34a0dd65fedb434a602ee4c2c8ad4c"
+                "reference": "b9db2b2ea3cdba7201067acee46f984ef2397cff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/73f78d8b2b34a0dd65fedb434a602ee4c2c8ad4c",
-                "reference": "73f78d8b2b34a0dd65fedb434a602ee4c2c8ad4c",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/b9db2b2ea3cdba7201067acee46f984ef2397cff",
+                "reference": "b9db2b2ea3cdba7201067acee46f984ef2397cff",
                 "shasum": ""
             },
             "require": {
@@ -12982,7 +13048,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.68.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.68.1"
             },
             "funding": [
                 {
@@ -12990,7 +13056,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-13T17:01:01+00:00"
+            "time": "2025-01-17T09:20:36+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
