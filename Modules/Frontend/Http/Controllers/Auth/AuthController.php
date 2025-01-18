@@ -50,7 +50,6 @@ class AuthController extends Controller
     {
         $data = $request->all();
 
-        dd('oi');
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',

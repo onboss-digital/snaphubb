@@ -12,7 +12,8 @@
                             <h5>{{ __('frontend.sign_up_title') }}</h5>
                             <p class="font-size-14">{{ __('frontend.sign_sub_title') }}</p>
                         </div>
-                        <p class="text-danger" id="error_message"></p>
+                        <p class="text-danger" id="error_message">
+                        </p>
                         <form id="registerForm" action="post" class="requires-validation" data-toggle="validator" novalidate>
 
                             <div class="input-group mb-3">
