@@ -557,17 +557,17 @@ class PaymentController extends Controller
         $provider = new PayPalClient($config);
         $provider->getAccessToken();
 
-        $response = $provider->listSubscriptionTransactions($subscriptionId, now()->subDays(1), now()->addDays(1)->format('Y-m-d\TH:i:s\Z'));
+        $subscription = $provider->showSubscriptionDetails($subscriptionId);
+
 
         try {
-            $transaction = $response['transactions'][0];
 
-            if ($transaction['status'] === 'COMPLETED') {
-                $amount = $transaction['amount_with_breakdown']['gross_amount']['value'];
+            if ($subscription['status'] === 'ACTIVE') {
+                $amount = $subscription['billing_info']['last_payment']['amount']['value'];
 
-                return $this->handlePaymentSuccess($plan_id, $amount, 'paypal', $transaction['id']);
+                return $this->handlePaymentSuccess($plan_id, $amount, 'paypal', $subscription['id']);
             } else {
-                return redirect('/')->with('error', 'Payment failed: ' . $response['message']);
+                return redirect('/')->with('error', 'Payment failed: ' . $subscription['message']);
             }
         } catch (\Exception $e) {
             return redirect('/')->with('error', 'Payment failed: ' . $e->getMessage());
