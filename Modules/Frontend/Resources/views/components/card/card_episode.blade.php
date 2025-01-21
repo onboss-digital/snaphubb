@@ -47,14 +47,14 @@
                 data-user-id="{{ auth()->id() }}" data-profile-id="{{ getCurrentProfile(auth()->id(), request()) }}"
                 data-episode-id="{{ $data['id'] }}" data-first-episode-id="{{ $index + 1 }}"
                 data-quality-options={{ $qualityOptionsJson }}
-                style="background: red;position: relative;margin-top: 25px;">
+                style="background: red;position: relative;margin-top: 25px;"
+                onclick="window.location.href='{{ route('episode-details', ['id' => $data['id']]) }}'">
                 <span class="d-flex
                 align-items-center justify-content-center gap-2">
                     <span><i class="ph-fill ph-play"></i></span>
                     {{ __('frontend.watch_now') }}
                 </span>
             </button>
-
         </div>
     </div>
 </div>
