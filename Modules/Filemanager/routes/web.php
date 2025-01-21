@@ -43,7 +43,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::post("store", [FilemanagersController::class, 'store'])->name("store");
       Route::get("getMediaStore", [FilemanagersController::class, 'getMediaStore'])->name("getMediaStore");
       Route::delete("destroy", [FilemanagersController::class, 'destroy'])->name("destroy");
-      Route::get("index_data", [FilemanagersController::class, 'index_data'])->name("index_data");
+      Route::get("index_data", [FilemanagersController::class, 'index_data'])->name("store-data");
       Route::get('export', [FilemanagersController::class, 'export'])->name('export');
       Route::get('media-library/{' . 'media-library' . '}/edit', [FilemanagersController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [FilemanagersController::class, 'bulk_action'])->name('bulk_action');

@@ -217,6 +217,7 @@ class PaymentController extends Controller
 
     protected function PayPalPayment(Request $request)
     {
+
         $this->getSettings('paypal');
         $dataRequest = $request->all();
 
@@ -253,12 +254,12 @@ class PaymentController extends Controller
         try {
             $response = $provider
                 ->addProduct(config('app.name') . " - {$plan->name}", config('app.name') . " - {$plan->name}", 'SERVICE', 'SOFTWARE')
-                ->addCustomPlan($plan->name, $plan->description, $plan->total_price, strtoupper($plan->duration), $plan->duration_value)
+                ->addCustomPlan($plan->name, substr($plan->description, 0, length: 100), $plan->total_price, strtoupper($plan->duration), $plan->duration_value)
                 ->setReturnAndCancelUrl(route('payment.success', ['gateway' => 'paypal', 'plan' => $plan->id]), route('payment.success', ['gateway' => 'paypal']))
                 ->setupSubscription(auth()->user()->first_name, auth()->user()->email);
             return response()->json(['success' => true, 'redirect' => $response['links'][0]['href']]);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors('Payment initialization failed: ' . ($responseBody['message'] ?? 'Unknown error'));
+            return response()->json(['success' => false, 'asd' => $e->getMessage()]);
         }
     }
 

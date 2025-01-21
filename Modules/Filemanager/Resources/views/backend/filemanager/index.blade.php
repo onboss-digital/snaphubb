@@ -25,7 +25,7 @@
                 </nav>
                 <div class="tab-content iq-tab-fade-up" id="nav-tab-content">
                     <div class="tab-pane fade" id="nav-upload" role="tabpanel" aria-labelledby="nav-upload-files-tab">
-                        {{ html()->form('POST', route('backend.media-library.store-data'))->id('form-submit')->attribute('enctype', 'multipart/form-data')
+                        {{ html()->form('POST', route('backend.media-library.store'))->id('form-submit')->attribute('enctype', 'multipart/form-data')
                             ->class('requires-validation')  // Add the requires-validation class
     ->attribute('novalidate', 'novalidate')
                             ->open() }}
