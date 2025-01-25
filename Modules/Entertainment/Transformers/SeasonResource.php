@@ -23,7 +23,7 @@ class SeasonResource extends JsonResource
             'plan_id' => $this->plan_id,
             'short_desc' => $this->short_desc,
             'description' => strip_tags($this->description),
-            'poster_image' => !empty($this->tmdb_id) ? $this->poster_url : setBaseUrlWithFileName($this->poster_url),
+            'poster_image' =>setBaseUrlWithFileName($this->poster_url),
             'plan' => new PlanResource($this->plan),
         ];
     }

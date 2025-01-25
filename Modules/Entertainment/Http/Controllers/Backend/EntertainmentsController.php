@@ -21,21 +21,21 @@ class EntertainmentsController extends Controller
 
     use ModuleTrait {
         initializeModuleTrait as private traitInitializeModuleTrait;
-        }
+    }
 
-        protected $entertainmentService;
+    protected $entertainmentService;
 
-        public function __construct(EntertainmentService $entertainmentService)
-        {
-            $this->entertainmentService = $entertainmentService;
+    public function __construct(EntertainmentService $entertainmentService)
+    {
+        $this->entertainmentService = $entertainmentService;
 
-            $this->traitInitializeModuleTrait(
-                'castcrew.castcrew_title',
-                'castcrew',
+        $this->traitInitializeModuleTrait(
+            'castcrew.castcrew_title',
+            'castcrew',
 
-                'fa-solid fa-clipboard-list'
-            );
-        }
+            'fa-solid fa-clipboard-list'
+        );
+    }
 
 
     public function index(Request $request)
@@ -68,10 +68,10 @@ class EntertainmentsController extends Controller
     }
 
     public function store(EntertainmentRequest $request)
-     {
+    {
         $data = $request->all();
-        $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] :extractFileNameFromUrl($data['thumbnail_url']);
-        $data['poster_url']= !empty( $data['tmdb_id']) ?  $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
+        $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] : extractFileNameFromUrl($data['thumbnail_url']);
+        $data['poster_url'] = !empty($data['tmdb_id']) ? $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
 
         // dd('oi');
 
@@ -80,22 +80,22 @@ class EntertainmentsController extends Controller
             $data['IMDb_rating'] = round($data['IMDb_rating'], 1);
         }
 
-        if($request->trailer_url_type == 'Local'){
+        if ($request->trailer_url_type == 'Local') {
             $data['trailer_video'] = extractFileNameFromUrl($data['trailer_video']);
         }
-        if($request->video_upload_type == 'Local'){
+        if ($request->video_upload_type == 'Local') {
             $data['video_file_input'] = extractFileNameFromUrl($data['video_file_input']);
         }
 
         $entertainment = $this->entertainmentService->create($data);
         $type = $entertainment->type;
-        $message = trans('messages.create_form', ['type' =>ucfirst($type)]);
+        $message = trans('messages.create_form', ['type' => ucfirst($type)]);
 
-        if($type=='movie'){
+        if ($type == 'movie') {
 
             return redirect()->route('backend.movies.index')->with('success', $message);
 
-        }else{
+        } else {
 
             return redirect()->route('backend.tvshows.index')->with('success', $message);
         }
@@ -125,17 +125,17 @@ class EntertainmentsController extends Controller
                 'entertainmentTalentMappings'
             ])
             ->first();
-                
+
         $tmdb_id = $data->tmdb_id;
         $data->thumbnail_url = !empty($data->tmdb_id) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->poster_url = !empty($data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
 
-        if($data->trailer_url_type =='Local'){
+        if ($data->trailer_url_type == 'Local') {
 
             $data->trailer_url = setBaseUrlWithFileName($data->trailer_url);
         }
 
-        if($data->video_upload_type =='Local'){
+        if ($data->video_upload_type == 'Local') {
 
             $data->video_url_input = setBaseUrlWithFileName($data->video_url_input);
         }
@@ -192,11 +192,12 @@ class EntertainmentsController extends Controller
 
     public function update(EntertainmentRequest $request, $id)
     {
-        $request_data=$request->all();
-        $request_data['thumbnail_url'] = !empty($request_data['tmdb_id']) ? $request_data['thumbnail_url'] :extractFileNameFromUrl($request_data['thumbnail_url']);
+        $request_data = $request->all();
+        $request_data['thumbnail_url'] = !empty($request_data['tmdb_id']) ? $request_data['thumbnail_url'] : extractFileNameFromUrl($request_data['thumbnail_url']);
         $request_data['poster_url'] = !empty($request_data['tmdb_id']) ? $request_data['poster_url'] : extractFileNameFromUrl($request_data['poster_url']);
         $request_data['trailer_video'] = extractFileNameFromUrl($request_data['trailer_video']);
-        $request_data['video_file_input'] = isset($request_data['video_file_input'])  ? extractFileNameFromUrl($request_data['video_file_input']) : null;
+        $request_data['video_file_input'] = isset($request_data['video_file_input']) ? extractFileNameFromUrl($request_data['video_file_input']) : null;
+
 
         
         if (isset($request_data['IMDb_rating'])) {
@@ -233,7 +234,7 @@ class EntertainmentsController extends Controller
 
 
         $type = $entertainment->type;
-        $message = trans('messages.update_form', ['Form' =>ucfirst($type)]);
+        $message = trans('messages.update_form', ['Form' => ucfirst($type)]);
 
         if ($type == 'movie') {
             return redirect()->route('backend.movies.index')
@@ -247,19 +248,19 @@ class EntertainmentsController extends Controller
 
     public function destroy($id)
     {
-       $entertainment = $this->entertainmentService->getById($id);
-       $type=$entertainment->type;
-       $entertainment->delete();
-       $message = trans('messages.delete_form', ['form' => $type]);
-       return response()->json(['message' => $message, 'status' => true], 200);
+        $entertainment = $this->entertainmentService->getById($id);
+        $type = $entertainment->type;
+        $entertainment->delete();
+        $message = trans('messages.delete_form', ['form' => $type]);
+        return response()->json(['message' => $message, 'status' => true], 200);
     }
 
     public function restore($id)
     {
         $entertainment = $this->entertainmentService->getById($id);
-        $type=$entertainment->type;
+        $type = $entertainment->type;
         $entertainment->restore();
-        $message = trans('messages.restore_form', ['form' =>$type]);
+        $message = trans('messages.restore_form', ['form' => $type]);
         return response()->json(['message' => $message, 'status' => true], 200);
 
     }
@@ -267,27 +268,28 @@ class EntertainmentsController extends Controller
     public function forceDelete($id)
     {
         $entertainment = $this->entertainmentService->getById($id);
-        $type=$entertainment->type;
+        $type = $entertainment->type;
         $entertainment->forceDelete();
-        $message = trans('messages.permanent_delete_form', ['form' =>$type]);
+        $message = trans('messages.permanent_delete_form', ['form' => $type]);
         return response()->json(['message' => $message, 'status' => true], 200);
     }
 
-    public function downloadOption(Request $request, $id){
+    public function downloadOption(Request $request, $id)
+    {
 
-        $data = Entertainment::where('id',$id)->with('entertainmentDownloadMappings')->first();
+        $data = Entertainment::where('id', $id)->with('entertainmentDownloadMappings')->first();
 
-        $module_title =__('messages.download_movie');
+        $module_title = __('messages.download_movie');
 
-        $upload_url_type=Constant::where('type','upload_type')->get();
-        $video_quality=Constant::where('type','video_quality')->get();
+        $upload_url_type = Constant::where('type', 'upload_type')->get();
+        $video_quality = Constant::where('type', 'video_quality')->get();
 
-        return view('entertainment::backend.entertainment.download', compact('data','module_title','upload_url_type','video_quality'));
+        return view('entertainment::backend.entertainment.download', compact('data', 'module_title', 'upload_url_type', 'video_quality'));
 
     }
 
 
-   public function storeDownloads(Request $request, $id)
+    public function storeDownloads(Request $request, $id)
     {
         $data = $request->all();
         $this->entertainmentService->storeDownloads($data, $id);
@@ -308,32 +310,32 @@ class EntertainmentsController extends Controller
 
         ])->findOrFail($id);
 
-        
-       foreach ($data->entertainmentTalentMappings as $talentMapping) {
-    $talentProfile = $talentMapping->talentprofile;
 
-    if ($talentProfile) {
-        if (in_array($talentProfile->type, ['actor', 'director'])) {
-            $talentProfile->file_url = !empty($talentProfile->tmdb_id) 
-                ? $talentProfile->file_url 
-                : getImageUrlOrDefault($talentProfile->file_url);
+        foreach ($data->entertainmentTalentMappings as $talentMapping) {
+            $talentProfile = $talentMapping->talentprofile;
+
+            if ($talentProfile) {
+                if (in_array($talentProfile->type, ['actor', 'director'])) {
+                    $talentProfile->file_url = !empty($talentProfile->tmdb_id)
+                        ? $talentProfile->file_url
+                        : getImageUrlOrDefault($talentProfile->file_url);
+                }
+            }
         }
-    }
-}
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->poster_url = !empty($data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
 
         $data->formatted_release_date = Carbon::parse($data->release_date)->format('d M, Y');
-        if($data->type == "movie"){
+        if ($data->type == "movie") {
             $module_title = __('movie.title');
             $show_name = $data->name;
             $route = 'backend.movies.index';
-        }else{
+        } else {
             $module_title = __('tvshow.title');
             $show_name = $data->name;
             $route = 'backend.tvshows.index';
         }
 
-        return view('entertainment::backend.entertainment.details', compact('data','module_title','show_name','route'));
+        return view('entertainment::backend.entertainment.details', compact('data', 'module_title', 'show_name', 'route'));
     }
 
 

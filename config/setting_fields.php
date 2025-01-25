@@ -119,11 +119,11 @@ return [
             [
                 'type' => 'file', // input fields type
                 'data' => 'string', // data type, string, int, boolean
-                'name' => 'dark_mini_logo', // unique name for field
-                'label' => 'Dark Mini Logo', // you know what label it is
+                'name' => 'light_logo', // unique name for field
+                'label' => 'Lignt Logo', // you know what label it is
                 'rules' => 'nullable|image|mimes:jpg,png,gif', // validation rule of laravel
                 'class' => '', // any class for input
-                'value' => 'img/logo/dark_mini_logo.png', // default value if you want
+                'value' => 'img/logo/light_logo.png', // default value if you want
                 'help' => '', // Help text for the input field.
                 'display' => 'raw', // Help text for the input field.
                 'datatype' => 'bussiness',

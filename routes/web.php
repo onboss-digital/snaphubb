@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth','admin']], function () {
 
 Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function () {
     // Language Switch
-    // Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
+    Route::get('language/{language}', [LanguageController::class, 'switch'])->name('language.switch');
     Route::post('set-user-setting', [BackendController::class, 'setUserSetting'])->name('backend.setUserSetting');
     Route::post('check-in-trash', [SearchController::class, 'check_in_trash'])->name('check-in-trash');
     Route::group(['as' => 'backend.', 'middleware' => ['auth','admin']], function () {
@@ -74,7 +74,7 @@ Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function (
         Route::group(['middleware' => ['admin']], function () {
             Route::get('settings/{vue_capture?}', [SettingController::class, 'index'])->name('settings')->where('vue_capture', '^(?!storage).*$');
             Route::get('settings-data', [SettingController::class, 'index_data']);
-            // Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
+            Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
             // Route::post('setting-update', [SettingController::class, 'update'])->name('setting.update');
             Route::get('clear-cache', [SettingController::class, 'clear_cache'])->name('clear-cache');
             Route::post('verify-email', [SettingController::class, 'verify_email'])->name('verify-email');
@@ -176,7 +176,7 @@ Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function (
             \Artisan::call('config:clear');
             \Artisan::call('cache:clear');
             return response()->json(['message' => 'Cache and Config cleared']);
-        })->name('clear-cache-config'); // Define the name for the route
+        })->name('config_clear');
     });
 
 });

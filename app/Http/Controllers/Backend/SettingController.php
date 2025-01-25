@@ -41,7 +41,7 @@ class SettingController extends Controller
     public function index_data(Request $request)
     {
         if (!isset($request->fields)) {
-            return response()->json($data, 404);
+            return response()->json([], 404);
         }
         $fields = explode(',', $request->fields);
         $data = Setting::whereIn('name', $fields)->get();
@@ -52,14 +52,13 @@ class SettingController extends Controller
             $value = $setting->val;
 
             // Process specific fields, like asset URLs
-            if (in_array($field, ['logo', 'mini_logo', 'dark_logo', 'dark_mini_logo', 'favicon'])) {
+            if (in_array($field, ['logo', 'mini_logo', 'dark_logo', 'dark_mini_logo','light_logo', 'favicon'])) {
                 $value = asset($value);
             }
 
-
-
             $responseData[$field] = $value;
         }
+
         return response()->json($responseData, 200);
     }
 

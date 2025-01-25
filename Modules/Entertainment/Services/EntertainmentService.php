@@ -189,7 +189,7 @@ class EntertainmentService
             $countries = $this->entertainmentRepository->moviecountries($data->id);
             $type = 'movie';
             $releaseDate = $data->release_date ? formatDate($data->release_date) : '';
-            $imageUrl = !empty($data['tmdb_id']) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
+            $imageUrl = setBaseUrlWithFileName($data->thumbnail_url);
             return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name,'genre'=>implode(', ', $genres->toArray()),'country'=>implode(', ', $countries->toArray()),'releaseDate'=>$releaseDate, 'type' => $type])->render();
 
         })
@@ -226,14 +226,14 @@ class EntertainmentService
         ->editColumn('status', function ($row) {
             $checked = $row->status ? 'checked="checked"' : '';
             $disabled = $row->trashed() ? 'disabled' : '';  // Disable if the record is soft-deleted
-        
+
             return '
                 <div class="form-check form-switch">
                     <input type="checkbox" data-url="' . route('backend.entertainments.update_status', $row->id) . '"
                         data-token="' . csrf_token() . '" class="switch-status-change form-check-input"
                         id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" ' . $checked . ' ' . $disabled . '>
                 </div>';
-        })        
+        })
         ->editColumn('updated_at', fn($data) => formatUpdatedAt($data->updated_at))
         ->orderColumns(['id'], '-:column $1')
         ->rawColumns(['action', 'status', 'check', 'thumbnail_url'])

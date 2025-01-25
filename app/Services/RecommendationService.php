@@ -15,6 +15,7 @@
     use libphonenumber\PhoneNumberUtil;
     use libphonenumber\NumberParseException;
     use App\Models\UserWatchHistory;
+    use Carbon\Carbon;
 
     class RecommendationService
     {
@@ -71,6 +72,7 @@
                 ->where('id', '!=', $recentlyWatched->entertainment_id)
                 ->where('type', 'movie')
                 ->where('status',1)
+                ->whereDate('release_date', '<=', Carbon::now())
                 ->take(10)
                 ->get();
         }
@@ -95,6 +97,7 @@
                 ->where('type', 'movie')
                 ->where('status',1)
                 ->limit(10)
+                ->whereDate('release_date', '<=', Carbon::now())
                 ->orderByRaw('FIELD(id, ' . $mostLikedMovies->implode(',') . ')') // Preserve the order of IDs
                 ->get();
         }
@@ -216,6 +219,7 @@ public function getTrendingMoviesByCountry($user)
         ->withCount('entertainmentReviews')
         ->where('type', 'movie')
         ->where('status', 1)
+        ->whereDate('release_date', '<=', Carbon::now())
         ->orderBy('entertainment_reviews_count', 'desc')
         ->take(10)
         ->get();

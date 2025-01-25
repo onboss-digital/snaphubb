@@ -6,10 +6,18 @@ class="nav navbar navbar-expand-xl navbar-light iq-navbar header-hover-menu left
     <a href="{{ route('backend.home') }}" class="navbar-brand">
             <div class="logo-main">
                 <div class="logo-mini d-none">
-                    <img src="{{ asset(setting('mini_logo')) }}" height="30" alt="{{ app_name() }}">
+
+                    @php
+                       $mini_logo=GetSettingValue('mini_logo') ??  asset(setting('mini_logo'));
+                    @endphp
+
+                    <img src="{{  $mini_logo }}" height="30" alt="{{ app_name() }}">
                 </div>
 
                 <div class="logo-dark">
+                    @php
+                    $dark_logo=GetSettingValue('dark_logo') ??  asset(setting('dark_logo'));
+                 @endphp
                     <img src="{{ asset(setting('dark_logo')) }}" height="30" alt="{{ app_name() }}">
                 </div>
             </div>

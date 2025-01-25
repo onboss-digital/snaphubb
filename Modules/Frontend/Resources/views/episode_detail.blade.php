@@ -55,7 +55,7 @@
     <div class="overflow-hidden">
         @if($data['more_items'] !=null)
             <div id="more-like-this">
-                @include('frontend::components.section.entertainment',  ['data' => $data['more_items'], 'title'=>__('frontend.more_like_this'),'type'=>'tvshow'])
+                @include('frontend::components.section.entertainment',  ['data' => $data['more_items'], 'title'=>__('frontend.more_like_this'),'type'=>'tvshow', 'slug'=>''])
             </div>
         @endif
     </div>

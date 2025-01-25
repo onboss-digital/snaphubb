@@ -131,6 +131,14 @@ window.onload = function() {
         }
     });
 
+    // Add event listener for Enter key press
+    searchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            document.getElementById('movie-search').click();
+        }
+    });
+
     const removeSearchButton = document.querySelector('#movie-remove');
     // Add event listener to the search input
 searchInput.addEventListener('input', function() {

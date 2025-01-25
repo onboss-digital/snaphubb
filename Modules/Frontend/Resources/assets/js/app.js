@@ -13,14 +13,14 @@ import 'node-snackbar/dist/snackbar.css';
     customSlider();
     readmore();
 
-    const selectProfileModal = document.getElementById('selectProfileModal');
-    if(selectProfileModal !== null) {
-        selectProfileModal.addEventListener('shown.bs.modal', event => {
-            selectProfileSlider();
-        });
-    } else {
-        console.warn("Element with ID 'selectProfileModal' not found.");
-    }
+    // const selectProfileModal = document.getElementById('selectProfileModal');
+    // if(selectProfileModal !== null) {
+    //     selectProfileModal.addEventListener('shown.bs.modal', event => {
+    //         selectProfileSlider();
+    //     });
+    // } else {
+    //     console.warn("Element with ID 'selectProfileModal' not found.");
+    // }
   });
 })(jQuery);
 

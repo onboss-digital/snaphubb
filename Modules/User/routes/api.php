@@ -5,6 +5,10 @@ use Modules\User\Http\Controllers\API\UserController;
 use Modules\User\Http\Controllers\API\UserMultiProfileController;
 use Modules\User\Http\Controllers\API\UserSearchHistoryController;
 
+
+Route::get('device-logout-data', [UserController::class, 'deviceLogout']);
+Route::get('logout-all-data', [UserController::class, 'logoutAll']);
+
 Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::get('profile-details', [UserController::class, 'profileDetails']);

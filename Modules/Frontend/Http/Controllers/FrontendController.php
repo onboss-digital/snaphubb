@@ -7,11 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\MobileSetting;
 use Modules\Entertainment\Models\Entertainment;
 use Modules\Banner\Models\Banner;
-use Modules\Entertainment\Models\ContinueWatch;
 use App\Models\Device;
 use App\Models\User;
 use Modules\Banner\Transformers\SliderResource;
-use Modules\Entertainment\Transformers\ContinueWatchResource;
 use Modules\Subscriptions\Models\Plan;
 use Modules\Subscriptions\Models\Subscription;
 use Illuminate\Support\Facades\Crypt;
@@ -20,15 +18,6 @@ use Modules\Entertainment\Transformers\MoviesResource;
 use Modules\Entertainment\Transformers\TvshowResource;
 use Modules\Tax\Models\Tax;
 use Modules\Constant\Models\Constant;
-use Modules\LiveTV\Models\LiveTvChannel;
-use Modules\LiveTV\Transformers\LiveTvChannelResource;
-use Modules\CastCrew\Models\CastCrew;
-use Modules\CastCrew\Transformers\CastCrewListResource;
-use Modules\Genres\Transformers\GenresResource;
-use Modules\Genres\Models\Genres;
-use Modules\Video\Transformers\VideoResource;
-use Modules\Video\Models\Video;
-use Modules\Page\Models\Page;
 use Modules\FAQ\Models\FAQ;
 use App\Services\RecommendationService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -47,218 +36,30 @@ class FrontendController extends Controller
         $this->recommendationService = $recommendationService;
 
     }
+
     public function index(Request $request)
     {
-
         $user_id = auth()->id();
-        $profile_id=0;
-        $continue_watch = [];
-
         $cacheKey = 'slider';
+        Cache::flush();
 
         $sliders = Cache::get($cacheKey);
-
         if (!$sliders) {
-
            $sliderList = Banner::where('status', 1)->get();
            $sliders = SliderResource::collection($sliderList->map(function ($slider) use ($user_id) {
                 return new SliderResource($slider, $user_id);
            }));
 
            $sliders = $sliders->toArray(request());
-
            Cache::put($cacheKey, $sliders);
 
         }
 
-            if( $user_id){
-
-                $profile_id=getCurrentProfile( $user_id, $request);
-                $continueWatchList = ContinueWatch::where('user_id', $user_id)->where('profile_id',$profile_id)->with('entertainment', 'episode', 'video')->orderBy('id','desc')->get();
-                $continue_watch = $continueWatchList->map(function ($item) {
-                    return new ContinueWatchResource($item);
-                })->toArray();
-            }
-
-            $cacheKey = 'top_10_movie';
-            $top_10 = Cache::get($cacheKey);
-
-            if(!$top_10){
-                $topMovieIds = MobileSetting::getValueBySlug('top-10');
-                $topMovies = Entertainment::whereIn('id',json_decode($topMovieIds))->where('status',1)->get();
-                $top_10 = MoviesResource::collection($topMovies);
-                $top_10 = $top_10->toArray(request());
-                Cache::put($cacheKey, $top_10);
-            }
-
-
-            $cacheKey = 'latest_movie';
-            $latest_movie = Cache::get($cacheKey);
-
-            if(!$latest_movie){
-
-               $latestMovieIds = MobileSetting::getValueBySlug('latest-movies');
-               $latestMovie = Entertainment::whereIn('id',json_decode($latestMovieIds))->where('status',1)->get();
-               $latest_movie = MoviesResource::collection($latestMovie);
-               Cache::put($cacheKey, $latest_movie);
-
-            }
-
-            $cacheKey = 'popular_language';
-            $popular_language = Cache::get($cacheKey);
-
-            if(!$popular_language){
-                $languageIds = MobileSetting::getValueBySlug('enjoy-in-your-native-tongue');
-                $popular_language = Constant::whereIn('id',json_decode($languageIds))->get();
-
-            }
-
-            $cacheKey = 'popular_movie';
-            $popular_movie = Cache::get($cacheKey);
-
-            if(!$popular_movie){
-
-             $popularMovieIds = MobileSetting::getValueBySlug(slug: 'popular-movies');
-             $popularMovies = Entertainment::whereIn('id',json_decode($popularMovieIds))->where('status',1)->get();
-             $popular_movie = MoviesResource::collection($popularMovies);
-
-            }
-
-            $cacheKey = 'top_channel';
-            $top_channel = Cache::get($cacheKey);
-
-            if(!$top_channel){
-
-              $channelIds = MobileSetting::getValueBySlug('top-channels');
-              $channels = LiveTvChannel::whereIn('id',json_decode($channelIds))->where('status',1)->get();
-              $top_channel = LiveTvChannelResource::collection($channels);
-              $top_channel = $top_channel->toArray(request());
-
-            }
-
-            $cacheKey = 'personality';
-            $personality = Cache::get($cacheKey);
-
-
-            if(!$personality){
-
-                $castIds =  MobileSetting::getValueBySlug('your-favorite-personality');
-                $casts = CastCrew::whereIn('id',json_decode($castIds))->get();
-                $personality = [];
-                foreach ($casts as $key => $value) {
-                    $personality[] = [
-                        'id' => $value->id,
-                        'name' => $value->name,
-                        'type' => $value->type,
-                        'profile_image' => setBaseUrlWithFileName($value->file_url),
-                    ];
-                }
-           }
-
-
-            $cacheKey = 'free_movie';
-            $free_movie = Cache::get($cacheKey);
-
-            if(!$free_movie){
-
-            $movieIds = MobileSetting::getValueBySlug('500-free-movies');
-            $free_movies_tvshow = Entertainment::whereIn('id',json_decode($movieIds))->where('status',1)->get();
-            $free_movie = MoviesResource::collection($free_movies_tvshow);
-
-            }
-
-            $cacheKey = 'popular_tvshow';
-            $popular_tvshow = Cache::get($cacheKey);
-
-            if(!$popular_tvshow){
-
-               $popular_tvshowIds = MobileSetting::getValueBySlug(slug: 'popular-tvshows');
-               $popular_tvshow = Entertainment::whereIn('id',json_decode($popular_tvshowIds))->where('status',1)->get();
-               $popular_tvshow = MoviesResource::collection($popular_tvshow);
-
-            }
-
-            $cacheKey = 'genres';
-            $genres = Cache::get($cacheKey);
-
-            if(!$genres){
-
-              $genreIds = MobileSetting::getValueBySlug(slug: 'genre');
-              $genres = Genres::whereIn('id',json_decode($genreIds))->where('status',1)->get();
-              $genres = GenresResource::collection($genres);
-              $genres = $genres->toArray(request());
-
-            }
-
-            $cacheKey = 'popular_videos';
-            $popular_videos = Cache::get($cacheKey);
-
-            if(!$popular_videos){
-
-            $videoIds = MobileSetting::getValueBySlug(slug: 'popular-videos');
-            $popular_videos = Video::whereIn('id',json_decode($videoIds))->where('status',1)->get();
-            $popular_videos = VideoResource::collection($popular_videos);
-            }
-
-
-        if( $user_id){
-
-             $profile_id=getCurrentProfile($user_id, $request);
-
-             $user = User::where('id',$user_id)->first();
-             $based_on_last_watch = $this->recommendationService->recommendByLastHistory($user,$profile_id);
-
-             $Lastwatchrecommendation = MoviesResource::collection($based_on_last_watch );
-
-
-            $likedMovies = $this->recommendationService->getLikedMovies($user, $profile_id);
-            $likedMovies = MoviesResource::collection($likedMovies);
-            $viewedMovies = $this->recommendationService->getEntertainmentViews($user, $profile_id);
-            $viewedMovies = MoviesResource::collection($viewedMovies);
-
-            $favorite_gener = $this->recommendationService->getFavoriteGener($user, $profile_id);
-            $FavoriteGener = GenresResource::collection($favorite_gener);
-            $FavoriteGener = $FavoriteGener->toArray(request());
-
-
-            $favorite_personality = $this->recommendationService->getFavoritePersonality($user, $profile_id);
-
-            $favorite_personality = CastCrewListResource::collection($favorite_personality);
-            $favorite_personality = $favorite_personality->toArray(request());
-
-
-            $watchlist = $this->recommendationService->getUserWatchlist($user, $profile_id);
-            $watchlist = $watchlist->toArray(request());
-
-            $trendingMovies = $this->recommendationService->getTrendingMoviesByCountry($user, $request);
-            $trendingMovies = MoviesResource::collection($trendingMovies);
-
-            }
-
-            $data = [
-                'slider' => $sliders,
-                'continue_watch' => $continue_watch,
-                'top_10' => $top_10,
-                'latest_movie' => $latest_movie,
-                'popular_language' => $popular_language,
-                'popular_movie' => $popular_movie,
-                'top_channel' => $top_channel,
-                'personality' => $personality,
-                'free_movie' => $free_movie,
-                'genres' => $genres,
-                'popular_tvshow' => $popular_tvshow,
-                'popular_videos' => $popular_videos,
-                'likedMovies' => $likedMovies ?? [],
-                'viewedMovies' => $viewedMovies ?? [],
-                'trendingMovies' => $trendingMovies ?? [],
-                'favorite_gener' => $FavoriteGener ?? [],
-                'favorite_personality' => $favorite_personality ?? [],
-                'based_on_last_watch'=>$Lastwatchrecommendation ?? [],
-
-            ];
-
-        return view('frontend::index', compact('data','user_id'));
+        return view('frontend::index', compact('user_id','sliders'));
     }
+
+
+
     public function searchList()
     {
         $entertainment_list = Entertainment::query()

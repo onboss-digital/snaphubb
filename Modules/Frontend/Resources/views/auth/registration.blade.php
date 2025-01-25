@@ -3,7 +3,7 @@
 @section('content')
 
 <div id="login" >
-    <div class="vh-100" style="background: url('{{ asset('img/img-web/authbg.png') }}'); background-size: cover; background-repeat: no-repeat; position: relative; min-height: 500px;">
+    <div class="vh-100" style="background: url('{{ asset('dummy-images/login_banner.jpg') }}'); background-size: cover; background-repeat: no-repeat; position: relative; min-height: 500px;">
         <div class="container">
             <div class="row justify-content-center align-items-center height-self-center vh-100">
                 <div class="col-lg-5 col-md-8 col-11 align-self-center">
@@ -12,7 +12,8 @@
                             <h5>{{ __('frontend.sign_up_title') }}</h5>
                             <p class="font-size-14">{{ __('frontend.sign_sub_title') }}</p>
                         </div>
-                        <p class="text-danger" id="error_message"></p>
+                        <p class="text-danger" id="error_message">
+                        </p>
                         <form id="registerForm" action="post" class="requires-validation" data-toggle="validator" novalidate>
 
                             <div class="input-group mb-3">

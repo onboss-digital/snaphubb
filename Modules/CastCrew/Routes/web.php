@@ -29,9 +29,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
        Route::group(['prefix' => '/castcrew', 'as' => 'castcrew.'], function () {
            Route::get('/index_list', [CastCrewController::class, 'index_list'])->name('index_list');
            Route::get('/index_data/{type}', [CastCrewController::class, 'index_data'])->name('index_data');
-        //    Route::get('export', [CastCrewController::class, 'export'])->name('export');
-        //    Route::get('/trashed', [CastCrewController::class, 'trashed'])->name('trashed');
-           Route::get('/trashed/{id}', [CastCrewController::class, 'trashed'])->name('trashed');
+           Route::get('/trashed', [CastCrewController::class, 'trashed'])->name('trashed');
            Route::post('bulk-action', [CastCrewController::class, 'bulk_action'])->name('bulk_action');
            Route::post('update-status/{id}', [CastCrewController::class, 'update_status'])->name('update_status');
            Route::delete('force-delete/{id}', [CastCrewController::class, 'forceDelete'])->name('force_delete');

@@ -16,6 +16,7 @@ use Modules\Entertainment\Repositories\EntertainmentRepositoryInterface;
 use  Modules\Genres\Repositories\GenreRepositoryInterface;
 use Modules\Entertainment\Services\TvShowService;
 use Modules\World\Models\Country;
+use Illuminate\Support\Facades\Cache;
 
 class TVshowController extends Controller
 {
@@ -119,6 +120,7 @@ class TVshowController extends Controller
         $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
         $moduleName = 'TV Shows'; // Adjust as necessary for dynamic use
+        Cache::flush();
 
         return $this->performBulkAction(Entertainment::class, $ids, $actionType, $moduleName);
     }
@@ -189,8 +191,8 @@ class TVshowController extends Controller
     {
         $data = Entertainment::where('id',$id)->with('entertainmentGenerMappings','entertainmentTalentMappings')->first();
         $tmdb_id = $data->tmdb_id;
-        $data->thumbnail_url = !empty($data->tmdb_id) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->thumbnail_url = setBaseUrlWithFileName($data->thumbnail_url);
+        $data->poster_url =  setBaseUrlWithFileName($data->poster_url);
         $data['genres'] = $data->entertainmentGenerMappings->isEmpty() ? [] : $data->entertainmentGenerMappings->pluck('genre_id')->toArray();
         $data['countries'] = $data->entertainmentCountryMappings->isEmpty() ? [] : $data->entertainmentCountryMappings->pluck('country_id')->toArray();
         $data['actors'] = $data->entertainmentTalentMappings->isEmpty() ? [] : $data->entertainmentTalentMappings->pluck('talent_id')->toArray();

@@ -21,8 +21,13 @@ class PermissionRoleTableSeeder extends Seeder
     {
         Schema::disableForeignKeyConstraints();
         $admin = Role::firstOrCreate(['name' => 'admin', 'title' => 'Admin', 'is_fixed' => true]);
-        $demo_admin = Role::firstOrCreate(['name' => 'demo_admin', 'title' => 'Demo Admin', 'is_fixed' => true]);
         $user = Role::firstOrCreate(['name' => 'user', 'title' => 'user', 'is_fixed' => true]);
+        $contentManager = Role::firstOrCreate(['name' => 'content_manager', 'title' => 'Content Manager', 'is_fixed' => true]);
+
+        // $moderator = Role::firstOrCreate(['name' => 'moderator', 'title' => 'Moderator', 'is_fixed' => true]);
+        // $analyst = Role::firstOrCreate(['name' => 'analyst', 'title' => 'Data Analyst', 'is_fixed' => true]);
+        // $support = Role::firstOrCreate(['name' => 'support', 'title' => 'Support', 'is_fixed' => true]);
+
 
         Permission::firstOrCreate(['name' => 'edit_settings', 'is_fixed' => true]);
         Permission::firstOrCreate(['name' => 'view_logs', 'is_fixed' => true]);
@@ -43,12 +48,15 @@ class PermissionRoleTableSeeder extends Seeder
                 }
             }
 
+            if ($module['module_name'] === 'Clinic Categories') {
+                $permission_name = 'view_' . $module_name;
+                Permission::firstOrCreate(['name' => $permission_name, 'is_fixed' => true]);
+            }
         }
 
         // Assign Permissions to Roles
         $admin->givePermissionTo(Permission::get());
 
-        $demo_admin->givePermissionTo(Permission::get());
 
         Schema::enableForeignKeyConstraints();
     }

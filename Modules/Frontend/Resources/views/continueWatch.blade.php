@@ -37,7 +37,7 @@
     let type=null;
     let per_page=10;
     const baseUrl =  "{{ env('APP_URL') }}";
-    const apiUrl = `${baseUrl}/api/continuewatch-list`;
+    const apiUrl = `${baseUrl}/api/continuewatch-list?page=${currentPage}&is_ajax=1&per_page=${per_page}`;
     const csrf_token='{{ csrf_token() }}'
 </script>
 

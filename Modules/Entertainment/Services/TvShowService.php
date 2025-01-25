@@ -178,7 +178,7 @@ class TvShowService
         $query = $this->getFilteredData($filter, $type)
     ->withCount([
         'entertainmentLike' => function ($query) use ($type) {
-            $query->where('is_like', 1)->where('type', $type); 
+            $query->where('is_like', 1)->where('type', $type);
         },
         'entertainmentView' => function ($query)  { }
     ]);
@@ -188,7 +188,7 @@ class TvShowService
             $genres = $this->entertainmentRepository->movieGenres($data->id);
             $type = 'tvshow';
             $releaseDate = $data->release_date ? formatDate($data->release_date) : '';
-            $imageUrl = !empty($data['tmdb_id']) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
+            $imageUrl =setBaseUrlWithFileName($data->thumbnail_url);
             return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name,'genre'=>implode(', ', $genres->toArray()),'releaseDate'=>$releaseDate, 'type' => $type])->render();
 
         })
@@ -197,7 +197,7 @@ class TvShowService
             return $data->entertainment_like_count > 0 ? $data->entertainment_like_count : '-';
         })
         ->orderColumn('like_count', 'entertainment_like_count $1')
-        
+
         ->addColumn('watch_count', function ($data) {
             return $data->entertainment_view_count > 0 ? $data->entertainment_view_count : '-';
         })
@@ -235,7 +235,7 @@ class TvShowService
         ->editColumn('status', function ($row) {
             $checked = $row->status ? 'checked="checked"' : ''; // Check if status is active
             $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
-        
+
             return '
                 <div class="form-check form-switch">
                     <input type="checkbox" data-url="' . route('backend.entertainments.update_status', $row->id) . '"
@@ -243,7 +243,7 @@ class TvShowService
                         id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" ' . $checked . ' ' . $disabled . '>
                 </div>
             ';
-        })        
+        })
         ->editColumn('updated_at', fn($data) =>formatUpdatedAt($data->updated_at))
             ->orderColumns(['id'], '-:column $1')
             ->rawColumns(['action', 'status', 'check','thumbnail_url'])

@@ -78,11 +78,11 @@
 <div class="container-fluid padding-right-0">
     <div class="overflow-hidden">
         <div id="movie-cast" class="half-spacing">
-            @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor'])
+            @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor', 'slug'=>''])
         </div>
 
         <div id="favorite-personality">
-            @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director'])
+            @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director', 'slug'=>''])
         </div>
     </div>
 </div>
@@ -103,7 +103,7 @@
     <div class="overflow-hidden">
         @if($data['more_items'] != null)
             <div id="more-like-this">
-                @include('frontend::components.section.entertainment',  ['data' => $data['more_items'], 'title'=>__('frontend.more_like_this'),'type' => $data['type']])
+                @include('frontend::components.section.entertainment',  ['data' => $data['more_items'], 'title'=>__('frontend.more_like_this'),'type' => $data['type'],'slug'=>''])
             </div>
         @endif
     </div>

@@ -18,6 +18,7 @@ use Modules\Episode\Trait\EpisodeTrait;
 use Modules\Episode\Services\EpisodeService;
 use App\Services\ChatGTPService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class EpisodesController extends Controller
 {
@@ -131,6 +132,7 @@ class EpisodesController extends Controller
         $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
         $moduleName = 'Episode'; // Adjust as necessary for dynamic use
+        Cache::flush();
 
         return $this->performBulkAction(Episode::class, $ids, $actionType, $moduleName);
     }
@@ -191,7 +193,7 @@ class EpisodesController extends Controller
         if (isset($data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
             $data['IMDb_rating'] = round($data['IMDb_rating'], 1);
-        }        
+        }
 
         if($request->trailer_url_type == 'Local'){
             $data['trailer_video'] = extractFileNameFromUrl($data['trailer_video']);
@@ -226,7 +228,7 @@ class EpisodesController extends Controller
     public function edit($id)
     {
         $data = Episode::where('id',$id)->with('EpisodeStreamContentMapping')->first();
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->poster_url =setBaseUrlWithFileName($data->poster_url);
         $tmdb_id = $data->tmdb_id;
 
         if($data->trailer_url_type=='Local'){
@@ -325,6 +327,8 @@ class EpisodesController extends Controller
     {
         $id->update(['status' => $request->status]);
 
+        Cache::flush();
+
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
 
@@ -348,6 +352,7 @@ class EpisodesController extends Controller
         $this->episodeService->storeDownloads($data, $id);
         $message = trans('messages.set_download_url');
 
+        Cache::flush();
         return redirect()->route('backend.episodes.index')->with('success', $message);
     }
 
@@ -604,7 +609,7 @@ class EpisodesController extends Controller
 
         ])->findOrFail($id);
 
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+        $data->poster_url =setBaseUrlWithFileName($data->poster_url);
         $data->formatted_release_date = Carbon::parse($data->release_date)->format('d M, Y');
         $module_title = __('episode.title');
         $show_name = $data->name;

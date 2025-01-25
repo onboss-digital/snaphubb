@@ -25,7 +25,7 @@ class AuthTableSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         $this->call(PermissionRoleTableSeeder::class);
-
+        $this->call(UserTableSeeder::class);
 
         Schema::enableForeignKeyConstraints();
     }

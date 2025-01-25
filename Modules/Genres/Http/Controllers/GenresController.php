@@ -9,6 +9,7 @@ use Modules\Genres\Services\GenreService;
 use Yajra\DataTables\DataTables;
 use Modules\Genres\Models\Genres;
 use App\Trait\ModuleTrait;
+use Illuminate\Support\Facades\Cache;
 
 class GenresController extends Controller
 {
@@ -58,6 +59,7 @@ class GenresController extends Controller
         $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
         $moduleName = __('genres.title');
+        Cache::flush();
         return $this->performBulkAction(Genres::class, $ids, $actionType, $moduleName);
     }
 

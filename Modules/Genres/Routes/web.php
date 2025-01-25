@@ -20,8 +20,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
         Route::get('/index_list', [GenresController::class, 'index_list'])->name('index_list');
         Route::get('/index_data', [GenresController::class, 'index_data'])->name('index_data');
         Route::get('export', [GenresController::class, 'export'])->name('export');
-        // Route::get('/trashed', [GenresController::class, 'trashed'])->name('trashed');
-        Route::get('/trashed/{id}', [GenresController::class, 'trashed'])->name('trashed');
+        Route::get('/trashed', [GenresController::class, 'trashed'])->name('trashed');
         Route::post('bulk-action', [GenresController::class, 'bulk_action'])->name('bulk_action');
         Route::post('update-status/{id}', [GenresController::class, 'update_status'])->name('update_status');
         Route::post('restore/{id}', [GenresController::class, 'restore'])->name('restore');

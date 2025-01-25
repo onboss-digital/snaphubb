@@ -53,7 +53,8 @@ class VideoController extends Controller
 
 
                 if (!empty($video->trailer_url) &&  $video->trailer_url_type != 'Local') {
-                    $episode['trailer_url'] = Crypt::encryptString($video->trailer_url);
+
+                    $video['trailer_url'] = Crypt::encryptString($video->trailer_url);
                 }
 
 
@@ -81,10 +82,13 @@ class VideoController extends Controller
 
         $data = new VideoDetailResource($video);
 
+
         Cache::put($cacheKey, $data);
     }
 
     $data = $data->toArray($request);
+
+
 
     // Define entertainment type
     $entertainmentType = 'video'; // Set the type as 'video' since this is a video detail

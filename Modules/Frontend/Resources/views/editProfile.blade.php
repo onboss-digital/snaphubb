@@ -149,7 +149,7 @@
                                                 <div class="card bg-body profil-card"  >
                                                     <div class="card-body rounded text-center" onclick="SelectProfile({{ $profile['id'] }})">
                                                         <div class="profile-card-image" >
-                                                            <img id="profile_image_{{ $profile['id'] }}" src="{{ $profile['avatar']}}" alt="profile-image">
+                                                            <img id="profile_image_{{ $profile['id'] }}" src="{{ $profile['']?? setDefaultImage()}}" alt="profile-image">
                                                         </div>
                                                         <h5 class="mt-3 mb-4 font-size-18" id="profile_name_{{ $profile['id'] }}">{{ $profile['name'] }}</h5>
                                                         <button class="btn p-0 h6 mb-0" data-bs-toggle="modal" data-type="update"

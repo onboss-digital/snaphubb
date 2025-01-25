@@ -32,7 +32,7 @@ class UserSearchHistoryController extends Controller
 
           }
 
-        $search_data = $search_data->where('user_id', operator: $user_id)->paginate($perPage);
+        $search_data = $search_data->where('user_id', operator: $user_id)->orderBy('id', 'desc')->paginate($perPage);
 
         $responseData = UserSearchHistoryResource::collection($search_data);
 

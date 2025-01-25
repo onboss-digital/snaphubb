@@ -183,16 +183,16 @@ class UsersController extends Controller
         ->editColumn('status', function ($row) {
             $checked = $row->status ? 'checked="checked"' : ''; // Set the checkbox to checked if status is true
             $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the user is soft-deleted
-        
+
             return '
                 <div class="form-check form-switch">
-                    <input type="checkbox" data-url="' . route('backend.users.update_status', $row->id) . '" 
-                           data-token="' . csrf_token() . '" class="switch-status-change form-check-input"  
-                           id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" 
+                    <input type="checkbox" data-url="' . route('backend.users.update_status', $row->id) . '"
+                           data-token="' . csrf_token() . '" class="switch-status-change form-check-input"
+                           id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '"
                            ' . $checked . ' ' . $disabled . '>
                 </div>
             ';
-        })     
+        })
 
         ->editColumn('gender', function ($data) {
             return $data->gender ? ucwords($data->gender) : '-';

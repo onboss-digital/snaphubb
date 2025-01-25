@@ -3,19 +3,22 @@
 @section('content')
 
 <div id="login" >
-
-    <div class="vh-100" style="background-image: url('{{ asset('/dummy-images/login_banner.jpg') }}')">
+    <div class="vh-100" style="background: url('dummy-images/login_banner.jpg'); background-size: cover; background-repeat: no-repeat; position: relative;min-height:500px">
         <div class="container">
             <div class="row justify-content-center align-items-center height-self-center vh-100">
                 <div class="col-lg-5 col-md-8 col-11 align-self-center">
                     <div class="user-login-card card my-5">
                         <div class="text-center auth-heading">
-                            <a >
-                                <x-application-logo />
-                            </a>
-
+                            <h5>{{ __('frontend.sign_in_title') }}</h5>
+                            <p class="fs-14">{{ __('frontend.sign_in_sub_title') }}</p>
                             @if(session()->has('error'))
                                 <span class="text-danger">{{session()->get('error')}}</span>
+                            @endif
+                            @if(session()->has('info'))
+                                <span class="text-info">{{session()->get('info')}}</span>
+                            @endif
+                            @if(session()->has('success'))
+                                <span class="text-success">{{ session()->get('success') }}</span>
                             @endif
                         </div>
                         <p class="text-danger" id="login_error_message"></p>
@@ -23,13 +26,13 @@
                             <div class="input-group">
                                 <span class="input-group-text px-0"><i class="ph ph-envelope"></i></span>
                                 <input type="email" name="email" class="form-control" placeholder="{{__('frontend.enter_email')}}"  aria-describedby="basic-addon1" required>
-                                <div class="invalid-feedback" id="name-error">Email field is required.</div>
+                                <div class="invalid-feedback" id="name-error">{{ __('auth.email_required') }}</div>
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text px-0"><i class="ph ph-lock-key"></i></span>
                                 <input type="password" name="password" class="form-control" id="password" placeholder="{{__('messages.enter_password')}}" aria-describedby="basic-addon1" required>
                                 <span class="input-group-text px-0" id="togglePassword"> <i class="ph ph-eye"></i></span>
-                                <div class="invalid-feedback" id="password-error">Password field is required.</div>
+                                <div class="invalid-feedback" id="password-error">{{ __('auth.password_required') }}</div>
                             </div>
                             <div class="d-flex flex-wrap align-items-center justify-content-between">
                                 <label class="list-group-item d-flex align-items-center"><input class="form-check-input m-0 me-2" type="checkbox">{{__('frontend.remember_me')}}</label>
@@ -39,13 +42,10 @@
                                 <button type="submit"  id="login-button" class="btn btn-primary w-100">
                                     {{__('frontend.sign_in')}}
                                 </button>
-                                <p class="mt-2 mb-0 fw-normal">{{__('frontend.not_have_account')}}
-                                    <a href="{{route('register-page')}}" class="ms-1">{{__('frontend.sign_up')}}</a>
-                                </p>
+                                <p class="mt-2 mb-0 fw-normal">{{__('frontend.not_have_account')}}<a href="{{route('register-page')}}" class="ms-1">{{__('frontend.sign_up')}}</a></p>
                             </div>
-                           {{--  <a href="{{route('admin-login')}}" class="d-block mt-3"> {{__('installer_messages.final.admin_panel')}}</a> --}}
 
-                          {{--   <div class="border-style">
+                            {{-- <div class="border-style">
                                 <span>Or</span>
                             </div>
 

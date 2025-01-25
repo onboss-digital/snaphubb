@@ -26,27 +26,27 @@ use Modules\Installer\Http\Controllers\Backend\FinalController;
 *
 * --------------------------------------------------------------------
 */
-Route::group(['prefix' => 'install'], function () {
+// Route::group(['prefix' => 'install'], function () {
 
 
-    Route::get("/", [WelcomeController::class, 'welcome'])->name('install.index');
+//     Route::get("/", [WelcomeController::class, 'welcome'])->name('install.index');
 
-    Route::get("/environment", [EnvironmentController::class, 'environmentMenu'])->name("environment");
-    Route::post("/environment/save", [WelcomeController::class, 'environmentSave'])->name("environment.save");
-    Route::get("/requirements", [RequirementsController::class, 'requirements'])->name("requirements");
-    Route::get("/permissions", [PermissionsController::class, 'permissions'])->name("permissions");
-    Route::get("environment/wizard", [EnvironmentController::class, 'environmentWizard'])->name("environmentWizard");
-    Route::get("environment/classic", [EnvironmentController::class, 'environmentClassic'])->name("environmentClassic");
-    Route::post("environment/saveWizard", [EnvironmentController::class, 'saveWizard'])->name("environmentSaveWizard");
-    Route::post("environment/saveClassic", [EnvironmentController::class, 'saveClassic'])->name("environmentSaveClassic");
-    Route::get("/database", [DatabaseController::class, 'database'])->name("database");
+//     Route::get("/environment", [EnvironmentController::class, 'environmentMenu'])->name("environment");
+//     Route::post("/environment/save", [WelcomeController::class, 'environmentSave'])->name("environment.save");
+//     Route::get("/requirements", [RequirementsController::class, 'requirements'])->name("requirements");
+//     Route::get("/permissions", [PermissionsController::class, 'permissions'])->name("permissions");
+//     Route::get("environment/wizard", [EnvironmentController::class, 'environmentWizard'])->name("environmentWizard");
+//     Route::get("environment/classic", [EnvironmentController::class, 'environmentClassic'])->name("environmentClassic");
+//     Route::post("environment/saveWizard", [EnvironmentController::class, 'saveWizard'])->name("environmentSaveWizard");
+//     Route::post("environment/saveClassic", [EnvironmentController::class, 'saveClassic'])->name("environmentSaveClassic");
+//     Route::get("/database", [DatabaseController::class, 'database'])->name("database");
 
-    Route::get("/final", [FinalController::class, 'finish'])->name("final");
-
-
+//     Route::get("/final", [FinalController::class, 'finish'])->name("final");
 
 
-});
+
+
+// });
 
 
 

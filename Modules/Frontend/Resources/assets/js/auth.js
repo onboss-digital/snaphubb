@@ -29,31 +29,31 @@ const baseUrl = document.querySelector('meta[name="base-url"]').getAttribute('co
 if (registerForm) {
   registerForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    const isValid = validateRegisterForm(); // Manually validate the form
-    if (!isValid) {
-      return;
-    }
+
+    // const isValid = validateRegisterForm(); // Manually validate the form
+    // if (!isValid) {
+    //   return;
+    // }
+
     toggleRegisterButton(true, registerButton);
     errorMessage.textContent = '';
 
+
+    const formData = new FormData(this);
+    const response = await fetch(`${baseUrl}/api/register?is_ajax=1`, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: formData
+    });
+    const data = await response.json();
     try {
-      const formData = new FormData(this);
-      const response = await fetch(`${baseUrl}/api/register?is_ajax=1` , {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: formData
-      });
-
-      const data = await response.json();
-
       if (!response.ok) {
         handleValidationErrors(data.errors);
       }
-
-      if (data.status==true) {
-
+      ;
+      if (data.status == true) {
 
         try {
           const formData = new FormData(this);
@@ -79,7 +79,7 @@ if (registerForm) {
         errorMessage.textContent = data.message;
       }
     } catch (error) {
-      errorMessage.textContent = 'An error occurred. Please try again later.';
+      errorMessage.textContent = data.message;
     } finally {
       toggleRegisterButton(false, registerButton);
     }
@@ -132,9 +132,9 @@ function validateRegisterForm() {
 
     showValidationError(password, 'Password field is required.');
     isValid = false;
-  } else if (password.value.length < 6) {
+  } else if (password.value.length < 8) {
 
-    showValidationError(password, 'Password must be at least 6 characters long.');
+    showValidationError(password, 'Password must be at least 8 characters long.');
     isValid = false;
   } else {
     clearValidationError(password);

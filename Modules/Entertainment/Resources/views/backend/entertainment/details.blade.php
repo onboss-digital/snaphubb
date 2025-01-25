@@ -84,7 +84,7 @@
                         @foreach ($data->entertainmentTalentMappings as $talentMapping)
                             @if (optional($talentMapping->talentprofile)->type == 'actor')
                                 <div class="actor">
-                                    <img src="{{ !empty(optional($talentMapping->talentprofile)->tmdb_id) ? optional($talentMapping->talentprofile)->file_url : getImageUrlOrDefault(optional($talentMapping->talentprofile)->file_url) }}" alt="" class="rounded avatar avatar-150">
+                                    <img src="{{ setBaseUrlWithFileName(optional($talentMapping->talentprofile)->file_url) }}" alt="" class="rounded avatar avatar-150">
                                     <h6 class="actor-title mb-0">{{ optional($talentMapping->talentprofile)->name ?? '-'}}</h6>
                                 </div>
                             @endif
@@ -97,7 +97,7 @@
                         @foreach ($data->entertainmentTalentMappings as $talentMapping)
                             @if (optional($talentMapping->talentprofile)->type == 'director')
                                 <div class="director">
-                                    <img src="{{  !empty(optional($talentMapping->talentprofile)->tmdb_id) ? optional($talentMapping->talentprofile)->file_url : getImageUrlOrDefault(optional($talentMapping->talentprofile)->file_url) }}" alt="{{ optional($talentMapping->talentprofile)->name }}" class="rounded avatar avatar-150">
+                                    <img src="{{  setBaseUrlWithFileName(optional($talentMapping->talentprofile)->file_url) }}" alt="{{ optional($talentMapping->talentprofile)->name }}" class="rounded avatar avatar-150">
                                     <h6 class="actor-title mb-0">{{ optional($talentMapping->talentprofile)->name ?? '-'}}</h6>
                                 </div>
                             @endif
@@ -152,20 +152,20 @@
         @php
             // Calculate the total number of reviews
             $totalReviews = $data->entertainmentReviews->count();
-            
+
             // Define an array for the ratings (1 to 5)
             $ratings = [5, 4, 3, 2, 1];
         @endphp
-        
+
         @foreach ($ratings as $rating)
             @php
                 // Calculate the count of each rating
                 $ratingCount = $data->entertainmentReviews->where('rating', (string) $rating . '.0')->count('rating');
-                
+
                 // Calculate the percentage for each rating
                 $percentage = $totalReviews > 0 ? ($ratingCount / $totalReviews) * 100 : 0;
             @endphp
-            
+
             <li class="{{ strtolower(trans_choice('RatingLevels', $rating)) }} d-flex align-items-center gap-3 mb-3">
                 <span class="review-name d-flex align-items-center gap-1"><i class="ph ph-fill ph-star text-warning"></i> <span>{{ $rating }}</span> </span>
                 <div class="progress w-100 bg-dark-subtle">
@@ -197,7 +197,7 @@
             @foreach ($data->entertainmentReviews as $review)
                 <div class="review border-bottom pb-5 mb-5">
                     <div class="reviewer d-flex align-items-center gap-3">
-                    <img class="reviewer-profile-image avatar avatar-80" src="{{ optional($review->user)->file_url ? optional($review->user)->file_url : setDefaultImage($data['file_url']) }}" alt="{{ optional($review->user)->first_name ?? '-' }}">
+                    <img class="reviewer-profile-image avatar avatar-80" src="{{ setBaseUrlWithFileName(optional($review->user)->file_url) ?? default_user_avatar() }}" alt="{{ optional($review->user)->first_name ?? '-' }}">
                         <div class="reviewer-info flex-grow-1">
                             <div class="row gy-4 align-items-start justify-content-between">
                                 <div class="col-md-10 col-lg-9 col-xl-10">
@@ -205,7 +205,7 @@
                                     <p class="mt-2 mb-0">{{ $review->review ?? '-'}}</p>
                                 </div>
                                 <div class="col-md-2 col-lg-3 col-xl-2 text-md-end">
-                                    <p class="mb-1"><strong> 
+                                    <p class="mb-1"><strong>
                                     <span class="star">
                                         @php
                                             $rating = $review->rating;

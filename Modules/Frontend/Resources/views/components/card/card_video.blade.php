@@ -41,13 +41,12 @@
           </ul>
 
           <h5 class="iq-title text-capitalize line-count-1"> {{ $data['name']  ?? '--'}} </h5>
-          <p class="line-count-2 mb-0"> {{ $data['short_desc']  ?? '--'}} </p>
+          <p class="line-count-2 mb-0"> {{ $data['short_desc']  ?? ''}} </p>
           <div class="d-flex align-items-center gap-3">
-            <!-- <div class="movie-time d-flex align-items-center gap-1">
+           <div class="movie-time d-flex align-items-center gap-1">
               <i class="ph ph-clock"></i>
               {{ $data['duration'] ? formatDuration($data['duration']) : '--' }}
-            </div> -->
-
+            </div> 
           </div>
 
           <div class="d-flex align-items-center gap-3 mt-3">

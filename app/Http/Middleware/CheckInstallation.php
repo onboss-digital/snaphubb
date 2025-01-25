@@ -21,28 +21,30 @@ class CheckInstallation
      */
     public function handle(Request $request, Closure $next): Response
     {
-        try {
-            $dbConnectionStatus =dbConnectionStatus();
+        return $next($request);
 
-            if ($dbConnectionStatus && Schema::hasTable('users') && file_exists(storage_path('installed')) ) {
+        // try {
+        //     $dbConnectionStatus =dbConnectionStatus();
 
-                $activeStorage = DB::table('settings')->where('name', 'disc_type')->value('val') ?? 'local';
+        //     if ($dbConnectionStatus && Schema::hasTable('users') && file_exists(storage_path('installed')) ) {
 
-                Config::set('filesystems.default', $activeStorage);
+        //         $activeStorage = DB::table('settings')->where('name', 'disc_type')->value('val') ?? 'local';
 
-                return $next($request);
-            } else {
+        //         Config::set('filesystems.default', $activeStorage);
 
-                return redirect()->route('install.index');
+        //         return $next($request);
+        //     } else {
 
-            }
-        } catch (QueryException $e) {
-            if (str_contains($e->getMessage(), 'Access denied for user')) {
+        //         return redirect()->route('install.index');
 
-                return redirect()->route('install.index');
-            }
+        //     }
+        // } catch (QueryException $e) {
+        //     if (str_contains($e->getMessage(), 'Access denied for user')) {
 
-            throw $e;
-        }
+        //         return redirect()->route('install.index');
+        //     }
+
+        //     throw $e;
+        // }
     }
 }

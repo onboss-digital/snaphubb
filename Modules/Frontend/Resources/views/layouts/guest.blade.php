@@ -59,9 +59,4 @@
       window.defaultCurrencySymbol = @json(Currency::defaultSymbol())
     </script>
 
-
-
-
-    {{-- Vite JS --}}
-    {{-- {{ module_vite('build-frontend', 'resources/assets/js/app.js') }} --}}
 </body>

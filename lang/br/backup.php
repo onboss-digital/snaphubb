@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'title' => 'Backup',
+    'title' => 'Cópia de Segurança',
 ];

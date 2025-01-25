@@ -50,7 +50,7 @@ class UserController extends Controller
 
         $user->save();
 
-        event(new UserUpdated($$module_name_singular));
+        // event(new UserUpdated($$module_name_singular));
 
         return response()->json(['message' => 'Account has been deactivated!']);
     }

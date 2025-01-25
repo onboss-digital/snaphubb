@@ -128,17 +128,19 @@ class WatchlistController extends Controller
 
         $ids = $request->is_ajax == 1 ? $request->id : explode(',', $request->id);
 
-        $entertainment = Entertainment::whereIn('id',$ids)->get();
+        // $entertainment = Entertainment::whereIn('id',$ids)->get();
 
-        foreach($entertainment as $e){
+        // foreach($entertainment as $e){
 
-         $cacheKey = $e->type === 'movie'
-                     ? 'movie_' . $e->id.'_'.$request->profile_id
-                     : 'tvshow_' . $e->id.'_'.$request->profile_id;
+        //  $cacheKey = $e->type === 'movie'
+        //              ? 'movie_' . $e->id.'_'.$request->profile_id
+        //              : 'tvshow_' . $e->id.'_'.$request->profile_id;
 
-           Cache::forget($cacheKey);
+        //    Cache::forget($cacheKey);
 
-        }
+        // }
+
+        Cache::flush();
         $watchlist = Watchlist::whereIn('entertainment_id', $ids)->where('user_id', $user->id)->forceDelete();
 
         if ($watchlist == null) {
@@ -159,7 +161,13 @@ class WatchlistController extends Controller
         $user_id = auth()->user()->id;
 
         $perPage = $request->input('per_page', 10);
-        $continuewatchList = ContinueWatch::query()->with('entertainment', 'episode', 'video');
+        $continuewatchList = ContinueWatch::query()
+         ->whereNotNull('watched_time')
+         ->whereNotNull('total_watched_time')
+         ->whereHas('entertainment', function ($query) {
+             $query->where('status', 1);
+         })
+         ->with(['entertainment', 'episode', 'video']);
 
         $profile_id=$request->has('profile_id') && $request->profile_id
         ? $request->profile_id
@@ -208,16 +216,9 @@ class WatchlistController extends Controller
 
         $watch_data['profile_id'] =  $profile_id;
 
-        $result = ContinueWatch::updateOrCreate(['entertainment_id' => $request->entertainment_id, 'user_id' => $user->id, 'entertainment_type' => $request->entertainment_type,'profile_id'=>$profile_id], $watch_data);
+        $result = ContinueWatch::updateOrCreate(['entertainment_id' => $request->entertainment_id, 'user_id' => $user->id, 'entertainment_type' => $request->entertainment_type,'profile_id'=>$profile_id,'episode_id'=>$request->episode_id], $watch_data);
 
-        if ($request->entertainment_type == 'movie') {
-            $cacheKey = 'movie_' . $request->entertainment_id.'_'.$profile_id;
-            Cache::forget($cacheKey);
-        } else if ($request->entertainment_type == 'episode') {
-            $cacheKey = 'episode_' . $request->entertainment_id.'_'.$profile_id;
-            Cache::forget($cacheKey);
-        }
-
+        Cache::flush();
 
         return response()->json(['status' => true, 'message' => __('movie.save_msg')]);
     }

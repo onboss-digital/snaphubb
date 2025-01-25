@@ -9,6 +9,7 @@ use Modules\Currency\Models\Currency;
 use Modules\Tax\Models\Tax;
 use App\Models\MobileSetting;
 use Modules\Subscriptions\Models\Subscription;
+use App\Models\Device;
 
 class SettingController extends Controller
 {
@@ -131,7 +132,12 @@ class SettingController extends Controller
 
         $taxes = Tax::active()->get();
         $ads_val= MobileSetting::where('slug', 'banner')->first();
+        $rate_our_app= MobileSetting::where('slug', 'rate-our-app')->first();
+        $ads_val= MobileSetting::where('slug', 'banner')->first();
+        $continue_watch= MobileSetting::where('slug', 'continue-watching')->first();
+       
 
+      
         if (isset($settings['isForceUpdate']) && isset($settings['version_code'])) {
             $response['isForceUpdate'] = intval($settings['isForceUpdate']);
 
@@ -162,6 +168,21 @@ class SettingController extends Controller
         $response['enable_tvshow'] = isset($settings['tvshow']) ? intval($settings['tvshow']) : 0;
         $response['enable_video'] = isset($settings['video']) ? intval($settings['video']) : 0;
         $response['enable_ads'] = isset($ads_val->value) ? (int) $ads_val->value : 0;
+        $response['continue_watch'] = isset($continue_watch->value) ? (int) $continue_watch->value : 0;
+        $response['enable_rate_us'] = isset($rate_our_app->value) ? (int) $rate_our_app->value : 0;
+        $response['enable_in_app'] = isset($settings['iap_payment_method']) ? intval($settings['iap_payment_method']) : 0;
+        $response['entitlement_id'] = isset($settings['entertainment_id']) ? $settings['entertainment_id'] : null;
+        $response['apple_api_key'] = isset($settings['apple_api_key']) ? $settings['apple_api_key'] : null;
+        $response['google_api_key'] = isset($settings['google_api_key']) ? $settings['google_api_key'] : null;
+        $response['is_login'] = 0;
+
+        if ($request->has('device_id') && $request->device_id != null && $request->has('user_id') && $request->user_id) {
+            $device = Device::where('user_id', $request->user_id)
+                ->where('device_id', $request->device_id)
+                ->first();
+
+            $response['is_login'] = $device ? 1 : 0;
+        }
         if(!empty($request->user_id)){
             $response['is_device_supported'] = $deviceTypeResponse['isDeviceSupported'];
         }

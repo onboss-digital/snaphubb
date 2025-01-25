@@ -65,13 +65,13 @@
     <div class="overflow-hidden">
         @if(count( $data['casts']) >0)
         <div id="movie-cast" class="half-spacing">
-            @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor'])
+            @include('frontend::components.section.castcrew',  ['data' => $data['casts']->toArray(request()), 'title'=> __('frontend.casts'),'entertainment_id' =>$data['id'], 'type'=>'actor', 'slug'=>''])
         </div>
         @endif
 
         @if(count( $data['directors']) >0)
         <div id="favorite-personality">
-            @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director'])
+            @include('frontend::components.section.castcrew',  ['data' => $data['directors']->toArray(request()),'title'=> __('frontend.directors'),'entertainment_id' =>$data['id'],'type'=>'director', 'slug'=>''])
         </div>
         @endif
     </div>
@@ -91,7 +91,7 @@
     <div class="overflow-hidden">
         @if(count($data['more_items']) !=0 )
         <div id="more-like-this">
-            @include('frontend::components.section.entertainment',  ['data' => $data['more_items'], 'title'=>__('frontend.more_like_this'), 'type'=>$data['type']])
+            @include('frontend::components.section.entertainment',  ['data' => $data['more_items'], 'title'=>__('frontend.more_like_this'), 'type'=>$data['type'], 'slug'=>''])
         </div>
         @endif
     </div>

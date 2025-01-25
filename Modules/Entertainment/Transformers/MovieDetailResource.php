@@ -30,9 +30,9 @@ class MovieDetailResource  extends JsonResource
             $genre_data[] = $genre->genre;
         }
 
-        $genre_ids = $genres->pluck('genre_id')->toArray();
-        $entertaintment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)->pluck('entertainment_id')->toArray();
-        $more_items = Entertainment::whereIn('id', $entertaintment_ids)->where('type','movie')->where('status',1)->limit(7)->get()->except($this->id);
+        // $genre_ids = $genres->pluck('genre_id')->toArray();
+        // $entertaintment_ids = EntertainmentGenerMapping::whereIn('genre_id', $genre_ids)->pluck('entertainment_id')->toArray();
+        // $more_items = Entertainment::whereIn('id', $entertaintment_ids)->where('type','movie')->where('status',1)->limit(7)->get()->except($this->id);
 
         $plans = [];
         $plan = $this->plan;
@@ -94,27 +94,21 @@ class MovieDetailResource  extends JsonResource
             'download_url' => $this->download_url,
             'enable_download_quality' => $this->enable_download_quality,
             'download_quality' => $downloadMappings,
-            'poster_image' => !empty($this->tmdb_id) ? $this->poster_url : setBaseUrlWithFileName($this->poster_url),
-            'thumbnail_image' => !empty($this->tmdb_id) ? $this->thumbnail_url : setBaseUrlWithFileName($this->thumbnail_url),
+            'poster_image' => setBaseUrlWithFileName($this->poster_url),
+            'thumbnail_image' => setBaseUrlWithFileName($this->thumbnail_url),
             'is_watch_list' => $this->is_watch_list ?? false,
             'is_likes' => $this->is_likes ?? false,
             'your_review' => $this->your_review ?? null,
             'total_review' => $this->total_review ?? 0,
             'genres' => GenresResource::collection($genre_data),
-            'plans' => PlanResource::collection($plans),
+            // 'plans' => PlanResource::collection($plans),
             'reviews' => ReviewResource::collection($this->reviews),
             'three_reviews' => ReviewResource::collection($this->reviews->take(3)),
             'video_links' => $this->entertainmentStreamContentMappings ?? null,
             'casts' => CastCrewListResource::collection($casts),
             'directors' => CastCrewListResource::collection($directors),
-            'more_items' => MoviesResource::collection($more_items),
+            // 'more_items' => MoviesResource::collection($more_items),
             'status' => $this->status,
-            'created_by' => $this->created_by,
-            'updated_by' => $this->updated_by,
-            'deleted_by' => $this->deleted_by,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'deleted_at' => $this->deleted_at,
             'download_id' => !empty($download) ? $download->id: null,
             'is_device_supported' => $deviceTypeResponse['isDeviceSupported']
         ];

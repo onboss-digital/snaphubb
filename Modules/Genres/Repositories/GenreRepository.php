@@ -27,7 +27,7 @@ class GenreRepository implements GenreRepositoryInterface
 
         $genre = $genreQuery->withTrashed()->findOrFail($id);
 
-        $genre->file_url = getImageUrlOrDefault($genre->file_url);
+        $genre->file_url = setBaseUrlWithFileName($genre->file_url);
 
         return $genre;
     }
@@ -71,11 +71,11 @@ class GenreRepository implements GenreRepositoryInterface
         $genreQuery=Genres::query()->withTrashed();
 
         if(Auth::user()->hasRole('user') ) {
-            $genreQuery->whereNull('deleted_at'); 
+            $genreQuery->whereNull('deleted_at');
         }
-    
+
         return $genreQuery;
-       
+
     }
 
     public function list($perPage, $searchTerm = null)
@@ -92,5 +92,5 @@ class GenreRepository implements GenreRepositoryInterface
         return $query->paginate($perPage);
     }
 
-    
+
 }

@@ -59,6 +59,20 @@ class AuthController extends Controller
         }
         $count = Device::where('user_id', $user->id)->count();
 
+        $devices = Device::where('user_id', $user->id)->get();
+
+        $other_device = [];
+
+        if($devices){
+
+            foreach ($devices as $device) {
+
+                    $other_device[] = $device;
+                }
+              }
+
+         $other_device= $other_device;
+
         if (!$request->has('is_demo_user') || $request->is_demo_user != 1) {
 
         if ($user->subscriptionPackage) {
@@ -70,17 +84,18 @@ class AuthController extends Controller
 
                 if ($count == $device) {
                     return response()->json([
-                        'error' => 'Your device limit has been reached.'
+                        'error' => 'Your device limit has been reached.',
+                        'other_device'=> $other_device
                     ], 406);
                 }
             }
            }else{
 
                 if ($count ==1) {
-                    return [
+                    return response()->json([
                         'error' => 'Your device limit has been reached.',
-                        'status' => 406
-                    ];
+                        'other_device'=> $other_device
+                    ], 406);
                 }
             }
 
@@ -163,16 +178,41 @@ class AuthController extends Controller
 
             $count = Device::where('user_id', $user_data->id)->count();
 
+
             if (!$request->has('is_demo_user') || $request->is_demo_user != 1) {
                 $planlimitation = optional(optional($user_data->subscriptionPackage)->plan)->planLimitation;
+
+                $devices = Device::where('user_id', $user_data->id)->get();
+
+                $other_device = [];
+
+                if($devices){
+
+                    foreach ($devices as $device) {
+
+                            $other_device[] = $device;
+                        }
+                      }
+
+                 $other_device= $other_device;
 
                 if ($planlimitation != null) {
                     $device_limit = $planlimitation->where('limitation_slug', 'device-limit')->first();
                     $device = $device_limit ? $device_limit->limit : 0;
 
-                    if ($count == $device) {
+                    if ($count >= $device) {
                         return response()->json([
-                            'error' => 'Your device limit has been reached.'
+                            'error' => 'Your device limit has been reached.',
+                            'other_device'=> $other_device
+                        ], 406);
+                    }
+                }else{
+
+                    if ($count >=1) {
+
+                        return response()->json([
+                            'error' => 'Your device limit has been reached.',
+                            'other_device'=> $other_device
                         ], 406);
                     }
                 }

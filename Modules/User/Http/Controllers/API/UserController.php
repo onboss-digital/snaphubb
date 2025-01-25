@@ -61,6 +61,10 @@ class UserController extends Controller
                 }
             }
 
+        }else{
+
+            $device = Device::where('user_id', $userId)->first();
+            $your_device = $device;
         }
 
         $user['your_device']= $your_device;
@@ -82,7 +86,8 @@ class UserController extends Controller
         ], 200);
     }
     public function deviceLogout(Request $request){
-        $userId = auth()->user()->id;
+
+        $userId = auth()->check() ? auth()->user()->id : $request->input('user_id');
 
         $deviceQuery = Device::where('user_id', $userId);
 
@@ -95,19 +100,24 @@ class UserController extends Controller
         }
 
         $device = $deviceQuery->first();
+
         if (!$device) {
             return response()->json([
                 'status' => false,
                 'message' => __('users.device_not_found'), // Change the message to suit your needs
             ], 404);
         }
+
+    
         $device->delete();
+
 
         return response()->json([
             'status' => true,
             'message' => __('users.device_logout'),
         ], 200);
     }
+
     public function deleteAccount(Request $request){
         $userId = auth()->user()->id;
 
@@ -127,15 +137,17 @@ class UserController extends Controller
     }
 
     public function logoutAll(Request $request){
-        $userId = auth()->user()->id;
 
-        $device = Device::where('user_id', $userId)->delete();
+        $userId = auth()->check() ? auth()->user()->id : $request->input('user_id');
+
+        $device = Device::where('user_id', $userId)->where('device_id','!=', $request->device_id)->delete();
 
         return response()->json([
             'status' => true,
             'message' => __('users.device_logout'),
         ], 200);
     }
+
     public function saveWatchHistory(Request $request)
     {
         $user = auth()->user();

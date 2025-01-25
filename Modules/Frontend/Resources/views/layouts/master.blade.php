@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="baseUrl" content="{{env('APP_URL')}}" />
+    <meta name="baseUrl" content="{{url('/')}}" />
     <link rel="icon" type="image/png" href="{{ asset(setting('logo')) }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset(setting('favicon')) }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

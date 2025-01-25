@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Auth\Trait;
 
 use App\Events\Auth\UserLoginSuccess;
+use App\Events\Frontend\UserRegistered;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
@@ -69,8 +71,8 @@ trait AuthTrait
         $user->createOrUpdateProfileWithAvatar();
         $user->assignRole($user->user_type);
         $user->save();
-        // event(new Registered($user));
-        // event(new UserRegistered($user));
+
+        event(new Registered($user));
 
         return $user;
     }

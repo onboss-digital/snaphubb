@@ -65,7 +65,7 @@ class SettingsController extends Controller
 
     public function generalSetting()
     {
-        $fields = ['app_name', 'user_app_name', 'helpline_number', 'inquriy_email', 'short_description', 'logo', 'mini_logo', 'dark_logo', 'dark_mini_logo', 'favicon'];
+        $fields = ['app_name', 'user_app_name', 'helpline_number', 'inquriy_email', 'short_description', 'logo', 'mini_logo', 'dark_logo', 'dark_mini_logo','light_logo', 'favicon'];
         $data = $this->fieldsData($fields);
 
         // dd($data);
@@ -178,26 +178,26 @@ class SettingsController extends Controller
     public function paymentMethod()
     {
         $fields = [
-            'razor_payment_method', 
-            'razorpay_secretkey', 
-            'razorpay_publickey', 
-            'str_payment_method', 
-            'stripe_secretkey', 
-            'stripe_publickey', 
-            'paystack_payment_method', 
-            'paystack_secretkey', 
-            'paystack_publickey', 
-            'paypal_payment_method', 
-            'paypal_secretkey', 
-            'paypal_clientid', 
+            'razor_payment_method',
+            'razorpay_secretkey',
+            'razorpay_publickey',
+            'str_payment_method',
+            'stripe_secretkey',
+            'stripe_publickey',
+            'paystack_payment_method',
+            'paystack_secretkey',
+            'paystack_publickey',
+            'paypal_payment_method',
+            'paypal_secretkey',
+            'paypal_clientid',
             'paypal_sandbox',
-            'flutterwave_payment_method', 
-            'flutterwave_secretkey', 
-            'flutterwave_publickey', 
-            'cash_payment_method', 
-            'cash_secretkey', 
-            'cash_publickey', 
-            'cinet_payment_method', 
+            'flutterwave_payment_method',
+            'flutterwave_secretkey',
+            'flutterwave_publickey',
+            'cash_payment_method',
+            'cash_secretkey',
+            'cash_publickey',
+            'cinet_payment_method',
             'cinet_siteid',
             'cinet_Secret_key',
             'sadad_payment_method',
@@ -518,11 +518,11 @@ class SettingsController extends Controller
         }
 
         $hashedPassword = $data->password;
-       
+
         $match = Hash::check($request->old_password, $hashedPassword);
-        
+
         $same_exits = Hash::check($request->new_password, $hashedPassword);
-        
+
         if ($match) {
             if ($same_exits) {
                 $message = __('messages.same_pass');
@@ -550,7 +550,7 @@ class SettingsController extends Controller
         $fields = ['is_social_login', 'is_google_login','google_client_id','google_client_secret','google_redirect_uri', 'is_otp_login', 'apiKey', 'authDomain', 'databaseURL', 'projectId', 'storageBucket', 'messagingSenderId', 'appId', 'measurementId', 'is_apple_login', 'is_firebase_notification','firebase_key', 'is_user_push_notification', 'is_application_link', 'ios_url', 'android_url', 'force_update', 'enter_app_version', 'app_version', 'message_text', 'is_ChatGPT_integration', 'ChatGPT_key'];
         $data = $this->fieldsData($fields);
         return view('setting::backend.appconfig.index', compact('module_action', 'data', 'module_title'));
-    }   
+    }
 
     public function getCurrencyData(Request $request)
     {

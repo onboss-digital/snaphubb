@@ -44,7 +44,6 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get("index_list", [PagesController::class, 'index_list'])->name("index_list");
       Route::get("index_data", [PagesController::class, 'index_data'])->name("index_data");
       Route::get('export', [PagesController::class, 'export'])->name('export');
-      // Route::get('pages/{' . 'pages' . '}/edit', [PagesController::class, 'edit'])->name('edit');
       Route::post('bulk-action', [PagesController::class, 'bulk_action'])->name('bulk_action');
       Route::post('update-status/{id}', [PagesController::class, 'update_status'])->name('update_status');
       Route::post('restore/{id}', [PagesController::class, 'restore'])->name('restore');

@@ -41,6 +41,7 @@ class TvShowController extends Controller
     public function tvshowDetail(Request $request, $id)
 {
     $tvshow_id = $id;
+
     $userId = auth()->id();
 
     $cacheKey = 'tvshow_' . $tvshow_id;
@@ -88,16 +89,21 @@ class TvShowController extends Controller
     // Convert response data to array
     $data = $responseData->toArray(request());
 
-
     $season_id=Season::where('entertainment_id', $tvshow_id)->value('id');
-
 
     $episode=Episode::where('entertainment_id', $tvshow_id)->where('season_id',$season_id)->with('entertainmentdata', 'plan', 'EpisodeStreamContentMapping', 'episodeDownloadMappings')->first();
 
+    if($episode ==null){
 
-    $genre_ids = $episode->entertainmentData->entertainmentGenerMappings->pluck('genre_id');
+        abort(404);
+
+    }
+
+    $genre_ids = $episode && $episode->entertainmentData
+    ? $episode->entertainmentData->entertainmentGenerMappings->pluck('genre_id')
+    : collect();
+
     $episode['genre_data'] = Genres::whereIn('id', $genre_ids)->get();
-
 
     $episode['moreItems'] = Entertainment::where('type', 'tvshow')
     ->whereHas('entertainmentGenerMappings', function ($query) use ($genre_ids) {
@@ -293,6 +299,7 @@ class TvShowController extends Controller
 
     public function stream($encryptedUrl)
     {
+
         $result = decryptVideoUrl($encryptedUrl);
 
         if (isset($result['error'])) {

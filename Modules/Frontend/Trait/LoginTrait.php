@@ -77,12 +77,6 @@ trait LoginTrait
 
             $userAgent = $agent->getUserAgent();
 
-            dd([
-                'device_type' => $deviceType,
-                'user_agent' => $userAgent,
-            ]);
-
-
             return response()->json(['status' => false, 'message' => __('messages.user_not_logged_in')]);
 
 

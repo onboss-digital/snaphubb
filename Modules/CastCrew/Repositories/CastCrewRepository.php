@@ -21,7 +21,7 @@ class CastCrewRepository implements CastCrewRepositoryInterface
         }
 
         $genre = $genreQuery->withTrashed()->findOrFail($id);
-        $genre->file_url = getImageUrlOrDefault($genre->file_url);
+        $genre->file_url = setBaseUrlWithFileName($genre->file_url);
         return $genre;
     }
 

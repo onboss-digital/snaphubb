@@ -74,7 +74,8 @@ class GenreService
                 return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" data-type="genres" onclick="dataTableRowCheck(' . $row->id . ',this)">';
             })
             ->editColumn('image', function ($data) {
-                $imageUrl = getImageUrlOrDefault($data->file_url);
+
+                $imageUrl = setBaseUrlWithFileName($data->file_url);
                 return view('components.image-name', ['image' => $imageUrl, 'name' => $data->name])->render();
             })
             ->addColumn('action', function ($data) {
@@ -82,7 +83,7 @@ class GenreService
             })
             ->editColumn('status', function ($row) {
                 $checked = $row->status ? 'checked="checked"' : '';
-                $disabled = $row->trashed() ? 'disabled' : '';          
+                $disabled = $row->trashed() ? 'disabled' : '';
                 return '
                     <div class="form-check form-switch">
                         <input type="checkbox" data-url="' . route('backend.genres.update_status', $row->id) . '"
@@ -90,7 +91,7 @@ class GenreService
                             id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" ' . $checked . ' ' . $disabled . '>
                     </div>
                 ';
-            })          
+            })
             ->editColumn('updated_at', function ($data) {
                 $diff = Carbon::now()->diffInHours($data->updated_at);
                 return $diff < 25 ? $data->updated_at->diffForHumans() : $data->updated_at->isoFormat('llll');

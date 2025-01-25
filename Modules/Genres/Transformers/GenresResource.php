@@ -14,7 +14,7 @@ class GenresResource extends JsonResource
         return [
             'id' => $this->id ?? null,
             'name' => $this->name ?? null,
-            'description' => $this->description ?? null,
+            // 'description' => $this->description ?? null,
             'genre_image' => !empty($this->file_url) ? setBaseUrlWithFileName($this->file_url) : null,
             'status' => $this->status ?? null,
         ];

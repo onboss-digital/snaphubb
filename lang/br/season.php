@@ -12,15 +12,15 @@ return [
     | these language lines according to your application's requirements.
     |
     */
-    'title' => 'Seasons',
-    'new_title'=>' New Season',
-    'edit_title'=>'Edit Season',
-    'lbl_tv_shows'=>'TV Show',
-    'lbl_import'=> 'Import',
-    'lbl_loading'=>'Loading...',
-    'already_added_season'=>'The Season has already been added.',
-    'access' => 'Access',
-    'plan' => 'Plan',
-    'lbl_free'=>'Free',
-    'lbl_paid'=>'Paid',  
+    'title' => 'Temporadas',
+    'new_title'=>'Nova Temporada',
+    'edit_title'=>'Editar Temporada',
+    'lbl_tv_shows'=>'Série de TV',
+    'lbl_import'=> 'Importar',
+    'lbl_loading'=>'Carregando...',
+    'already_added_season'=>'A Temporada já foi adicionada.',
+    'access' => 'Acesso',
+    'plan' => 'Plano',
+    'lbl_free'=>'Grátis',
+    'lbl_paid'=>'Pago',
 ];

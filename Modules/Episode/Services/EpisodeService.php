@@ -96,7 +96,7 @@ class EpisodeService
         ->editColumn('poster_url', function ($data) {
             $seasonName = optional($data->seasondata)->name;
             $type = 'episode';
-            $imageUrl = !empty($data['tmdb_id']) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
+            $imageUrl = setBaseUrlWithFileName($data->poster_url);
             return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'seasonName' => $seasonName, 'type' => $type])->render();
         })
 
@@ -157,7 +157,7 @@ class EpisodeService
           ->editColumn('status', function ($row) {
             $checked = $row->status ? 'checked="checked"' : ''; // Check if status is active
             $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
-        
+
             return '
                 <div class="form-check form-switch">
                     <input type="checkbox" data-url="' . route('backend.episodes.update_status', $row->id) . '"
@@ -165,10 +165,10 @@ class EpisodeService
                         id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" ' . $checked . ' ' . $disabled . '>
                 </div>
             ';
-        })    
+        })
         ->orderColumn('status', function ($query, $order) {
             $query->orderBy('status', $order);
-        }) 
+        })
           ->editColumn('updated_at', fn($data) =>formatUpdatedAt($data->updated_at))
             ->orderColumns(['id'], '-:column $1')
             ->rawColumns(['action', 'status', 'check','poster_url','entertainment_id','season_id','plan_id'])

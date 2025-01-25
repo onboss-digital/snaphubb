@@ -14,6 +14,7 @@ use Modules\Entertainment\Models\Entertainment;
 use Modules\LiveTV\Models\LiveTV;
 use Modules\LiveTV\Models\LiveTvChannel;
 use Modules\Banner\Services\BannerService;
+use Illuminate\Support\Facades\Cache;
 
 class BannersController extends Controller
 {
@@ -77,12 +78,16 @@ class BannersController extends Controller
         $actionType = $request->action_type;
         $moduleName = __('banner.title');
 
+        Cache::flush();
+
         return $this->performBulkAction(Banner::class, $ids, $actionType, $moduleName);
     }
 
     public function update_status(Request $request, Banner $id)
     {
         $id->update(['status' => $request->status]);
+
+        Cache::flush();
 
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
@@ -104,11 +109,8 @@ class BannersController extends Controller
 
         foreach ($names as &$value) {
 
-            if ($value['tmdb_id']==null ) {
-
                 $value['thumbnail_url'] = setBaseUrlWithFileName($value['thumbnail_url']);
                 $value['poster_url'] = setBaseUrlWithFileName($value['poster_url']);
-            }
 
         }
 
@@ -146,7 +148,8 @@ class BannersController extends Controller
 
             ->addColumn('image', function ($data) {
                 $type = 'banner';
-                $imageUrl = getImageUrlOrDefault($data->file_url);
+                $imageUrl = setBaseUrlWithFileName($data->file_url);
+
                 return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->title, 'type' => $type])->render();
 
             })
@@ -159,12 +162,12 @@ class BannersController extends Controller
             ->editColumn('status', function ($data) {
                 $checked = '';
                 $disabled = '';
-            
+
                 // Check if the status is active
                 if ($data->status) {
                     $checked = 'checked="checked"';
                 }
-            
+
                 // Check if the record is soft-deleted and disable the checkbox if true
                 if ($data->trashed()) {
                     $disabled = 'disabled';
@@ -218,17 +221,14 @@ class BannersController extends Controller
     public function store(BannerRequest $request)
     {
         $data = $request->all();
-        $data['file_url'] = extractFileNameFromUrl($data['file_url']);
-        $data['poster_url'] = extractFileNameFromUrl($data['poster_url']);
+        $data['file_url'] = $data['file_url'];
+        $data['poster_url'] = $data['poster_url'];
 
         $this->bannerService->create($data, $request);
         $title = __('banner.title');
         $message = trans('messages.create_form', ['form' => $title]);
         return redirect()->route('backend.banners.index')->with('success', $message);
     }
-
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -243,8 +243,8 @@ class BannersController extends Controller
         $names = [];
 
         $banner['name_id'] = $banner->type_id;
-        $banner->file_url  = getImageUrlOrDefault($banner->file_url);
-        $banner->poster_url = getImageUrlOrDefault($banner->poster_url);
+        $banner->file_url  = setBaseUrlWithFileName($banner->file_url);
+        $banner->poster_url = setBaseUrlWithFileName($banner->poster_url);
 
         $mediaUrls = getMediaUrls();
 
@@ -276,8 +276,8 @@ class BannersController extends Controller
         $data['type_id'] = $request->input('type_id');
         $data['type_name'] = $request->input('type_name');
 
-        $data['file_url'] = extractFileNameFromUrl($data['file_url']);
-        $data['poster_url'] = extractFileNameFromUrl($data['poster_url']);
+        $data['file_url'] = $data['file_url'];
+        $data['poster_url'] = $data['poster_url'];
 
         $banner->update($data);
 
@@ -285,8 +285,6 @@ class BannersController extends Controller
         $message = trans('messages.update_form', ['form' => $title]);
         return redirect()->route('backend.banners.index')->with('success', $message);
     }
-
-
 
     /**
      * Remove the specified resource from storage.

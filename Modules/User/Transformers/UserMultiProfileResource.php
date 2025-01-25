@@ -15,7 +15,7 @@ class UserMultiProfileResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'name' => $this->name,
-            'avatar' =>$this->avatar,
+            'avatar' =>setBaseUrlWithFileName($this->avatar),
             'is_active' => $this->activeprofile !== null ? 1 : 0,
         ];
     }

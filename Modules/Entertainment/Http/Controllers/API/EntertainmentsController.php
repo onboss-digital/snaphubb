@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Entertainment\Models\Entertainment;
 use Modules\Entertainment\Transformers\MoviesResource;
-use Modules\Entertainment\Transformers\MovieDetailResource;
+use Modules\Entertainment\Transformers\MovieDetailDataResource;
 use Modules\Entertainment\Transformers\TvshowResource;
 use Modules\Entertainment\Transformers\TvshowDetailResource;
 use Modules\Entertainment\Models\Watchlist;
@@ -31,6 +31,7 @@ use Modules\Season\Models\Season;
 use Modules\Entertainment\Transformers\SeasonResource;
 use Modules\CastCrew\Models\CastCrew;
 use Modules\CastCrew\Transformers\CastCrewListResource;
+
 
 
 class EntertainmentsController extends Controller
@@ -162,7 +163,7 @@ class EntertainmentsController extends Controller
                 $continueWatch = ContinueWatch::where('entertainment_id', $movie->id)->where('user_id', $user_id)->where('profile_id', $request->profile_id)->where('entertainment_type', 'movie')->first();
                 $movie['continue_watch'] = $continueWatch;
             }
-            $responseData = new MovieDetailResource($movie);
+            $responseData = new MovieDetailDataResource($movie);
             Cache::put($cacheKey, $responseData);
         }
 
@@ -180,7 +181,8 @@ class EntertainmentsController extends Controller
         $tvshowList = Entertainment::query()
         ->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')
         ->where('type', 'tvshow')
-        ->whereHas('episode');
+        ->whereDate('release_date', '<=', Carbon::now()) 
+        ->whereHas('episode');  
 
         if ($request->has('search')) {
             $searchTerm = $request->search;
@@ -423,7 +425,7 @@ class EntertainmentsController extends Controller
     public function getSearch(Request $request)
     {
 
-        $movieList = Entertainment::query()->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'entertainmentStreamContentMappings')->where('type', 'movie')->where('status', 1);
+        $movieList = Entertainment::query()->whereDate('release_date', '<=', Carbon::now())->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'entertainmentStreamContentMappings')->where('type', 'movie')->where('status', 1);
 
         if ($request->has('search') && $request->search !='') {
 
@@ -445,7 +447,7 @@ class EntertainmentsController extends Controller
 
 
         $movieData = (isenablemodule('movie') == 1) ? MoviesResource::collection($movieList) : [];
-        $tvshowList = Entertainment::where('status', 1)->where('type', 'tvshow')->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')->whereHas('episode');;
+        $tvshowList = Entertainment::where('status', 1)->where('type', 'tvshow')->whereDate('release_date', '<=', Carbon::now())->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')->whereHas('episode');
 
         if ($request->has('search') && $request->search !='') {
 
@@ -460,7 +462,7 @@ class EntertainmentsController extends Controller
         $tvshowData = (isenablemodule('tvshow') == 1) ? TvshowResource::collection($tvshowList) : [];
 
 
-        $videoList = Video::query()->with('VideoStreamContentMappings', 'plan');
+        $videoList = Video::query()->whereDate('release_date', '<=', Carbon::now())->with('VideoStreamContentMappings', 'plan');
 
         if ($request->has('search') && $request->search !='') {
 
@@ -484,7 +486,7 @@ class EntertainmentsController extends Controller
         $seasonData = (isenablemodule('tvshow') == 1) ? SeasonResource::collection($seasonList) : [];
 
 
-        $episodeList = Episode::query()->with('seasondata');
+        $episodeList = Episode::query()->whereDate('release_date', '<=', Carbon::now())->with('seasondata');
 
         if ($request->has('search') && $request->search !='') {
 
@@ -707,6 +709,8 @@ class EntertainmentsController extends Controller
             $reminderData
         );
 
+        Cache::flush();
+
         $message = $reminders->wasRecentlyCreated ? __('movie.reminder_add') : __('movie.reminder_update');
         $result = $reminders;
 
@@ -719,6 +723,8 @@ class EntertainmentsController extends Controller
         $data = $request->all();
         $data['user_id'] = $user->id;
         $viewData = EntertainmentView::where('entertainment_id', $request->entertainment_id)->where('user_id', $user->id)->first();
+
+        Cache::flush();
 
         if (!$viewData) {
             $views = EntertainmentView::create($data);
@@ -739,6 +745,8 @@ class EntertainmentsController extends Controller
 
         $reminders = UserReminder::whereIn('entertainment_id', $ids)->where('user_id', $user->id)->forceDelete();
 
+        Cache::flush();
+
         if ($reminders == null) {
 
             $message = __('movie.reminder_add');
@@ -758,6 +766,8 @@ class EntertainmentsController extends Controller
         $ids = explode(',', $request->id);
 
         $download = EntertainmentDownload::whereIn('id', $ids)->forceDelete();
+
+        Cache::flush();
 
         if ($download == null) {
 

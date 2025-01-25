@@ -17,8 +17,7 @@
          </a>
          @endif
       <div class="image-box w-100">
-        <img src="{{ $value['poster_image'] }}" alt="movie-card" class="img-fluid object-cover w-100 d-block border-0">
-
+        <img src="{{ $value['poster_image'] }}" alt="movie-card" class="img-fluid object-cover w-100 d-block border-0" >
         @if($value['movie_access']=='paid' )
 
         @php
@@ -33,11 +32,11 @@
     </div>
       <div class="card-description with-transition">
         <div class="position-relative w-100">
-          <ul class="genres-list ps-0 mb-2 d-flex align-items-center gap-5">
-          @foreach($value['genres'] as $gener)
-            <li class="small">{{ $gener->name ?? '--' }}</li>
-            @endforeach
-          </ul>
+        <ul class="genres-list ps-0 mb-2 d-flex align-items-center gap-5">
+    @foreach(collect($value['genres'])->slice(0, 2) as $gener)
+        <li class="small">{{ $gener['name'] ?? '--' }}</li>
+    @endforeach
+</ul>
 
           <h5 class="iq-title text-capitalize line-count-1"> {{ $value['name']  ?? '--'}} </h5>
           <div class="d-flex align-items-center gap-3">

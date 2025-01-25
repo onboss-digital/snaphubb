@@ -18,7 +18,7 @@
                         @if(!empty($data['genres']))
                         @foreach($data['genres'] as $genres)
                             <li>
-                                <a href="#" class="tag">{{ $genres->name }}</a>
+                                <a href="#" class="tag">{{ $genres['name'] }}</a>
                             </li>
                         @endforeach
                     @endif

@@ -15,6 +15,7 @@ use Modules\Season\Services\SeasonService;
 use Modules\Subscriptions\Models\Plan;
 use App\Services\ChatGTPService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class SeasonsController extends Controller
 {
@@ -98,6 +99,8 @@ class SeasonsController extends Controller
         $ids = explode(',', $request->rowIds);
         $actionType = $request->action_type;
         $moduleName = 'Season'; // Adjust as necessary for dynamic use
+        Cache::flush();
+
 
         return $this->performBulkAction(Season::class, $ids, $actionType, $moduleName);
     }
@@ -196,8 +199,8 @@ class SeasonsController extends Controller
     {
         $data = Season::findOrFail($id);
         $tmdb_id = $data->tmdb_id;
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
-        // $data->poster_url = getImageUrlOrDefault($data->poster_url);
+        $data->poster_url = setBaseUrlWithFileName($data->poster_url);
+
 
         if($data->trailer_url_type =='Local'){
 
@@ -228,7 +231,7 @@ class SeasonsController extends Controller
     public function update(SeasonRequest $request, $id)
     {
         $requestData = $request->all();
-      
+
         $requestData['poster_url'] = !empty($requestData['tmdb_id']) ? $requestData['poster_url'] : extractFileNameFromUrl($requestData['poster_url']);
         // $requestData['poster_url'] = extractFileNameFromUrl($requestData['poster_url']);
         $requestData['trailer_video'] = extractFileNameFromUrl($requestData['trailer_video']);
@@ -278,6 +281,8 @@ class SeasonsController extends Controller
     public function update_status(Request $request, Season $id)
     {
         $id->update(['status' => $request->status]);
+        Cache::flush();
+
 
         return response()->json(['status' => true, 'message' => __('messages.status_updated')]);
     }
@@ -465,9 +470,8 @@ class SeasonsController extends Controller
             'plan',
 
         ])->findOrFail($id);
-        
-        $data->poster_url = !empty( $data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
-        // $data->poster_url = getImageUrlOrDefault($data->poster_url);
+
+        $data->poster_url = setBaseUrlWithFileName($data->poster_url);
         $data->formatted_release_date = Carbon::parse($data->release_date)->format('d M, Y');
         $module_title = __('season.title');
         $show_name = $data->name;

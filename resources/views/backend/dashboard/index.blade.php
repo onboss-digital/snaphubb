@@ -296,7 +296,7 @@
                         <div class="card-header card-header-primary">
                             <h3 class="card-title">{{ __('dashboard.lbl_top_rated') }}</h3>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-0">
                             <div id="chart-top-rated"></div>
                         </div>
                     </div>

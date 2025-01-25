@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ContinueWatch extends BaseModel
 {
     use SoftDeletes;
-    
+
     protected $table = 'continue_watch';
 
     /**
      * The attributes that are mass assignable.
      */
-    protected $fillable = ['entertainment_id', 'user_id', 'entertainment_type', 'watched_time', 'total_watched_time','profile_id'];
+    protected $fillable = ['entertainment_id', 'user_id', 'entertainment_type', 'watched_time', 'total_watched_time','profile_id','episode_id'];
 
 
     public function entertainment()

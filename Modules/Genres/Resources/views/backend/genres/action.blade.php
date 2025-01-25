@@ -10,7 +10,7 @@
         @endhasPermission
     @else
     @hasPermission('restore_genres')
-        <a class="btn btn-success-subtle btn-sm fs-4 restore-tax" data-confirm-message="{{__('messages.are_you_sure_restore')}}" 
+        <a class="btn btn-success-subtle btn-sm fs-4 restore-tax" data-confirm-message="{{__('messages.are_you_sure_restore')}}"
     data-success-message="{{__('messages.restore_form',  ['form' => 'Genres'])}}" data-bs-toggle="tooltip" title="{{__('messages.restore')}}" href="{{ route('backend.genres.restore', $data->id) }}">
             <i class="ph ph-arrow-clockwise align-middle"></i>
         </a>

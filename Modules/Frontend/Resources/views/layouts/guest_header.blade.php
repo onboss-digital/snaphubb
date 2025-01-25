@@ -30,29 +30,26 @@
             <div class="d-flex justify-content-end">
                <div class="dropdown dropdown-user-wrapper">
                   @if(auth()->check())
-                  @if(auth()->user()->user_type == 'user')
-                  @if(auth()->user()->is_subscribe==0)
-                  <button class="btn btn-warning-subtle font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
-                     {{__('frontend.subscribe')}}
-                  </button>
-                  @else
 
-                  <button class="btn btn-warning-subtle font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
-                     {{__('frontend.upgrade')}}
-                  </button>
+                      @if( auth()->user()->user_type == 'user' && auth()->user()->is_subscribe==0)
+                      <button class="btn btn-warning-subtle font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
+                         {{__('frontend.subscribe')}}
+                      </button>
+                      @else
+                      <button class="btn btn-warning-subtle font-size-14 text-uppercase subscribe-btn" onclick="window.location.href='{{ route('subscriptionPlan') }}'">
+                         {{__('frontend.upgrade')}}
+                      </button>
+                      @endif
 
-                  @endif
-
-                  @endif
-                  <a class="dropdown-toggle-item dropdown-user ms-3" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                   <a class="dropdown-toggle-item dropdown-user ms-3" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                     <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url)?? setDefaultImage(auth()->user()->file_url) }}" class="img-fluid user-image rounded-circle" alt="user image">
+                     <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url)}}" class="img-fluid user-image rounded-circle" alt="user image">
                   </a>
                   <div class="dropdown-menu dropdown-menu-end dropdown-user-menu border border-gray-900" aria-labelledby="navbarDropdown">
                      <div class="bg-body p-3 d-flex justify-content-between align-items-center gap-3 rounded mb-4">
                         <div class="d-inline-flex align-items-center gap-3">
                            <div class="image flex-shrink-0">
-                              <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url)?? setDefaultImage(auth()->user()->file_url) }}" class="img-fluid dropdown-user-menu-image" alt="">
+                              <img src="{{ setBaseUrlWithFileName(auth()->user()->file_url) }}" class="img-fluid dropdown-user-menu-image" alt="">
                            </div>
                            <div class="content">
                               <h6 class="mb-1">{{ auth()->user()->full_name ?? default_user_name() }}</h6>

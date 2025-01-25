@@ -191,7 +191,7 @@ class VideosController extends Controller
     public function edit($id)
     {
         $data = Video::where('id', $id)->with('VideoStreamContentMappings')->first();
-        $data->poster_url= getImageUrlOrDefault($data->poster_url);
+        $data->poster_url= setBaseUrlWithFileName($data->poster_url);
 
         if($data->trailer_url_type =='Local'){
             $data->trailer_url_type = setBaseUrlWithFileName($data->trailer_url);

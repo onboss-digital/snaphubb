@@ -1,7 +1,7 @@
 <div class="footer-stcky-menu">
     <ul class="list-unstyled m-0 p-0 d-flex align-items-center justify-content-between gap-3">
       <li class="nav-item">
-        <a class="nav-link text-center"  href="/">
+        <a class="nav-link text-center"  href="{{ route('user.login')  }}">
           <i class="ph ph-house-line"></i>
           <span class="item-name">{{__('frontend.home')}}</span>
         </a>
@@ -23,13 +23,13 @@
           <i class="ph ph-television-simple"></i>
           <span class="item-name">{{__('frontend.livetv')}}</span>
         </a>
-      </li>   
+      </li>
       <li class="nav-item">
         <a class="nav-link text-center"  href="/livetv">
           <i class="ph ph-user"></i>
           <span class="item-name">{{__('frontend.profile')}}</span>
         </a>
-      </li>   
+      </li>
     </ul>
 </div>
 

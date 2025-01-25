@@ -33,11 +33,11 @@ class CurrencyChange
     public function format($amount)
     {
 
-        $noOfDecimal = $this->defaultCurrency->no_of_decimal;
-        $decimalSeparator = $this->defaultCurrency->decimal_separator;
-        $thousandSeparator = $this->defaultCurrency->thousand_separator;
-        $currencyPosition = $this->defaultCurrency->currency_position;
-        $currencySymbol = $this->defaultCurrency->currency_symbol;
+        $noOfDecimal = $this->defaultCurrency->no_of_decimal ?? 2;
+        $decimalSeparator = $this->defaultCurrency->decimal_separator ?? '';
+        $thousandSeparator = $this->defaultCurrency->thousand_separator ?? '';
+        $currencyPosition = $this->defaultCurrency->currency_position ?? 'left';
+        $currencySymbol = $this->defaultCurrency->currency_symbol ?? '';
 
         return formatCurrency($amount, $noOfDecimal, $decimalSeparator, $thousandSeparator, $currencyPosition, $currencySymbol);
     }
