@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Stichoza\GoogleTranslate\GoogleTranslate;
-
+use Illuminate\Support\Facades\Artisan;
+use Modules\Currency\Models\Currency;
 
 function mail_footer($type)
 {
@@ -170,15 +171,20 @@ function getAccessToken()
     $credentialsFiles = File::glob($directory . '/*.json');
 
     if (empty($credentialsFiles)) {
-        throw new Exception('No JSON credentials found in the specified directory.');
+        return null; // No credentials found
     }
+
     $client = new Google_Client();
     $client->setAuthConfig($credentialsFiles[0]);
     $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
 
-    $token = $client->fetchAccessTokenWithAssertion();
-
-    return $token['access_token'];
+    try {
+        $token = $client->fetchAccessTokenWithAssertion();
+        return $token['access_token'];
+    } catch (Exception $e) {
+        // In case of any error, return null
+        return null;
+    }
 }
 
 function formatOffset($offset)
@@ -303,6 +309,16 @@ if (!function_exists('jdd')) {
         exit();
     }
 }
+function GetcurrentCurrency(){
+
+    $currency = Currency::where('is_primary', 1)->first();
+
+    $currency_code = $currency ? strtolower($currency->currency_code) : 'usd';
+    return $currency_code;
+
+
+}
+
 
 /*
  *
@@ -999,10 +1015,39 @@ if (!function_exists('getFooterData')) {
 
                 $data['app_store_url']=GetSettingValue('ios_url');
                 $data['play_store_url']=GetSettingValue('android_url');
-                
+                $data['helpline_number']=GetSettingValue('helpline_number');
+                $data['inquriy_email']=GetSettingValue('inquriy_email');
+                $data['short_description']=GetSettingValue('short_description');
+
                 Cache::put($cacheKey, $data);
            }
         return $data;
+        }
+    }
+
+
+    function setEnvValue($key, $value)
+    {
+        $path = base_path('.env');
+
+        // Ensure the .env file exists
+        if (file_exists($path)) {
+            $envContent = file_get_contents($path);
+
+            // Check if the key already exists
+            if (strpos($envContent, "$key=") !== false) {
+                // Replace the existing key value pair
+                $envContent = preg_replace("/^$key=.*/m", "$key=$value", $envContent);
+            } else {
+                // Add the key value pair if not found
+                $envContent .= "\n$key=$value";
+            }
+
+            // Write the content back to the .env file
+            file_put_contents($path, $envContent);
+
+            Artisan::call('config:clear');
+            Artisan::call('config:cache');
         }
     }
 

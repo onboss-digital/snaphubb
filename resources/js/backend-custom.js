@@ -753,8 +753,9 @@ import 'node-snackbar/dist/snackbar.css';
                 // iconColor:'primary',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
-                cancelButtonColor: '#858482',
                 confirmButtonText: 'Yes, delete it!',
+                cancelButtonColor: '#858482',
+                reverseButtons: true,
                 showClass: {
                   popup: 'animate__animated animate__zoomIn'
                 },
@@ -771,8 +772,8 @@ import 'node-snackbar/dist/snackbar.css';
             icon: 'question',
             // iconColor:'primary',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
             cancelButtonColor: '#858482',
+            confirmButtonColor: '#d33',
             confirmButtonText: 'Yes'
           }).then((result) => {
             return result

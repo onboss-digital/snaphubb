@@ -43,3 +43,54 @@
     </div>
 @endforeach
 
+    <script>
+     var baseUrl = document.querySelector('meta[name="base-url"]').getAttribute('content');
+
+     function deleteImage(url) {
+    Swal.fire({
+        title: "Are you sure you want to delete?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        reverseButtons: true,
+    })
+    .then((result) => {
+        if (result.isConfirmed) {
+            fetch(`${baseUrl}/app/media-library/destroy`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const mediaContainer = document.querySelector(`img[src="${url}"], video source[src="${url}"]`);
+                    if (mediaContainer) {
+                        mediaContainer.closest('#media-images').remove(); // Remove the parent div of the media
+                    }
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Your media has been deleted.',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        'There was a problem deleting your media.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+}
+</script>
+

@@ -85,20 +85,23 @@
                     </ul>
                     @php
 
-
                    $qualityOptions = [];
                         if($data['type']=='movie'){
                           $videoLinks = $data['video_links'];
                           $episode_id='';
                           $type=$data['video_upload_type'];
-                          $video_url= $data['video_upload_type']=== 'Local' ? setBaseUrlWithFileName($data['video_url_input']) : $data['video_url_input'] ;
+                          $video_url= $data['video_upload_type']=== 'Local' ? $data['video_url_input'] : $data['video_url_input'] ;
 
-                          foreach($videoLinks as $link) {
-                            $qualityOptions[$link->quality] = [
-                                'value' => $link->type === 'Local' ? setBaseUrlWithFileName($link->url) : Crypt::encryptString($link->url),
-                                'type' => $link->type // Add the type here
-                            ];
-                          }
+                         if($data['enable_quality']==1){
+
+                            foreach($videoLinks as $link) {
+                              $qualityOptions[$link->quality] = [
+                                  'value' => $link->type === 'Local' ? setBaseUrlWithFileName($link->url) : Crypt::encryptString($link->url),
+                                  'type' => $link->type // Add the type here
+                              ];
+                            }
+
+                         }
 
                         }else{
 
@@ -106,7 +109,7 @@
                              $videoLinks = $episodeData['video_links'];
                              $episode_id = $episodeData['id'];
                              $type=$episodeData['video_upload_type'];
-                             $video_url= $episodeData['video_upload_type']=== 'Local' ? setBaseUrlWithFileName($episodeData['video_url_input']) : Crypt::encryptString($episodeData['video_url_input']) ;
+                             $video_url= $episodeData['video_upload_type']=== 'Local' ? ($episodeData['video_url_input']) : Crypt::encryptString($episodeData['video_url_input']) ;
 
                           foreach($videoLinks as $link) {
                             $qualityOptions[$link->quality] = [
@@ -115,7 +118,9 @@
                             ];
                           }
 
+
                         }
+
 
                         $qualityOptionsJson = json_encode($qualityOptions);
 
@@ -128,7 +133,7 @@
                             <button
                             class="btn btn-primary"
                             id="watchNowButton"
-                            data-type="{{ $data['trailer_url_type'] }}"
+                            data-type="{{ $type }}"
                             data-entertainment-id="{{ $data['id'] }}"
                             data-entertainment-type="{{ $data['type'] }}"
                             data-video-url="{{ $video_url }}"

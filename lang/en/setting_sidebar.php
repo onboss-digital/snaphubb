@@ -30,5 +30,8 @@ return [
     'Select_StartTime' => 'Select StartTime',
     'Select_EndTime' => 'Select EndTime',
     'lbl_module-setting'=>'Module Settings',
-    'lbl_storage'=>'Storage Settings'
+    'lbl_storage'=>'Storage Settings',
+    'lbl_database_reset'=>'Database Reset',
+    'load_sample_data'=> 'Load Sample Data',
+    'reset_database'=>'Reset Database'
 ];

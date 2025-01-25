@@ -154,7 +154,7 @@ class FrontendController extends Controller
     }
     public function subscriptionPlan()
     {
-        $plans = Plan::with('planLimitation')->get();
+        $plans = Plan::with('planLimitation')->where('status',1)->get();
         $activeSubscriptions = Subscription::where('user_id', auth()->id())->where('status', 'active')->where('end_date', '>', now())->orderBy('id','desc')->first();
         $currentPlanId = $activeSubscriptions ? $activeSubscriptions->plan_id : null;
         $subscriptions = Subscription::where('user_id', auth()->id())

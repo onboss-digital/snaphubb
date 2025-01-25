@@ -90,6 +90,12 @@
                         </a>
                     </div>
 
+                    {{-- <div class="mb-3 active-menu">
+                        <a id="link-storage-settings" href="{{ route('backend.settings.database-reset') }}" class="btn btn-border {{ request()->routeIs('backend.settings.database-reset') ? 'active' : '' }}">
+                            <i class="fa-solid fa-database"></i>{{ __('setting_sidebar.lbl_database_reset') }}
+                        </a>
+                    </div> --}}
+
 
 
 

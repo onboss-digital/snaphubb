@@ -56,7 +56,7 @@ class LiveTvCategoryTableSeeder extends Seeder
                 'status' => 1,
             ],
             ];
-            if (env('IS_DUMMY_DATA')) {
+
                 foreach ($liveTvCategories as $key => $liveTvCategory_data) {
                     $featureImage = $liveTvCategory_data['file_url'] ?? null;
                     $categoryData = Arr::except($liveTvCategory_data, ['file_url']);
@@ -68,7 +68,7 @@ class LiveTvCategoryTableSeeder extends Seeder
                             $category->save();
                         }
                     }
-                }
+
 
                 Schema::enableForeignKeyConstraints();
         }

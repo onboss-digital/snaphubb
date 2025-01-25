@@ -11,7 +11,8 @@ Swal.fire({
   showCancelButton: true,
   confirmButtonColor: "#3085d6",
   cancelButtonColor: "#d33",
-  confirmButtonText: "Yes"
+  confirmButtonText: "Yes",
+  reverseButtons: true 
 }).then((result) => {
   if (result.isConfirmed) {
       $.ajax({

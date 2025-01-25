@@ -115,8 +115,8 @@
                         <h4 class="mt-5 pt-4">{{__('frontend.permanent_delete')}}</h4>
                         <p class="pb-4 mb-0">{{__('frontend.permanent_deleted')}}</p>
                         <div class="d-flex justify-content-center gap-3 mt-4 pt-3">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{__('frontend.cancel')}}</button>
-                            <button type="button" class="btn btn-dark" onclick="proceedToDeleteAccount()">{{__('frontend.proceed')}}</button>
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">{{__('frontend.cancel')}}</button>
+                            <button type="button" class="btn btn-primary" onclick="proceedToDeleteAccount()">{{__('frontend.proceed')}}</button>
 
                         </div>
                     </div>
@@ -150,8 +150,8 @@
                     <div class="modal-body modal-acoount-info text-center">
                         <h6 class="mt-3 pt-2">{{__('frontend.cancle_subscription')}}</h6>
                         <div class="d-flex justify-content-center gap-3 mt-4 pt-3">
-                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">{{__('frontend.cancel')}}</button>
-                            <button type="button" class="btn btn-dark" onclick="cancelSubscription()">{{__('frontend.proceed')}}</button>
+                            <button type="button" class=" btn btn-dark" data-bs-dismiss="modal">{{__('frontend.cancel')}}</button>
+                            <button type="button" class="btn btn-primary" onclick="cancelSubscription()">{{__('frontend.proceed')}}</button>
 
                         </div>
                     </div>

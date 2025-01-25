@@ -199,6 +199,7 @@ class SettingsController extends Controller
             'cash_publickey',
             'cinet_payment_method',
             'cinet_siteid',
+            'cinet_api_key',
             'cinet_Secret_key',
             'sadad_payment_method',
             'sadad_Sadadkey',
@@ -218,8 +219,8 @@ class SettingsController extends Controller
             'entertainment_id',
             'apple_api_key',
             'google_api_key'
-            ];
-
+        ];
+        
         $settings = $this->fieldsData($fields);
         return view('setting::backend.setting.section-pages.payment-method', compact('settings'));
     }
@@ -246,6 +247,19 @@ class SettingsController extends Controller
         return view('setting::backend.setting.section-pages.notification-configuration', compact('settings'));
     }
 
+    public function ResetDatabase(){
+
+
+        \Artisan::call('migrate:fresh --seed');
+
+        $message = __('messages.data_reset');
+
+        return response()->json(['message' => $message, 'status' => true], 200);
+
+
+    }
+
+
     public function storageSettings()
     {
 
@@ -262,6 +276,174 @@ class SettingsController extends Controller
         $settings = $this->fieldsData($fields);
         return view('setting::backend.setting.section-pages.storage-setting', compact('settings'));
     }
+
+    public function databaseReset()
+    {
+        return view('setting::backend.setting.section-pages.database_reset');
+    }
+
+
+    public function dataload(){
+
+        $this->setEnvValue('IS_DUMMY_DATA', 'true');
+
+        $artisanPath = base_path('artisan');
+
+        $output = [];
+        $resultCode = 0;
+        exec("php {$artisanPath} migrate:fresh --seed --force 2>&1", $output, $resultCode);
+
+        // Log the full output of the command
+        \Log::info('Migration Output: ' . implode("\n", $output));
+        \Log::info('Migration Result Code: ' . $resultCode);
+
+        if ($resultCode !== 0) {
+            \Log::error('Migration failed with result code: ' . $resultCode);
+            \Log::error('Migration error output: ' . implode("\n", $output));
+            return redirect()->back()->with('error', __('settings.data_reset_failed'));
+        }
+
+        // Log the value of IS_DUMMY_DATA
+        \Log::info('IS_DUMMY_DATA value: ' . env('IS_DUMMY_DATA'));
+
+        \Log::info('Database reset completed.');
+
+        $message = __('settings.data_reset');
+
+        // Redirect back with success message
+        return response()->json(['message' => $message, 'status' => true], 200);
+
+    }
+
+    public function datareset()
+    {
+        \Artisan::call('config:clear');
+
+        $this->setEnvValue('IS_DUMMY_DATA', 'false');
+
+        $artisanPath = base_path('artisan');
+
+        $output = [];
+        $resultCode = 0;
+        exec("php {$artisanPath} migrate:fresh --seed --force 2>&1", $output, $resultCode);
+
+        // Log the full output of the command
+        \Log::info('Migration Output: ' . implode("\n", $output));
+        \Log::info('Migration Result Code: ' . $resultCode);
+
+        if ($resultCode !== 0) {
+            \Log::error('Migration failed with result code: ' . $resultCode);
+            \Log::error('Migration error output: ' . implode("\n", $output));
+            return redirect()->back()->with('error', __('settings.data_reset_failed'));
+        }
+
+        // Log the value of IS_DUMMY_DATA
+        \Log::info('IS_DUMMY_DATA value: ' . env('IS_DUMMY_DATA'));
+
+        \Log::info('Database reset completed.');
+
+        $message = __('settings.data_reset');
+
+        return redirect()->back()->with('success', $message);
+    }
+    /**
+     * Update a specific value in the .env file
+     */
+    private function setEnvValue($key, $value)
+    {
+        $envPath = base_path('.env');
+
+        if (file_exists($envPath)) {
+            // Read .env file
+            $envContent = file_get_contents($envPath);
+
+            // Update or add the key
+            $pattern = "/^{$key}=.*/m";
+            if (preg_match($pattern, $envContent)) {
+                $envContent = preg_replace($pattern, "{$key}={$value}", $envContent);
+            } else {
+                $envContent .= "\n{$key}={$value}";
+            }
+
+            // Save changes
+            file_put_contents($envPath, $envContent);
+
+            // Clear cache to apply changes
+            \Artisan::call('config:clear');
+            \Artisan::call('cache:clear');
+        }
+
+        return;
+    }
+
+
+    // public function datareset(){
+
+    //     putenv('IS_DUMMY_DATA=false');
+
+    //     \Artisan::call('migrate:fresh --seed');
+
+    //     $message = __('settings.save_setting');
+
+    //    return redirect()->back()->with('success', $message);
+
+    // }
+
+    // public function datareset(Request $request)
+    // {
+
+    //     EnvHelper::setEnvValue('IS_DUMMY_DATA', 'false');
+    //      config(['app.is_dummy_data' => false]);
+
+    //     // Clear the cache to make sure changes are reflected
+    //     \Artisan::call('config:clear');
+    //     \Artisan::call('config:cache');
+    //     \Artisan::call('cache:clear');
+
+    //     // List of tables that should not be cleared
+    //     $protectedTables = [
+    //         'users',
+    //         'roles',
+    //         'permissions',
+    //         'model_has_roles',
+    //         'role_has_permissions',
+    //         'permission_role',
+    //         'frontend_settings',
+    //         'settings', // Add any additional tables related to Spatie here
+    //     ];
+
+    //     // Disable foreign key checks
+    //     DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+
+    //     // Get all table names
+    //     $tables = DB::select('SHOW TABLES');
+
+    //     foreach ($tables as $table) {
+    //         $tableName = (array)$table;
+    //         $tableName = reset($tableName); // Extract table name from object
+
+    //         // Skip protected tables
+    //         if (in_array($tableName, $protectedTables)) {
+    //             continue;
+    //         }
+
+    //         // Drop foreign key constraints for the current table (if any)
+    //         $this->dropForeignKeys($tableName);
+
+    //         // Truncate table if it's not protected
+    //         DB::table($tableName)->truncate();
+    //     }
+
+    //     // Delete users where user_type is not 'admin' or 'demo admin'
+    //     dB::table('users')
+    //         ->whereIn('user_type', ['user', 'provider', 'handyman'])
+    //         ->delete();
+
+    //     // Re-enable foreign key checks
+    //     DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+    //     return redirect()->route('setting.index')->with('success', 'Database has been reset successfully.');
+    // }
+
 
 
 
@@ -327,13 +509,16 @@ class SettingsController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+        //dd($request->all());
+
+
 
         $rules = Setting::getSelectedValidationRules(array_keys($request->all()));
         // dd($request->all());
         // dd($request, $rules);
 
         $data = $this->validate($request, $rules);
+
         $validSettings = array_keys($rules);
 
         if ($request->has('firebase_json_file')) {
@@ -357,7 +542,6 @@ class SettingsController extends Controller
             }
             $file->move($directoryPath, $fileName);
         }
-
 
         foreach ($data as $key => $val) {
             if (in_array($key, $validSettings)) {

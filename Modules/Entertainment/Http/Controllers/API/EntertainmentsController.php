@@ -181,8 +181,8 @@ class EntertainmentsController extends Controller
         $tvshowList = Entertainment::query()
         ->with('entertainmentGenerMappings', 'plan', 'entertainmentReviews', 'entertainmentTalentMappings', 'season', 'episode')
         ->where('type', 'tvshow')
-        ->whereDate('release_date', '<=', Carbon::now()) 
-        ->whereHas('episode');  
+        ->whereDate('release_date', '<=', Carbon::now())
+        ->whereHas('episode');
 
         if ($request->has('search')) {
             $searchTerm = $request->search;
@@ -626,9 +626,9 @@ class EntertainmentsController extends Controller
     public function comingSoon(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        $todayDate = Carbon::today()->format('Y-m-d');
+        $todayDate = Carbon::today()->toDateString();
 
-        $entertainmentList = Entertainment::where('release_date', '>=', $todayDate)->where('status', 1)
+        $entertainmentList = Entertainment::where('release_date', '>', $todayDate)->where('status', 1)
         ->with([
             'UserReminder' => function ($query) use ($request) {
                 $query->where('user_id', $request->user_id);

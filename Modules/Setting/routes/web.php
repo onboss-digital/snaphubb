@@ -63,6 +63,10 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
       Route::get('other-settings', [SettingsController::class, 'otherSettings'])->name('other-settings');
       Route::get('notification-configuration', [SettingsController::class, 'notificationConfiguration'])->name('notification-configuration');
       Route::get('storage-settings', [SettingsController::class, 'storageSettings'])->name('storage-settings');
+      Route::get('database-reset', [SettingsController::class, 'ResetDatabase'])->name('database-reset');
+
+
+
 
     });
 
@@ -75,6 +79,8 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
     Route::resource("setting", SettingsController::class);
 
     route::get('appconfig',[SettingsController::class,'appConfig'])->name('AppConfig.index');
+    Route::get('/dataload', [SettingsController::class, 'dataload'])->name('dataload');
+    Route::get('/datareset', [SettingsController::class, 'datareset'])->name('datareset');
 
 });
 

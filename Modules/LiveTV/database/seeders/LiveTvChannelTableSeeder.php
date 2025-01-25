@@ -613,7 +613,7 @@ class LiveTvChannelTableSeeder extends Seeder
                     ],
                 ],
             ];
-            if (env('IS_DUMMY_DATA')) {
+
                 foreach ($liveTvChannels as $key => $liveTvChannel_data) {
                     $featureImage = $liveTvChannel_data['poster_url'] ?? null;
                     $channelData = Arr::except($liveTvChannel_data, ['poster_url','stream_content_mappings']);
@@ -640,7 +640,7 @@ class LiveTvChannelTableSeeder extends Seeder
                 }
 
                 Schema::enableForeignKeyConstraints();
-        }
+
     }
 
     private function uploadToSpaces($publicPath)

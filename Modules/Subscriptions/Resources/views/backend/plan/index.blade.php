@@ -291,7 +291,8 @@ $(document).on('click', '[data-form-delete]', function() {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
+        confirmButtonText: "Yes, delete it!",
+        reverseButtons: true,
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({

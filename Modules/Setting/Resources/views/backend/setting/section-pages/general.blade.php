@@ -14,11 +14,23 @@
 }}
     @csrf
     <div class="d-flex justify-content-between align-items-center mb-3">
+
         <h4>   <i class="fas fa-cube"></i> {{ __('setting_sidebar.lbl_General') }}</h4>
+
+
+    <div>
       <button type="button" class="btn btn-primary float-right" onclick="clearCache()">
         <i class="fa-solid fa-arrow-rotate-left mx-2"></i>{{ __('settings.purge_cache') }}
       </button>
+
+      {{-- @role('admin')
+      <button type="button" class="btn btn-primary float-right" onclick="resetDatabase()">
+        <i class="fa-solid fa-arrow-rotate-left mx-2"></i>{{ __('setting_sidebar.lbl_database_reset') }}
+      </button>
+     @endrole --}}
     </div>
+    </div>
+
 
     <div class="form-group">
       <label class="form-label">{{ __('setting_bussiness_page.lbl_app') }} <span class="text-danger">*</span></label>
@@ -259,6 +271,71 @@
         }
     });
 }
+
+
+function resetDatabase() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Are you sure you want to reset the Database?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, reset it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Change button text to "Loading..." and disable it
+            let button = document.querySelector('button[onclick="resetDatabase()"]');
+            button.disabled = true;
+            button.innerHTML = '<i class="fa-solid fa-spinner fa-spin mx-2"></i>Loading...';
+
+            fetch('{{ route('backend.settings.database-reset') }}', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Database reset successfully', // Use the dynamic message from the server
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An unexpected error occurred.',
+                        icon: 'error',
+                        showConfirmButton: true
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error clearing cache:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while resetting the database.',
+                    icon: 'error',
+                    showConfirmButton: true
+                });
+            })
+            .finally(() => {
+                // Reset the button text and enable it after the request
+                button.disabled = false;
+                button.innerHTML = '<i class="fa-solid fa-arrow-rotate-left mx-2"></i>{{ __('setting_sidebar.lbl_database_reset') }}';
+            });
+        }
+    });
+}
+
+
+
 
 
 

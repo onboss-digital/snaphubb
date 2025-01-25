@@ -129,8 +129,6 @@ class NotificationTemplateSeeder extends Seeder
             Constant::updateOrCreate(['type' => $value['type'], 'value' => $value['value']], $value);
         }
 
-        echo " Insert: notificationtempletes \n\n";
-
         // Enable foreign key checks!
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
