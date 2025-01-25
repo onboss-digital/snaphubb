@@ -95,12 +95,18 @@ class EntertainmentService
     {
         $entertainment = $this->entertainmentRepository->find($id);
 
+        if(key_exists('trailer_url', $data)){
+            $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
+        }else{
+            $data['trailer_url'] = '';
+        }
+
         if($entertainment->type=='movie'){
 
             $cacheKey = 'movie_'.$id;
             Cache::flush();
 
-            $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
+            // $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
 
             $data['video_url_input'] = ($data['video_upload_type'] == 'Local') ? $data['video_file_input'] : $data['video_url_input'];
           }else{
@@ -108,7 +114,7 @@ class EntertainmentService
             $cacheKey = 'tvshow_'.$id;
             Cache::flush();
 
-            $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
+            // $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
 
           }
 

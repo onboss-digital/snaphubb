@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
               await player.play()
             } catch (error) {
-              console.error('Error trying to autoplay:', error)
+              console.error('Error trying to autoplay:'+ error)
             }
           })
           isVideoLoaded = true
         })
-        .catch((error) => console.error('Error fetching video:', error))
+        .catch((error) => console.error('Error fetching video:'+ error))
     }
    else{
     $('#DeviceSupport').modal('show')
