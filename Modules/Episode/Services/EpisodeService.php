@@ -32,19 +32,19 @@ class EpisodeService
         $cacheKey = 'episode_';
         Cache::forget($cacheKey);
 
-        $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
+        // $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
         $data['video_url_input'] = ($data['video_upload_type'] == 'Local') ? $data['video_file_input'] : $data['video_url_input'];
-       $episode = $this->episodeRepository->create($data);
+        $episode = $this->episodeRepository->create($data);
 
-       if(isset($data['enable_quality']) && $data['enable_quality'] == 1) {
-        $this->episodeRepository->saveQualityMappings(
-            $episode->id,
-            $data['video_quality'],
-            $data['quality_video_url_input'],
-            $data['video_quality_type'],
-            $data['quality_video'],
-        );
-    }
+        if (isset($data['enable_quality']) && $data['enable_quality'] == 1) {
+            $this->episodeRepository->saveQualityMappings(
+                $episode->id,
+                $data['video_quality'],
+                $data['quality_video_url_input'],
+                $data['video_quality_type'],
+                $data['quality_video'],
+            );
+        }
 
 
 
@@ -53,7 +53,7 @@ class EpisodeService
 
     public function update($id, array $data)
     {
-        $cacheKey = 'episode_'.$id;
+        $cacheKey = 'episode_' . $id;
         Cache::flush();
 
         $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
@@ -64,7 +64,7 @@ class EpisodeService
 
     public function delete($id)
     {
-        $cacheKey = 'episode_'.$id;
+        $cacheKey = 'episode_' . $id;
         Cache::flush();
 
 
@@ -73,7 +73,7 @@ class EpisodeService
 
     public function restore($id)
     {
-        $cacheKey = 'episode_'.$id;
+        $cacheKey = 'episode_' . $id;
         Cache::flush();
 
 
@@ -82,7 +82,7 @@ class EpisodeService
 
     public function forceDelete($id)
     {
-        $cacheKey = 'episode_'.$id;
+        $cacheKey = 'episode_' . $id;
         Cache::flush();
 
 
@@ -93,85 +93,85 @@ class EpisodeService
     {
         $query = $this->getFilteredData($filter);
         return $datatable->eloquent($query)
-        ->editColumn('poster_url', function ($data) {
-            $seasonName = optional($data->seasondata)->name;
-            $type = 'episode';
-            $imageUrl = setBaseUrlWithFileName($data->poster_url);
-            return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'seasonName' => $seasonName, 'type' => $type])->render();
-        })
+            ->editColumn('poster_url', function ($data) {
+                $seasonName = optional($data->seasondata)->name;
+                $type = 'episode';
+                $imageUrl = setBaseUrlWithFileName($data->poster_url);
+                return view('components.media-item', ['thumbnail' => $imageUrl, 'name' => $data->name, 'seasonName' => $seasonName, 'type' => $type])->render();
+            })
 
-        ->editColumn('entertainment_id', function ($data) {
-            return optional($data->entertainmentdata)->name;
-        })
-
-
-        ->editColumn('season_id', function ($data) {
-            return optional($data->seasondata)->name;
-        })
+            ->editColumn('entertainment_id', function ($data) {
+                return optional($data->entertainmentdata)->name;
+            })
 
 
-        ->filterColumn('season_id', function ($data, $keyword) {
-            if (!empty($keyword)) {
-                $data->whereHas('seasondata', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
-                });
-            }
-        })
-
-        ->editColumn('plan_id', function ($data) {
-            return optional($data->plan)->name ?? '-';
-        })
+            ->editColumn('season_id', function ($data) {
+                return optional($data->seasondata)->name;
+            })
 
 
-        ->filterColumn('plan_id', function ($query, $keyword) {
-            if (!empty($keyword)) {
-                $query->whereHas('plan', function ($query) use ($keyword) {
-                    $query->where('name', 'like', '%' . $keyword . '%');
-                });
-            }
-        })
+            ->filterColumn('season_id', function ($data, $keyword) {
+                if (!empty($keyword)) {
+                    $data->whereHas('seasondata', function ($q) use ($keyword) {
+                        $q->where('name', 'like', '%' . $keyword . '%');
+                    });
+                }
+            })
 
-        ->filterColumn('entertainment_id', function($query, $keyword) {
-            $query->where('entertainment_id', $keyword);
-        })
-
-        ->filterColumn('entertainment_id', function ($data, $keyword) {
-            if (!empty($keyword)) {
-                $data->whereHas('entertainmentdata', function ($q) use ($keyword) {
-                    $q->where('name', 'like', '%' . $keyword . '%');
-                });
-            }
-        })
+            ->editColumn('plan_id', function ($data) {
+                return optional($data->plan)->name ?? '-';
+            })
 
 
-        ->filterColumn('season_id', function($query, $keyword) {
-            $query->where('season_id', $keyword);
-        })
+            ->filterColumn('plan_id', function ($query, $keyword) {
+                if (!empty($keyword)) {
+                    $query->whereHas('plan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    });
+                }
+            })
 
-          ->addColumn('check', function ($data) {
-              return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$data->id.'"  name="datatable_ids[]" value="'.$data->id.'" data-type="episode" onclick="dataTableRowCheck('.$data->id.',this)">';
-          })
-          ->addColumn('action', function ($data) {
-              return view('episode::backend.episode.action', compact('data'));
-          })
-          ->editColumn('status', function ($row) {
-            $checked = $row->status ? 'checked="checked"' : ''; // Check if status is active
-            $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
+            ->filterColumn('entertainment_id', function ($query, $keyword) {
+                $query->where('entertainment_id', $keyword);
+            })
 
-            return '
+            ->filterColumn('entertainment_id', function ($data, $keyword) {
+                if (!empty($keyword)) {
+                    $data->whereHas('entertainmentdata', function ($q) use ($keyword) {
+                        $q->where('name', 'like', '%' . $keyword . '%');
+                    });
+                }
+            })
+
+
+            ->filterColumn('season_id', function ($query, $keyword) {
+                $query->where('season_id', $keyword);
+            })
+
+            ->addColumn('check', function ($data) {
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $data->id . '"  name="datatable_ids[]" value="' . $data->id . '" data-type="episode" onclick="dataTableRowCheck(' . $data->id . ',this)">';
+            })
+            ->addColumn('action', function ($data) {
+                return view('episode::backend.episode.action', compact('data'));
+            })
+            ->editColumn('status', function ($row) {
+                $checked = $row->status ? 'checked="checked"' : ''; // Check if status is active
+                $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
+
+                return '
                 <div class="form-check form-switch">
                     <input type="checkbox" data-url="' . route('backend.episodes.update_status', $row->id) . '"
                         data-token="' . csrf_token() . '" class="switch-status-change form-check-input"
                         id="datatable-row-' . $row->id . '" name="status" value="' . $row->id . '" ' . $checked . ' ' . $disabled . '>
                 </div>
             ';
-        })
-        ->orderColumn('status', function ($query, $order) {
-            $query->orderBy('status', $order);
-        })
-          ->editColumn('updated_at', fn($data) =>formatUpdatedAt($data->updated_at))
+            })
+            ->orderColumn('status', function ($query, $order) {
+                $query->orderBy('status', $order);
+            })
+            ->editColumn('updated_at', fn($data) => formatUpdatedAt($data->updated_at))
             ->orderColumns(['id'], '-:column $1')
-            ->rawColumns(['action', 'status', 'check','poster_url','entertainment_id','season_id','plan_id'])
+            ->rawColumns(['action', 'status', 'check', 'poster_url', 'entertainment_id', 'season_id', 'plan_id'])
             ->toJson();
     }
 
@@ -217,106 +217,110 @@ class EpisodeService
     }
 
 
-    public function getEpisodeList($tvshow_id,$season_index){
+    public function getEpisodeList($tvshow_id, $season_index)
+    {
 
-     $curl = curl_init();
+        $curl = curl_init();
 
-     $api_key=gettmdbapiKey();
+        $api_key = gettmdbapiKey();
 
-     curl_setopt_array($curl, array(
-       CURLOPT_URL => 'https://api.themoviedb.org/3/tv/'.$tvshow_id.'/season/'.$season_index.'?api_key='.$api_key,
-       CURLOPT_RETURNTRANSFER => true,
-       CURLOPT_ENCODING => '',
-       CURLOPT_MAXREDIRS => 10,
-       CURLOPT_TIMEOUT => 0,
-       CURLOPT_FOLLOWLOCATION => true,
-       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-       CURLOPT_CUSTOMREQUEST => 'GET',
-     ));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.themoviedb.org/3/tv/' . $tvshow_id . '/season/' . $season_index . '?api_key=' . $api_key,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
 
-     $response = curl_exec($curl);
+        $response = curl_exec($curl);
 
-     curl_close($curl);
+        curl_close($curl);
 
-     return $response;
+        return $response;
 
     }
 
-    public function getConfiguration(){
+    public function getConfiguration()
+    {
 
-        $api_key=gettmdbapiKey();
+        $api_key = gettmdbapiKey();
 
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://api.themoviedb.org/3/configuration?api_key='.$api_key,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_URL => 'https://api.themoviedb.org/3/configuration?api_key=' . $api_key,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
         ));
 
-       $response = curl_exec($curl);
+        $response = curl_exec($curl);
 
-       curl_close($curl);
+        curl_close($curl);
 
-       return $response;
-
-    }
-
-    public function  getEpisodeDetails($tvshow_id,$season_id, $episode_id){
-
-      $curl = curl_init();
-
-     $api_key=gettmdbapiKey();
-
-      curl_setopt_array($curl, array(
-        CURLOPT_URL => 'https://api.themoviedb.org/3/tv/'.$tvshow_id.'/season/'.$season_id.'/episode/'.$episode_id.'?api_key='.$api_key,
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => '',
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 0,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => 'GET',
-      ));
-
-      $response = curl_exec($curl);
-
-      curl_close($curl);
-
-      return $response;
+        return $response;
 
     }
 
-    public function getEpisodevideo($tvshow_id,$season_id, $episode_id){
+    public function getEpisodeDetails($tvshow_id, $season_id, $episode_id)
+    {
 
-       $curl = curl_init();
+        $curl = curl_init();
 
-       $api_key=gettmdbapiKey();
+        $api_key = gettmdbapiKey();
 
-       curl_setopt_array($curl, array(
-         CURLOPT_URL => 'https://api.themoviedb.org/3/tv/'.$tvshow_id.'/season/'.$season_id.'/episode/'.$episode_id.'/videos?api_key='.$api_key,
-         CURLOPT_RETURNTRANSFER => true,
-         CURLOPT_ENCODING => '',
-         CURLOPT_MAXREDIRS => 10,
-         CURLOPT_TIMEOUT => 0,
-         CURLOPT_FOLLOWLOCATION => true,
-         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-         CURLOPT_CUSTOMREQUEST => 'GET',
-         CURLOPT_HTTPHEADER => array(
-           'accept: application/json'
-         ),
-       ));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.themoviedb.org/3/tv/' . $tvshow_id . '/season/' . $season_id . '/episode/' . $episode_id . '?api_key=' . $api_key,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+        ));
 
-       $response = curl_exec($curl);
+        $response = curl_exec($curl);
 
-       curl_close($curl);
+        curl_close($curl);
 
-       return $response;
+        return $response;
+
+    }
+
+    public function getEpisodevideo($tvshow_id, $season_id, $episode_id)
+    {
+
+        $curl = curl_init();
+
+        $api_key = gettmdbapiKey();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.themoviedb.org/3/tv/' . $tvshow_id . '/season/' . $season_id . '/episode/' . $episode_id . '/videos?api_key=' . $api_key,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'accept: application/json'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $response;
     }
 
 

@@ -38,7 +38,7 @@ class EntertainmentService
 
         Cache::flush();
 
-        $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
+        // $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
 
 
 

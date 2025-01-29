@@ -13,20 +13,20 @@ use Modules\Genres\Models\Genres;
 use Modules\CastCrew\Models\CastCrew;
 use Modules\Entertainment\Trait\ImportMovieTrait;
 use Modules\Entertainment\Repositories\EntertainmentRepositoryInterface;
-use  Modules\Genres\Repositories\GenreRepositoryInterface;
+use Modules\Genres\Repositories\GenreRepositoryInterface;
 use Modules\Entertainment\Services\TvShowService;
 use Modules\World\Models\Country;
 use Illuminate\Support\Facades\Cache;
 
 class TVshowController extends Controller
 {
-     protected string $exportClass = '\App\Exports\TVshowExport';
-     use ImportMovieTrait;
-     protected $tvShowService;
+    protected string $exportClass = '\App\Exports\TVshowExport';
+    use ImportMovieTrait;
+    protected $tvShowService;
 
     use ModuleTrait {
         initializeModuleTrait as private traitInitializeModuleTrait;
-        }
+    }
 
     public function __construct(TvShowService $tvShowService)
     {
@@ -106,12 +106,12 @@ class TVshowController extends Controller
         ];
         $export_url = route('backend.tvshows.export');
 
-        $geners=Genres::where('status',1)->get();
-        $plan=Plan::where('status',1)->get();
+        $geners = Genres::where('status', 1)->get();
+        $plan = Plan::where('status', 1)->get();
 
-        $movie_language=Constant::where('type','movie_language')->get();
+        $movie_language = Constant::where('type', 'movie_language')->get();
 
-        return view('entertainment::backend.tvshows.index', compact('module_action', 'filter', 'export_import', 'export_columns', 'export_url','geners','plan','movie_language'));
+        return view('entertainment::backend.tvshows.index', compact('module_action', 'filter', 'export_import', 'export_columns', 'export_url', 'geners', 'plan', 'movie_language'));
 
     }
 
@@ -127,7 +127,7 @@ class TVshowController extends Controller
     public function index_data(Datatables $datatable, Request $request)
     {
         $filter = $request->filter;
-        $type='tvshow';
+        $type = 'tvshow';
         return $this->tvShowService->getDataTable($datatable, $filter, $type);
     }
 
@@ -136,35 +136,35 @@ class TVshowController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-      {
-        $upload_url_type=Constant::where('type','upload_type')->get();
+    {
+        $upload_url_type = Constant::where('type', 'upload_type')->get();
 
         $assets = ['textarea'];
 
-        $plan=Plan::where('status',1)->get();
+        $plan = Plan::where('status', 1)->get();
 
-        $movie_language=Constant::where('type','movie_language')->get();
+        $movie_language = Constant::where('type', 'movie_language')->get();
 
-        $genres=Genres::where('status',1)->get();
+        $genres = Genres::where('status', 1)->get();
 
         $numberOptions = collect(range(1, 10))->mapWithKeys(function ($number) {
             return [$number => $number];
         });
 
-        $video_quality=Constant::where('type','video_quality')->get();
+        $video_quality = Constant::where('type', 'video_quality')->get();
 
-        $actors=CastCrew::where('type','actor')->get();
-        $directors=CastCrew::where('type','director')->get();
+        $actors = CastCrew::where('type', 'actor')->get();
+        $directors = CastCrew::where('type', 'director')->get();
         $countries = Country::where('status', 1)->get();
 
-        $type='tvshow';
+        $type = 'tvshow';
 
         $module_title = __('tvshow.add_title');
 
-        $mediaUrls =  getMediaUrls();
+        $mediaUrls = getMediaUrls();
 
 
-        return view('entertainment::backend.tvshows.create', compact('upload_url_type','assets','plan','movie_language','genres','numberOptions','actors','directors','countries','video_quality','type','module_title','mediaUrls'));
+        return view('entertainment::backend.tvshows.create', compact('upload_url_type', 'assets', 'plan', 'movie_language', 'genres', 'numberOptions', 'actors', 'directors', 'countries', 'video_quality', 'type', 'module_title', 'mediaUrls'));
     }
 
 
@@ -189,45 +189,45 @@ class TVshowController extends Controller
      */
     public function edit($id)
     {
-        $data = Entertainment::where('id',$id)->with('entertainmentGenerMappings','entertainmentTalentMappings')->first();
+        $data = Entertainment::where('id', $id)->with('entertainmentGenerMappings', 'entertainmentTalentMappings')->first();
         $tmdb_id = $data->tmdb_id;
         $data->thumbnail_url = setBaseUrlWithFileName($data->thumbnail_url);
-        $data->poster_url =  setBaseUrlWithFileName($data->poster_url);
+        $data->poster_url = setBaseUrlWithFileName($data->poster_url);
         $data['genres'] = $data->entertainmentGenerMappings->isEmpty() ? [] : $data->entertainmentGenerMappings->pluck('genre_id')->toArray();
         $data['countries'] = $data->entertainmentCountryMappings->isEmpty() ? [] : $data->entertainmentCountryMappings->pluck('country_id')->toArray();
         $data['actors'] = $data->entertainmentTalentMappings->isEmpty() ? [] : $data->entertainmentTalentMappings->pluck('talent_id')->toArray();
         $data['directors'] = $data->entertainmentTalentMappings->isEmpty() ? [] : $data->entertainmentTalentMappings->pluck('talent_id')->toArray();
 
-        $upload_url_type=Constant::where('type','upload_type')->get();
+        $upload_url_type = Constant::where('type', 'upload_type')->get();
 
 
-        if($data->trailer_url_type =='Local'){
+        // if($data->trailer_url_type =='Local'){
 
-            $data->trailer_url = setBaseUrlWithFileName($data->trailer_url);
-        }
+        //     $data->trailer_url = setBaseUrlWithFileName($data->trailer_url);
+        // }
 
 
-        $plan=Plan::where('status',1)->get();
+        $plan = Plan::where('status', 1)->get();
 
         $assets = ['textarea'];
 
 
-        $movie_language=Constant::where('type','movie_language')->get();
+        $movie_language = Constant::where('type', 'movie_language')->get();
 
-        $genres=Genres::where('status',1)->get();
+        $genres = Genres::where('status', 1)->get();
 
         $numberOptions = collect(range(1, 10))->mapWithKeys(function ($number) {
             return [$number => $number];
         });
 
-        $actors=CastCrew::where('type','actor')->get();
-        $directors=CastCrew::where('type','director')->get();
+        $actors = CastCrew::where('type', 'actor')->get();
+        $directors = CastCrew::where('type', 'director')->get();
         $countries = Country::where('status', 1)->get();
         $module_title = __('tvshow.edit_title');
 
-        $mediaUrls =  getMediaUrls();
+        $mediaUrls = getMediaUrls();
 
-        return view('entertainment::backend.tvshows.edit', compact('data','tmdb_id','assets','upload_url_type','plan','movie_language','genres','countries','numberOptions','actors','directors','mediaUrls','module_title'));
+        return view('entertainment::backend.tvshows.edit', compact('data', 'tmdb_id', 'assets', 'upload_url_type', 'plan', 'movie_language', 'genres', 'countries', 'numberOptions', 'actors', 'directors', 'mediaUrls', 'module_title'));
 
     }
 
@@ -252,9 +252,9 @@ class TVshowController extends Controller
         $tv_show_id = $id;
         $tvshow_details = null;
 
-        $tvshow=Entertainment::where('tmdb_id',  $tv_show_id)->where('type','tvshow')->first();
+        $tvshow = Entertainment::where('tmdb_id', $tv_show_id)->where('type', 'tvshow')->first();
 
-        if(!empty($tvshow)){
+        if (!empty($tvshow)) {
 
             $message = __('tvshow.already_added_tvshow');
 
@@ -266,18 +266,18 @@ class TVshowController extends Controller
         }
 
 
-        $configuration =$this->getConfiguration();
+        $configuration = $this->getConfiguration();
 
         $configurationData = json_decode($configuration, true);
 
         while ($configurationData === null) {
 
-            $configuration =$this->getConfiguration();
+            $configuration = $this->getConfiguration();
 
             $configurationData = json_decode($configuration, true);
         }
 
-        if(isset($configurationData['success']) && $configurationData['success'] === false) {
+        if (isset($configurationData['success']) && $configurationData['success'] === false) {
             return response()->json([
                 'success' => false,
                 'message' => $configurationData['status_message']
@@ -317,17 +317,17 @@ class TVshowController extends Controller
             ], 400);
         }
 
-        $trailer_url_type=null;
-        $trailer_url=null;
+        $trailer_url_type = null;
+        $trailer_url = null;
 
-        if(isset($TVshowVideos['results']) && is_array($TVshowVideos['results'])) {
+        if (isset($TVshowVideos['results']) && is_array($TVshowVideos['results'])) {
 
             foreach ($TVshowVideos['results'] as $video) {
 
-                if($video['type'] == 'Trailer'){
+                if ($video['type'] == 'Trailer') {
 
-                    $trailer_url_type= $video['site'];
-                    $trailer_url='https://www.youtube.com/watch?v='.$video['key'];
+                    $trailer_url_type = $video['site'];
+                    $trailer_url = 'https://www.youtube.com/watch?v=' . $video['key'];
 
                 }
             }
@@ -358,11 +358,11 @@ class TVshowController extends Controller
             }
         }
 
-       $all_language= Constant::where('type','movie_language')->where('status',1)->get();
+        $all_language = Constant::where('type', 'movie_language')->where('status', 1)->get();
 
         $genersIds = [];
 
-        if(isset($TVshowDetail['genres']) && is_array($TVshowDetail['genres'])) {
+        if (isset($TVshowDetail['genres']) && is_array($TVshowDetail['genres'])) {
             foreach ($TVshowDetail['genres'] as $genre) {
                 $genre_data = [
                     'name' => $genre['name'],
@@ -379,9 +379,10 @@ class TVshowController extends Controller
 
         }
 
-        $all_genres=Genres::where('status',1)->get();
+        $all_genres = Genres::where('status', 1)->get();
 
-        function formatDuration($minutes) {
+        function formatDuration($minutes)
+        {
             $hours = floor($minutes / 60);
             $minutes = $minutes % 60;
             return sprintf('%02d:%02d', $hours, $minutes);
@@ -391,7 +392,7 @@ class TVshowController extends Controller
         $castcrew = $this->getTvCastCrew($tv_show_id);
         $castcrewDetail = json_decode($castcrew, true);
 
-        while($castcrewDetail === null) {
+        while ($castcrewDetail === null) {
 
             $castcrew = $this->getTvCastCrew($tv_show_id);
             $castcrewDetail = json_decode($castcrew, true);
@@ -409,49 +410,49 @@ class TVshowController extends Controller
         $actorCount = 0;
         $directorCount = 0;
         $maxCount = 5;
-        $all_actors=[];
-        $all_directors=[];
+        $all_actors = [];
+        $all_directors = [];
 
 
 
-       foreach ($castcrewDetail['crew'] as $crew) {
-         if (($directorCount >= $maxCount)) {
-             break;
-           }
+        foreach ($castcrewDetail['crew'] as $crew) {
+            if (($directorCount >= $maxCount)) {
+                break;
+            }
 
-        if (isset($castcrewDetail['cast']) && is_array($castcrewDetail['cast'])) {
-            foreach ($castcrewDetail['cast'] as $cast) {
-                if (($actorCount >= $maxCount)) {
-                    break;
-                }
+            if (isset($castcrewDetail['cast']) && is_array($castcrewDetail['cast'])) {
+                foreach ($castcrewDetail['cast'] as $cast) {
+                    if (($actorCount >= $maxCount)) {
+                        break;
+                    }
 
-                if ($cast['known_for_department'] == 'Acting') {
-
-                    $cast_details = $this->getCrewDetials($cast['id']);
-                    $castDetails = json_decode($cast_details, true);
-
-                    while($castcrewDetail === null) {
+                    if ($cast['known_for_department'] == 'Acting') {
 
                         $cast_details = $this->getCrewDetials($cast['id']);
                         $castDetails = json_decode($cast_details, true);
-                    }
+
+                        while ($castcrewDetail === null) {
+
+                            $cast_details = $this->getCrewDetials($cast['id']);
+                            $castDetails = json_decode($cast_details, true);
+                        }
 
 
-                    if (!empty($castDetails)) {
+                        if (!empty($castDetails)) {
 
-                        $cast_data = [
-                            'name' => $castDetails['name'],
-                            'type' => 'actor',
-                            'tmdb_id'=> $tv_show_id,
-                            'file_url' => $configurationData['images']['secure_base_url'] . 'original' . $castDetails['profile_path'],
-                            'bio' => $castDetails['biography'],
-                            'place_of_birth' => $castDetails['place_of_birth'],
-                            'dob' => $castDetails['birthday'],
-                            'designation' => null,
-                        ];
+                            $cast_data = [
+                                'name' => $castDetails['name'],
+                                'type' => 'actor',
+                                'tmdb_id' => $tv_show_id,
+                                'file_url' => $configurationData['images']['secure_base_url'] . 'original' . $castDetails['profile_path'],
+                                'bio' => $castDetails['biography'],
+                                'place_of_birth' => $castDetails['place_of_birth'],
+                                'dob' => $castDetails['birthday'],
+                                'designation' => null,
+                            ];
 
                             $castRecord = CastCrew::updateOrCreate(
-                                ['name' => $cast_data['name'], 'dob' => $cast_data['dob'] ],
+                                ['name' => $cast_data['name'], 'dob' => $cast_data['dob']],
                                 $cast_data
                             );
                             if ($actorCount < $maxCount) {
@@ -465,11 +466,11 @@ class TVshowController extends Controller
                 }
             }
 
-          $all_actors=CastCrew::where('type', 'actor')->get();
+            $all_actors = CastCrew::where('type', 'actor')->get();
 
 
-        if (isset($castcrewDetail['crew']) && is_array($castcrewDetail['crew'])) {
-              if ($crew['known_for_department'] == 'Directing') {
+            if (isset($castcrewDetail['crew']) && is_array($castcrewDetail['crew'])) {
+                if ($crew['known_for_department'] == 'Directing') {
                     $crew_details = $this->getCrewDetials($crew['id']);
                     $crewDetails = json_decode($crew_details, true);
 
@@ -478,7 +479,7 @@ class TVshowController extends Controller
                         $crew_data = [
                             'name' => $crewDetails['name'],
                             'type' => 'director',
-                            'tmdb_id'=> $tv_show_id,
+                            'tmdb_id' => $tv_show_id,
                             'file_url' => $configurationData['images']['secure_base_url'] . 'original' . $crewDetails['profile_path'],
                             'bio' => $crewDetails['biography'],
                             'place_of_birth' => $crewDetails['place_of_birth'],
@@ -486,51 +487,51 @@ class TVshowController extends Controller
                             'designation' => null,
                         ];
 
-                            $crewRecord = CastCrew::updateOrCreate(
-                                ['name' => $crew_data['name'], 'dob' => $crew_data['dob']],
-                                $crew_data
-                            );
+                        $crewRecord = CastCrew::updateOrCreate(
+                            ['name' => $crew_data['name'], 'dob' => $crew_data['dob']],
+                            $crew_data
+                        );
 
-                            if ($directorCount < $maxCount) {
-                                $directors[] = $crewRecord->id;
-                                $directorCount++;
+                        if ($directorCount < $maxCount) {
+                            $directors[] = $crewRecord->id;
+                            $directorCount++;
 
-                            }
                         }
                     }
                 }
             }
+        }
 
-           $all_directors=CastCrew::where('type', 'director')->get();
+        $all_directors = CastCrew::where('type', 'director')->get();
 
 
         $data = [
-            'id'=>  $tv_show_id,
+            'id' => $tv_show_id,
             'poster_url' => $configurationData['images']['secure_base_url'] . 'original' . $TVshowDetail['poster_path'],
             'thumbnail_url' => $configurationData['images']['secure_base_url'] . 'original' . $TVshowDetail['backdrop_path'],
             'name' => $TVshowDetail['original_name'],
             'description' => $TVshowDetail['overview'],
-            'trailer_url_type'=>$trailer_url_type,
-            'trailer_url'=>$trailer_url,
+            'trailer_url_type' => $trailer_url_type ?? '',
+            'trailer_url' => $trailer_url ?? '',
             'language' => $language,
             'genres' => $genersIds,
             'is_restricted' => $TVshowDetail['adult'],
             'release_date' => $TVshowDetail['first_air_date'],
             'actors' => $actors,
             'directors' => $directors,
-            'movie_access'=>'free',
-            'all_actors'=>$all_actors,
-            'all_directors'=>$all_directors,
-            'all_language'=>$all_language,
-            'all_genres'=>$all_genres,
+            'movie_access' => 'free',
+            'all_actors' => $all_actors,
+            'all_directors' => $all_directors,
+            'all_language' => $all_language,
+            'all_genres' => $all_genres,
 
         ];
 
-         return response()->json([
-                'success' => true,
-                'data' => $data,
-            ], 200);
-        }
+        return response()->json([
+            'success' => true,
+            'data' => $data,
+        ], 200);
+    }
 
 
 

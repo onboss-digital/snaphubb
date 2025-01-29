@@ -684,12 +684,12 @@ tinymce.init({
                             return true;
                         }
                     }
-            var initialSelectedValue = document.getElementById('trailer_url_type').value;
-            handleTrailerUrlTypeChange(initialSelectedValue);
-            $('#trailer_url_type').change(function() {
-                var selectedValue = $(this).val();
-                handleTrailerUrlTypeChange(selectedValue);
-            });
+            // var initialSelectedValue = document.getElementById('trailer_url_type').value;
+            // handleTrailerUrlTypeChange(initialSelectedValue);
+            // $('#trailer_url_type').change(function() {
+            //     var selectedValue = $(this).val();
+            //     handleTrailerUrlTypeChange(selectedValue);
+            // });
             var URLInput = document.querySelector('input[name="trailer_url"]');
                 if (URLInput) {
                     URLInput.addEventListener('input', function() {
