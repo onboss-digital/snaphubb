@@ -104,7 +104,7 @@
 
 
                         </div> --}}
-                        <div>
+                        {{-- <div>
                             <div id="url_input">
                                 {{ html()->label(__('movie.lbl_trailer_url') .' <span class="text-danger">*</span>', 'trailer_url')->class('form-label') }}
                                 {{ html()->text('trailer_url')->attribute('value', old('trailer_url'))->placeholder(__('placeholder.lbl_trailer_url'))->class('form-control') }}
@@ -140,7 +140,7 @@
                                 <div class="invalid-feedback" id="trailer-file-error">Video File field is required</div>
 
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="col-lg-12">
                         <div class="d-flex align-items-center justify-content-between mb-2">
