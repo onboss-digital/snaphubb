@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\API\SettingController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+use App\Http\Controllers\WebHookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -52,3 +53,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
+
+
+//webhook cardpanda
+Route::group(['prefix' => 'webhook'], function () {
+    Route::controller(WebHookController::class)->group(function () {
+        Route::post('cardpanda', 'cardpanda');
+    });
+});
+
+Route::get('get-tranding-data', [DashboardController::class, 'getTrandingData']);
