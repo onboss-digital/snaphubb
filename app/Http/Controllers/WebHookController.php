@@ -56,8 +56,7 @@ class WebHookController extends Controller
         $plan = Plan::findOrFail($plan_id);
         $limitation_data = PlanlimitationMappingResource::collection($plan->planLimitation);
 
-        $start_date = now();
-        $end_date = $this->get_plan_expiration_date($start_date, $plan->duration, $plan->duration_value);
+        $end_date = $this->get_plan_expiration_date(now(), $plan->duration, $plan->duration_value);
         $taxes = Tax::active()->get();
         $totalTax = 0;
         foreach ($taxes as $tax) {
@@ -109,30 +108,49 @@ class WebHookController extends Controller
         $data = $request->all();
         $logFile = $logFile ?? $this->logData($data);
         // $logFile = storage_path('logs/cardpanda') . '/cardpanda_20250129_184844.log';
-
-        //laraval set locale
-        app()->setLocale('br');
-
-
         try {
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
-                $logData = json_decode($logContent, true);
+                $logData = json_decode(trim($logContent), true);
 
-                $user = User::firstOrCreate(['email' => $logData['order']['customer']['email']], [
-                    'first_name' => $logData['order']['customer']['first_name'],
-                    'last_name' => $logData['order']['customer']['last_name'],
-                    'email' => $logData['order']['customer']['email'],
-                    'password' => bcrypt('P@55w0rd'),
-                    'user_type' => 'user',
-                ]);
+                if ($logData == null) {
+                    $exploded = explode(' {', trim($logContent));
+                    if (strtotime($exploded[0]) !== false) {
+                        unset($exploded[0]);
+                        $logContent = '{' . implode(' {', $exploded);
+                    }
+                    $logContent = str_replace('}{', '},{', $logContent);
+                    $logData = json_decode(trim($logContent), true);
+                }
 
-                $plan = Plan::orderBy('price', 'asc')->first();
+                if ($logData == null) {
+                    return response()->json(['status' => 'error']);
+                }
 
-                $this->handleSubscrible($plan->id, $plan->price, 'cardpanda', $logData['order']['id'], $user);
+                switch ($logData['event']) {
+                    case 'order.paid':
+                        $user = User::firstOrCreate(['email' => $logData['order']['customer']['email']], [
+                            'first_name' => $logData['order']['customer']['first_name'],
+                            'last_name' => $logData['order']['customer']['last_name'],
+                            'email' => $logData['order']['customer']['email'],
+                            'password' => bcrypt('P@55w0rd'),
+                            'user_type' => 'user',
+                        ]);
 
-                $user->password_decrypted = 'P@55w0rd';
-                event(new Registered($user));
+                        $plan = Plan::orderBy('price', 'asc')->first();
+
+                        $this->handleSubscrible($plan->id, $plan->price, 'cardpanda', $logData['order']['id'], $user);
+
+                        $user->password_decrypted = 'P@55w0rd';
+                        event(new Registered($user));
+                        break;
+                    case 'order.failed':
+                        break;
+                    case 'order.cancelled':
+                        break;
+                    default:
+                        return response()->json(['status' => 'error']);
+                }
 
                 if (file_exists($logFile)) {
                     // unlink($logFile);
