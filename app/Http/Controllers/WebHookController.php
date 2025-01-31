@@ -127,7 +127,7 @@ class WebHookController extends Controller
                 if ($logData == null) {
                     return response()->json(['status' => 'error']);
                 }
-
+                app()->setLocale(env('APP_LOCALE', 'es'));
                 switch ($logData['event']) {
                     case 'order.paid':
                         $user = User::firstOrCreate(['email' => $logData['order']['customer']['email']], [
@@ -143,6 +143,7 @@ class WebHookController extends Controller
                         $this->handleSubscrible($plan->id, $plan->price, 'cartpanda', $logData['order']['id'], $user);
 
                         $user->password_decrypted = 'P@55w0rd';
+
                         event(new Registered($user));
                         break;
                     case 'order.failed':

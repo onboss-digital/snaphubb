@@ -37,20 +37,7 @@ class AuthController extends Controller
     public function verifyEmail(Request $request)
     {
         $user = User::find($request->route('id'));
-        $message = __('auth.email_verified');
-        if (Hash::check('P@55w0rd', $user->password)) {
-            Password::sendResetLink(
-                $user->only('email')
-            );
-            $message = __('auth.email_verified_reset_password');
-        }
-
-       
-
-        return redirect()
-            ->route('login')
-            ->with('success', $message);
-
+        
         if (!$user) {
             return redirect()
                 ->route('login')
@@ -72,12 +59,18 @@ class AuthController extends Controller
         if ($user->markEmailAsVerified()) {
             event(new UserRegistered(user: $user));
         }
-        
+       
+        $message = __('auth.email_verified');
+        if (Hash::check('P@55w0rd', $user->password)) {
+            Password::sendResetLink(
+                $user->only('email')
+            );
+            $message = __('auth.email_verified_reset_password');
+        }
 
-
-
-
-
+        return redirect()
+            ->route('login')
+            ->with('success', $message);
         
     }
 
