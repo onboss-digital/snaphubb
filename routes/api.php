@@ -54,6 +54,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
+Route::post('execute-webhook-logs/{webhook}', [WebHookController::class, 'executeWebhookLogs']);
 
 //webhook cardpanda
 Route::group(['prefix' => 'webhook'], function () {

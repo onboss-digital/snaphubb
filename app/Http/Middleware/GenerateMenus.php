@@ -17,7 +17,7 @@ class GenerateMenus
     public function handle()
     {
         return \Menu::make('menu', function ($menu) {
-            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
+            if (auth()->user()->hasRole('admin') ) {
                 $this->staticMenu($menu, ['title' =>  __('sidebar.main'), 'order' => 0]);
                 $this->mainRoute($menu, [
                     'icon' => 'ph ph-squares-four',

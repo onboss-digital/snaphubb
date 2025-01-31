@@ -69,19 +69,19 @@ function sendNotification($data)
                     }
 
                     break;
-                case 'demo_admin':
+                // case 'demo_admin':
 
-                    $demoadmin = \App\Models\User::role('demo_Admin')->first();
+                //     $demoadmin = \App\Models\User::role('demo_Admin')->first();
 
-                    if (isset($demoadmin->email)) {
-                        try {
-                            $demoadmin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
-                        } catch (\Exception $e) {
-                            Log::error($e);
-                        }
-                    }
+                //     if (isset($demoadmin->email)) {
+                //         try {
+                //             $demoadmin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
+                //         } catch (\Exception $e) {
+                //             Log::error($e);
+                //         }
+                //     }
 
-                    break;
+                //     break;
                 case 'user':
                     if (isset($data['user_id'])) {
                         $user = \App\Models\User::find($data['user_id']);

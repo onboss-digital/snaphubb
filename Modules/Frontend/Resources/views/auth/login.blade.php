@@ -36,7 +36,7 @@
                             </div>
                             <div class="d-flex flex-wrap align-items-center justify-content-between">
                                 <label class="list-group-item d-flex align-items-center"><input class="form-check-input m-0 me-2" type="checkbox">{{__('frontend.remember_me')}}</label>
-                                <a href="/forget-password" >{{__('frontend.forgot_password')}}</a>
+                                <a href="/admin/forgot-password" >{{__('frontend.forgot_password')}}</a>
                             </div>
                             <div class="full-button text-center">
                                 <button type="submit"  id="login-button" class="btn btn-primary w-100">

@@ -56,7 +56,7 @@ class EpisodeService
         $cacheKey = 'episode_' . $id;
         Cache::flush();
 
-        $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
+        // $data['trailer_url'] = ($data['trailer_url_type'] == 'Local') ? $data['trailer_video'] : $data['trailer_url'];
 
         $data['video_url_input'] = ($data['video_upload_type'] == 'Local') ? $data['video_file_input'] : $data['video_url_input'];
         return $this->episodeRepository->update($id, $data);

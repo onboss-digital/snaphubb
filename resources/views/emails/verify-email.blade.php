@@ -32,17 +32,21 @@
         color: #ffffff;
       ">
         <p style="text-align: center;">
-            <div
-                style="
+        <div
+            style="
                 display: block;
                 width: 250px;
                 height: auto;
                 margin: 0px auto 70px;
                 ">
-                <a href="{{ url('/') }}">
-                    <img style="width: 100%; height: auto" src="{{ asset(setting('logo')) }}" alt="SNAPHUB" />
-                </a>
-            </div>
+            <a href="{{ url('/') }}">
+                <img style="width: 100%; height: auto" src="{{ asset(setting('logo')) }}" alt="SNAPHUB" />
+            </a>
+        </div>
+        </p>
+        <p style="text-align: center; font-size: 17px; font-weight: 900">
+            {{ __('email.hello') }}
+            {{ $user->first_name }}
         </p>
         <p style="text-align: center; font-size: 17px; font-weight: 900">
             {{ __('email.welcome') }}
@@ -50,6 +54,23 @@
         <p style="text-align: center">
             {{ __('email.happy_to_have_you') }}
         </p>
+        <p style="text-align: center">
+            {{ __('email.user_details') }}
+        </p>
+
+        <p style="text-align: center">
+            {{ __('email.user_login') }}:{{ $user->email }}<br />
+        </p>
+
+        @if ($user->password_decrypted)
+            <p style="text-align: center">
+                {{ __('email.user_pass') }}:{{ $user->password_decrypted }}<br />
+            </p>
+        @else
+            <p style="text-align: center">
+                {{ __('email.user_pass') }}:**************<br />
+            </p>
+        @endif
         <p style="text-align: center; margin: 20px 0px 70px 0;">
             <a style="
             text-decoration: none;
@@ -78,7 +99,8 @@
           padding-top: 20px;
         ">
             <p style="color: #ffffff; text-align: center;">
-                {{ __('email.contact_us') }} <a style="color: #ff0000" href="mailto:contato@snaphubb.com">contato@snaphubb.com</a>.
+                {{ __('email.contact_us') }} <a style="color: #ff0000"
+                    href="mailto:contato@snaphubb.com">contato@snaphubb.com</a>.
             </p>
             <p style="text-align: center;">{{ __('email.best_regards') }}</p>
         </div>

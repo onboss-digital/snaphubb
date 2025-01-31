@@ -95,6 +95,8 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    'admin_email' => env('MAIL_ADMIN_EMAIL', 'admin@example.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Markdown Mail Settings
@@ -107,7 +109,7 @@ return [
     */
 
     'markdown' => [
-        'theme' => 'default',
+        'theme' => 'snaphubb',
 
         'paths' => [
             resource_path('views/vendor/mail'),
