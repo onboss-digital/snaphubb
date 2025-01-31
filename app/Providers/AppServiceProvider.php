@@ -79,5 +79,17 @@ class AppServiceProvider extends ServiceProvider
                 ]);
         });
 
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+
+            $url = str_replace('/admin', '', $url);
+            return (new MailMessage)
+                ->subject(__('email.subject_prefix') . " | " .
+                    __('email.subject_verify_email_address'))
+                ->view('emails.verify-email', [
+                    'user' => $notifiable,
+                    'actionUrl' => $url
+                ]);
+        });
+
     }
 }

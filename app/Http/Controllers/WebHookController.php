@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
 
+
 class WebHookController extends Controller
 {
     private function logData($data)
@@ -153,12 +154,10 @@ class WebHookController extends Controller
                 }
 
                 if (file_exists($logFile)) {
-                    // unlink($logFile);
+                    unlink($logFile);
                 }
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
-
             Log::error($e->getMessage());
 
             $adminEmail = Config::get('mail.admin_email');

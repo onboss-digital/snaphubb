@@ -25,5 +25,6 @@ return [
     'email_verified_successfully' => 'Email verified successfully.',
     'forgot_password_description' => 'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
     'email_password_reset_link' => 'Email Password Reset Link',
+    'email_verified_reset_password' => 'Email verified successfully. However, your password is still the default password. We have sent you an email with a password reset link.',
 
 ];
