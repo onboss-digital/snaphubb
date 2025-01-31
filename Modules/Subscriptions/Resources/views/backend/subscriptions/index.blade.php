@@ -16,9 +16,10 @@
             <x-slot name="toolbar">
 
                 <div class="input-group flex-nowrap">
-                    <span class="input-group-text pe-0" id="addon-wrapping"><i class="fa-solid fa-magnifying-glass"></i></span>
-                    <input type="text" class="form-control dt-search" placeholder="{{__('placeholder.lbl_search')}}" aria-label="Search"
-                        aria-describedby="addon-wrapping">
+                    <span class="input-group-text pe-0" id="addon-wrapping"><i
+                            class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" class="form-control dt-search" placeholder="{{ __('placeholder.lbl_search') }}"
+                        aria-label="Search" aria-describedby="addon-wrapping">
 
                 </div>
 
@@ -47,8 +48,7 @@
     <script src="{{ asset('js/form/index.js') }}" defer></script>
     <script type="text/javascript" src="{{ asset('vendor/datatable/datatables.min.js') }}"></script>
     <script type="text/javascript" defer>
-        const columns = [
-            {
+        const columns = [{
                 name: 'check',
                 data: 'check',
                 title: '<input type="checkbox" class="form-check-input" name="select_all_table" id="select-all-table" data-type="subscriptions"  onclick="selectAllTable(this)">',
@@ -56,7 +56,7 @@
                 exportable: false,
                 orderable: false,
                 searchable: false,
-            },    
+            },
             {
                 data: 'user_id',
                 name: 'user_id',
@@ -66,6 +66,27 @@
                 data: 'name',
                 name: 'name',
                 title: "{{ __('messages.plan') }}"
+            },
+            {
+                data: 'subscription_transaction.payment_type',
+                name: 'payment_type',
+                title: "{{ __('messages.payment_type') }}",
+                render: function(data, type, row) {
+                    let className, style;
+
+                    switch (data) {
+                        case 'cartpanda':
+                            className = 'badge p-2';
+                            style = 'background-color: #ffff; color: #000;';
+                            break;
+
+                        default:
+                            break;
+                    }
+
+
+                    return '<span class="' + className + '" style="' + style + '">' + data + '</span>';
+                }
             },
 
             {
@@ -97,7 +118,7 @@
                 data: 'status',
                 name: 'status',
                 title: "{{ __('messages.lbl_status') }}",
-                render: function (data, type, row) {
+                render: function(data, type, row) {
                     let capitalizedData = data.charAt(0).toUpperCase() + data.slice(1);
                     let className = data == 'active' ? 'badge bg-success-subtle p-2' : 'badge bg-danger-subtle p-2';
                     return '<span class="' + className + '">' + capitalizedData + '</span>';

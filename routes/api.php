@@ -56,10 +56,10 @@ Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
 Route::post('execute-webhook-logs/{webhook}', [WebHookController::class, 'executeWebhookLogs']);
 
-//webhook cardpanda
+//webhook cartpanda
 Route::group(['prefix' => 'webhook'], function () {
     Route::controller(WebHookController::class)->group(function () {
-        Route::post('cardpanda', 'cardpanda');
+        Route::post('cartpanda', 'cartpanda');
     });
 });
 

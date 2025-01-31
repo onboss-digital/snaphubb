@@ -23,11 +23,11 @@ class WebHookController extends Controller
 {
     private function logData($data)
     {
-        $logDir = storage_path('logs/cardpanda');
+        $logDir = storage_path('logs/cartpanda');
         if (!is_dir($logDir)) {
             mkdir($logDir, 0755, true);
         }
-        $logFile = $logDir . '/cardpanda_' . date('Ymd_His') . '.log';
+        $logFile = $logDir . '/cartpanda_' . date('Ymd_His') . '.log';
         $log = json_encode($data) . PHP_EOL;
         file_put_contents($logFile, $log);
         return $logFile;
@@ -104,11 +104,11 @@ class WebHookController extends Controller
         return $user;
     }
 
-    public function cardpanda(Request $request, $logFile = false)
+    public function cartpanda(Request $request, $logFile = false)
     {
         $data = $request->all();
         $logFile = $logFile ?? $this->logData($data);
-        // $logFile = storage_path('logs/cardpanda') . '/cardpanda_20250129_184844.log';
+        // $logFile = storage_path('logs/cartpanda') . '/cartpanda_20250129_184844.log';
         try {
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
@@ -140,7 +140,7 @@ class WebHookController extends Controller
 
                         $plan = Plan::orderBy('price', 'asc')->first();
 
-                        $this->handleSubscrible($plan->id, $plan->price, 'cardpanda', $logData['order']['id'], $user);
+                        $this->handleSubscrible($plan->id, $plan->price, 'cartpanda', $logData['order']['id'], $user);
 
                         $user->password_decrypted = 'P@55w0rd';
                         event(new Registered($user));
@@ -177,7 +177,7 @@ class WebHookController extends Controller
 
         foreach ($logFiles as $logFile) {
             $request = new Request();
-            $this->cardpanda($request, $logFile);
+            $this->cartpanda($request, $logFile);
         }
 
         return response()->json(['status' => 'success']);

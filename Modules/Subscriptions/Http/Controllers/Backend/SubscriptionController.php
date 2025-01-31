@@ -85,7 +85,7 @@ class SubscriptionController extends Controller
     public function index_data(Datatables $datatable,Request $request)
     {
         $query = Subscription::query()
-            ->with('user');
+            ->with('user', 'subscription_transaction');
 
         $datatable = $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
