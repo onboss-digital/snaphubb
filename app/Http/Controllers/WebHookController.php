@@ -155,7 +155,11 @@ class WebHookController extends Controller
                 }
 
                 if (file_exists($logFile)) {
-                    unlink($logFile);
+                    $successDir = storage_path('logs/cartpanda/success');
+                    if (!is_dir($successDir)) {
+                        mkdir($successDir, 0755, true);
+                    }
+                    rename($logFile, $successDir . '/' . basename($logFile));
                 }
             }
         } catch (\Exception $e) {
@@ -166,6 +170,14 @@ class WebHookController extends Controller
                 $message->to($adminEmail)
                     ->subject('Error Notification');
             });
+
+            if (file_exists($logFile)) {
+                $failDir = storage_path('logs/cartpanda/fail');
+                if (!is_dir($failDir)) {
+                    mkdir($failDir, 0755, true);
+                }
+                rename($logFile, $failDir . '/' . basename($logFile));
+            }
         }
 
         return response()->json(['status' => 'success']);
