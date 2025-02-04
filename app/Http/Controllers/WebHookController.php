@@ -107,7 +107,8 @@ class WebHookController extends Controller
     public function cartpanda(Request $request, $logFile = false)
     {
         $data = $request->all();
-        $logFile = $logFile ?? $this->logData($data);
+        $logFile = $logFile == false ? $this->logData($data) : $logFile;
+
         // $logFile = storage_path('logs/cartpanda') . '/cartpanda_20250129_184844.log';
         try {
             if (file_exists($logFile)) {
