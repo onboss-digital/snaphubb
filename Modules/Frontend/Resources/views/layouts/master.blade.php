@@ -32,6 +32,8 @@
     @stack('after-styles')
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-frontend', 'resources/assets/sass/app.scss') }} --}}
+    <x-google-analytics />
+
 </head>
 
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
