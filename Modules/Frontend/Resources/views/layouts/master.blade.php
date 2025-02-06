@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark" dir="{{ session()->has('dir') ? session()->get('dir') : 'ltr' }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark"
+    dir="{{ session()->has('dir') ? session()->get('dir') : 'ltr' }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="baseUrl" content="{{url('/')}}" />
+    <meta name="baseUrl" content="{{ url('/') }}" />
     <link rel="icon" type="image/png" href="{{ asset(setting('logo')) }}">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset(setting('favicon')) }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +20,9 @@
 
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300&amp;display=swap"
+        rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('modules/frontend/style.css') }}">
 
@@ -34,6 +37,19 @@
     {{-- {{ module_vite('build-frontend', 'resources/assets/sass/app.scss') }} --}}
     <x-google-analytics />
 
+    <script type="text/javascript">
+        (function(c, l, a, r, i, t, y) {
+            c[a] = c[a] || function() {
+                (c[a].q = c[a].q || []).push(arguments)
+            };
+            t = l.createElement(r);
+            t.async = 1;
+            t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0];
+            y.parentNode.insertBefore(t, y);
+        })(window, document, "clarity", "script", "q5ddtgbeex");
+    </script>
+
 </head>
 
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
@@ -41,7 +57,7 @@
 
     @yield('content')
 
-     @include('frontend::layouts.footer')
+    @include('frontend::layouts.footer')
 
     @include('frontend::components.partials.back-to-top')
 
@@ -54,19 +70,18 @@
     {{-- {{ module_vite('build-frontend', 'resources/assets/js/app.js') }} --}}
     @stack('after-scripts')
     <script>
+        const currencyFormat = (amount) => {
+            const DEFAULT_CURRENCY = JSON.parse(@json(json_encode(Currency::getDefaultCurrency(true))))
+            const noOfDecimal = DEFAULT_CURRENCY.no_of_decimal
+            const decimalSeparator = DEFAULT_CURRENCY.decimal_separator
+            const thousandSeparator = DEFAULT_CURRENCY.thousand_separator
+            const currencyPosition = DEFAULT_CURRENCY.currency_position
+            const currencySymbol = DEFAULT_CURRENCY.currency_symbol
+            return formatCurrency(amount, noOfDecimal, decimalSeparator, thousandSeparator, currencyPosition,
+                currencySymbol)
+        }
 
-const currencyFormat = (amount) => {
-        const DEFAULT_CURRENCY = JSON.parse(@json(json_encode(Currency::getDefaultCurrency(true))))
-         const noOfDecimal = DEFAULT_CURRENCY.no_of_decimal
-         const decimalSeparator = DEFAULT_CURRENCY.decimal_separator
-         const thousandSeparator = DEFAULT_CURRENCY.thousand_separator
-         const currencyPosition = DEFAULT_CURRENCY.currency_position
-         const currencySymbol = DEFAULT_CURRENCY.currency_symbol
-        return formatCurrency(amount, noOfDecimal, decimalSeparator, thousandSeparator, currencyPosition, currencySymbol)
-      }
-
-      window.currencyFormat = currencyFormat
-      window.defaultCurrencySymbol = @json(Currency::defaultSymbol())
-
+        window.currencyFormat = currencyFormat
+        window.defaultCurrencySymbol = @json(Currency::defaultSymbol())
     </script>
 </body>
