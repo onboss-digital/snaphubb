@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', function () {
   async function loadVideoIfAuthenticated() {
     const accessType = document.querySelector('#videoPlayer').getAttribute('data-movie-access')
 
-    if (!isAuthenticated) {
-      return // Exit if not authenticated
-    }
+    // if (!isAuthenticated) {
+    //   return // Exit if not authenticated
+    // }
 
     let canPlay = true
     if (accessType === 'paid') {
@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
               await player.play()
             } catch (error) {
-              console.error('Error trying to autoplay:', error)
+              console.error('Error trying to autoplay:'+ error)
             }
           })
           isVideoLoaded = true
         })
-        .catch((error) => console.error('Error fetching video:', error))
+        .catch((error) => console.error('Error fetching video:'+ error))
     }
    else{
     $('#DeviceSupport').modal('show')
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return // Stop further execution
           }
         }
-       
+
         if (accessType === 'free') {
           playVideo(videoUrl, qualityOptions, lastWatchedTime)
         } else {
@@ -155,8 +155,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function playVideo(videoUrl, qualityOptions, lastWatchedTime) {
     const datatype = watchNowButton?.getAttribute('data-type') || seasonWatchBtn?.getAttribute('data-type')
+
     if(datatype === 'Local') {
       const videoSource = document.querySelectorAll('#videoSource');
+
     videoSource.src = videoUrl;
 
     const videoPlayer = videojs('videoPlayer');
@@ -172,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       qualityOptions.forEach((option) => {
         const qualityOption = document.createElement('option')
+
         qualityOption.value = option.url.value // Use the URL for the quality option
         qualityOption.innerText = option.label // Display the label (e.g., "360p", "720p")
          qualityOption.setAttribute('data-type', option.url.type);
@@ -194,6 +197,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const videoSource = document.querySelectorAll('#videoSource'); // Use querySelector for a single element
 
             if (videoSource) {
+
+
                 videoSource.src = option.url.value; // Set the local video source
 
                 const videoPlayer = videojs('videoPlayer');
@@ -206,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(`${baseUrl}/video/stream/${encodeURIComponent(selectedQuality)}`)
                 .then(response => response.json())
                 .then(data => {
+
                     const { videoId, platform } = data;
                     if (platform === 'youtube') {
                         player.src({ type: 'video/youtube', src: `https://www.youtube.com/watch?v=${videoId}` });
@@ -227,10 +233,11 @@ document.addEventListener('DOMContentLoaded', function () {
       player.controlBar.el().appendChild(qualitySelector)
     }
     } else{
-      
+
       fetch(`${baseUrl}/video/stream/${encodeURIComponent(videoUrl)}`)
         .then((response) => response.json())
         .then((data) => {
+
           setVideoSource(player, data.platform, data.videoId, data.url, data.mimeType, qualityOptions)
           player.load()
           player.one('loadedmetadata', async function () {
@@ -345,6 +352,8 @@ document.addEventListener('DOMContentLoaded', function () {
   })
 
   function setVideoSource(player, platform, videoId, url = '', mimeType = '', qualityOptions = []) {
+
+
     if (platform === 'youtube') {
       player.src({ type: 'video/youtube', src: `https://www.youtube.com/watch?v=${videoId}` })
     } else if (platform === 'vimeo') {
@@ -352,6 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (platform === 'hls') {
       player.src({ type: 'application/x-mpegURL', src: url })
     } else if (platform === 'local') {
+
       player.src({ type: mimeType, src: url })
     }
 
@@ -364,6 +374,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       qualityOptions.forEach((option) => {
         const qualityOption = document.createElement('option')
+
+
+
         qualityOption.value = option.url.value // Use the URL for the quality option
         qualityOption.innerText = option.label // Display the label (e.g., "360p", "720p")
          qualityOption.setAttribute('data-type', option.url.type);
@@ -372,11 +385,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
       qualityDropdown.addEventListener('change', function () {
         const selectedQuality = this.value
+
+
+
         var videoId = null
         var platform = null
         var url = null
           qualityOptions.forEach((option) => {
             if(option.url.type === 'Local'){
+
+
               const videoSource = document.querySelectorAll('#videoSource');
               videoSource.src = option.url.value;
 
@@ -388,6 +406,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 fetch(`${baseUrl}/video/stream/${encodeURIComponent(selectedQuality)}`)
                         .then((response) => response.json())
                         .then((data) => {
+
                           videoId = data.videoId
                           platform = data.platform
 

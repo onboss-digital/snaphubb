@@ -16,81 +16,81 @@ class MovieService
     {
         $this->movieRepository = $movieRepository;
     }
-       
+
         public function importMovie($id)
         {
             $tmdb_id = $id;
             $configurationData = $this->getConfiguration();
-    
+
             if (isset($configurationData['success']) && $configurationData['success'] === false) {
                 return $configurationData;
             }
-    
+
             $movieDetail = $this->getMovieDetail($id);
 
             if (isset($movieDetail['success']) && $movieDetail['success'] === false) {
                 return  $movieDetail;
             }
-    
+
             $movieVideoDetail = $this->getMovieVideoDetail($id);
             if (isset($movieVideoDetail['success']) && $movieVideoDetail['success'] === false) {
                 return  $movieVideoDetail;
             }
-    
+
             $castcrewDetail = $this->getCastCrewDetail($id);
 
             return $this->formatMovieData(  $tmdb_id,$movieDetail, $movieVideoDetail, $castcrewDetail, $configurationData);
-        
+
         }
 
         private function getConfiguration()
         {
             $configuration = $this->movieRepository->getConfiguration();
             $configurationData= json_decode($configuration, true);
-    
+
             while ($configurationData === null) {
                 $configuration = $this->movieRepository->getConfiguration();
                   $configurationData= json_decode($configuration, true);
             }
             return $configurationData;
         }
-    
+
         private function getMovieDetail($id)
         {
             $movieDetails = $this->movieRepository->getMovieDetails($id);
             $movieDetail = json_decode($movieDetails, true);
-    
+
             while ($movieDetail === null) {
                 $movieDetails = $this->movieRepository->getMovieDetails($id);
                 $movieDetail = json_decode($movieDetails, true);
             }
             return $movieDetail;
         }
-    
+
         private function getMovieVideoDetail($id)
         {
             $movieVideo = $this->movieRepository->getMovieVideo($id);
             $movieVideoDetail = json_decode($movieVideo, true);
-    
+
             while ($movieVideoDetail === null) {
                 $movieVideo = $this->movieRepository->getMovieVideo($id);
                 $movieVideoDetail = json_decode($movieVideo, true);
             }
             return $movieVideoDetail;
         }
-    
+
         private function getCastCrewDetail($id)
         {
             $castcrew = $this->movieRepository->getCastCrew($id);
             $castcrewDetail = json_decode($castcrew, true);
-    
+
             while ($castcrewDetail === null) {
                 $castcrew = $this->movieRepository->getCastCrew($id);
                 $castcrewDetail = json_decode($castcrew, true);
             }
             return $castcrewDetail;
         }
-    
+
         private function formatMovieData( $tmdb_id,$movieDetail, $movieVideoDetail, $castcrewDetail, $configurationData)
         {
             $actors = $this->processCast( $tmdb_id,$castcrewDetail['cast'], $configurationData, 'Acting','actor');
@@ -98,7 +98,7 @@ class MovieService
             $language = $this->processLanguage($movieDetail);
             $genres = $this->processGenres($movieDetail['genres']);
             $videoData = $this->processVideoData($movieVideoDetail);
-    
+
             return [
                 'id'=>$tmdb_id,
                 'poster_url' => $configurationData['images']['secure_base_url'] . 'original' . $movieDetail['poster_path'],
@@ -125,13 +125,13 @@ class MovieService
                 'all_genres' => Genres::where('status', 1)->get(),
             ];
         }
-    
+
         private function processCast($tmdb_id,$castData, $configurationData, $department, $type)
         {
             $result = [];
             $count = 0;
             $maxCount = 5;
-    
+
             foreach ($castData as $cast) {
                 if ($count >= $maxCount) break;
                 if ($cast['known_for_department'] == $department) {
@@ -142,11 +142,11 @@ class MovieService
                             [
                                 'name' => $castDetails['name'],
                                 'type' =>$type,
-                                'tmdb_id' => $tmdb_id, 
-                                'file_url' => !empty($castDetails['profile_path']) 
-                                ? $configurationData['images']['secure_base_url'] . 'original' . $castDetails['profile_path'] 
+                                'tmdb_id' => $tmdb_id,
+                                'file_url' => !empty($castDetails['profile_path'])
+                                ? $configurationData['images']['secure_base_url'] . 'original' . $castDetails['profile_path']
                                 : setDefaultImage($castDetails['profile_path']),
-                            
+
                                 'bio' => $castDetails['biography'],
                                 'place_of_birth' => $castDetails['place_of_birth'],
                                 'dob' => $castDetails['birthday'],
@@ -160,29 +160,29 @@ class MovieService
             }
             return $result;
         }
-    
+
         private function getCrewDetail($id)
         {
             $crewDetails = $this->movieRepository->getCastCrewDetail($id);
             $crewDetail = json_decode($crewDetails, true);
-    
+
             while ($crewDetail === null) {
                 $crewDetails = $this->movieRepository->getCastCrewDetail($id);
                 $crewDetail = json_decode($crewDetails, true);
             }
             return $crewDetail;
         }
-    
+
         private function processLanguage($movieDetail)
         {
             $language = null;
-    
+
             if (isset($movieDetail['spoken_languages']) && is_array($movieDetail['spoken_languages'])) {
                 $spoken_languages = $movieDetail['spoken_languages'];
                 if (!empty($spoken_languages)) {
                     $first_language = $spoken_languages[0];
                     $language = $first_language['name'];
-    
+
                     Constant::updateOrCreate(
                         ['name' => $language, 'type' => 'movie_language'],
                         [
@@ -196,7 +196,7 @@ class MovieService
             }
             return $language;
         }
-    
+
         private function processGenres($genres)
         {
             $genersIds = [];
@@ -213,7 +213,7 @@ class MovieService
             }
             return $genersIds;
         }
-    
+
         private function processVideoData($movieVideoDetail)
         {
             $trailer_url_type = null;
@@ -222,7 +222,7 @@ class MovieService
 
             $video_url_type=null;
             $video_url=null;
-    
+
             if (isset($movieVideoDetail['results']) && is_array($movieVideoDetail['results'])) {
                 foreach ($movieVideoDetail['results'] as $video) {
                     if ($video['type'] == 'Trailer') {
@@ -244,7 +244,7 @@ class MovieService
 
             return ['trailer_url_type' => $trailer_url_type, 'trailer_url' => $trailer_url, 'moive_list' => $moive_list ,'video_url_type'=> $video_url_type,'video_url'=>$video_url];
         }
-    
+
         private function formatDuration($minutes)
         {
             $hours = floor($minutes / 60);
@@ -254,8 +254,8 @@ class MovieService
 
 
   }
-    
 
 
-   
- 
+
+
+

@@ -52,6 +52,7 @@ class DashboardController extends Controller
 
             }
 
+
             Cache::put($cacheKey, $top_10);
         }
 
@@ -338,7 +339,7 @@ class DashboardController extends Controller
 
         $Lastwatchrecommendation = MoviesResource::collection($based_on_last_watch);
 
-        if (!$Lastwatchrecommendation->isEmpty()) {
+        if (!empty($Lastwatchrecommendation)) {
 
             $html = view('frontend::components.section.entertainment', ['data' => $Lastwatchrecommendation, 'title' => __('frontend.because_you_watch'), 'type' => 'movie', 'slug' => 'based_on_last_watch'])->render();
 

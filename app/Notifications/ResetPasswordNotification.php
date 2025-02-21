@@ -57,11 +57,11 @@ class ResetPasswordNotification extends Notification
         }
 
         return (new MailMessage())
-            ->subject(Lang::get('Reset Password Notification Email'))
-            ->line(Lang::get('You are receiving this email because we received a password reset request for your account.'))
-            ->action(Lang::get('Reset Password'), url(config('app.url').route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], false)))
-            ->line(Lang::get('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
-            ->line(Lang::get('If you did not request a password reset, no further action is required.'));
+            ->subject(__('email.reset_password_subject'))
+            ->line(__('email.you_are_receiving_this_email'))
+            ->action(__('email.reset_password'), url(config('app.url') . route('password.reset', ['token' => $this->token, 'email' => $notifiable->getEmailForPasswordReset()], false)))
+            ->line(__('email.this_password_reset_link_will_expire', ['count' => config('auth.passwords.' . config('auth.defaults.passwords') . '.expire')]))
+            ->line(__('email.if_you_did_not_request'));
     }
 
     /**

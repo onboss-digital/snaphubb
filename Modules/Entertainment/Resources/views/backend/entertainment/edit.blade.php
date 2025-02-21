@@ -105,7 +105,7 @@
                             @enderror
                             <div class="invalid-feedback" id="name-error">Name field is required</div>
                         </div>
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             {{ html()->label(__('movie.lbl_trailer_url_type').' <span class="text-danger">*</span>', 'type')->class('form-label') }}
                             {{ html()->select(
                                     'trailer_url_type',
@@ -128,7 +128,7 @@
                                     <div class="invalid-feedback" id="trailer-pattern-error" style="display:none;">
                                     Please enter a valid URL starting with http:// or https://.
                                 </div>
-                        </div>
+                        </div> --}}
 
                         <div class="d-none" id="url_file_input">
                             {{ html()->label(__('movie.lbl_trailer_video').' <span class="text-danger">*</span>', 'trailer_video')->class('form-label') }}
@@ -759,12 +759,12 @@ tinymce.init({
                             return true;
                         }
                     }
-            var initialSelectedValue = document.getElementById('trailer_url_type').value;
-            handleTrailerUrlTypeChange(initialSelectedValue);
-            $('#trailer_url_type').change(function() {
-                var selectedValue = $(this).val();
-                handleTrailerUrlTypeChange(selectedValue);
-            });
+            // var initialSelectedValue = document.getElementById('trailer_url_type').value;
+            // handleTrailerUrlTypeChange(initialSelectedValue);
+            // $('#trailer_url_type').change(function() {
+            //     var selectedValue = $(this).val();
+            //     handleTrailerUrlTypeChange(selectedValue);
+            // });
 
             var URLInput = document.querySelector('input[name="trailer_url"]');
                 if (URLInput) {

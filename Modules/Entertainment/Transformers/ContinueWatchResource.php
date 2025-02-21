@@ -34,8 +34,8 @@ class ContinueWatchResource extends JsonResource
             'watched_time' => $this->watched_time ?? '00:00:01',
             'total_watched_time' => $this->total_watched_time ?? '00:00:01',
             'episode_id' => $this->episode_id ?? null,
-            'name' => $entertainment->name ?? null, 
-            'description' => strip_tags($entertainment->description),
+            'name' => $entertainment->name ?? null,
+            'description' => strip_tags($entertainment->description ?? null),
             'trailer_url_type' => $entertainment->trailer_url_type ??null ,
             'trailer_url' => isset($entertainment) && $entertainment->trailer_url_type == 'Local'
     ? setBaseUrlWithFileName($entertainment->trailer_url)
@@ -45,7 +45,7 @@ class ContinueWatchResource extends JsonResource
             'video_upload_type' => $entertainment->video_upload_type ?? null,
             'video_url_input' => isset($entertainment) && $entertainment->video_upload_type == 'Local'  ? setBaseUrlWithFileName($entertainment->video_url_input) : ($entertainment->video_url_input ?? null),
             'poster_image' =>  setBaseUrlWithFileName($entertainment->poster_url ?? null ),
-            'thumbnail_image' =>setBaseUrlWithFileName($entertainment->thumbnail_url ?? null),  
+            'thumbnail_image' =>setBaseUrlWithFileName($entertainment->thumbnail_url ?? null),
             'status' => $entertainment->status ?? null,
         ];
     }

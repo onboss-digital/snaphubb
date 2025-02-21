@@ -25,9 +25,9 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
 
-        $this->app->singleton(ChatGTPService::class, function ($app) {
-            return new ChatGTPService();
-        });
+            $this->app->singleton(ChatGTPService::class, function ($app) {
+                return new ChatGTPService();
+            });
 
         }
     }
@@ -69,12 +69,25 @@ class AppServiceProvider extends ServiceProvider
 
         VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
 
-            $url = str_replace('/admin','', $url);
+            $url = str_replace('/admin', '', $url);
             return (new MailMessage)
-                ->subject('Verify Email Address')
+                ->subject(__('email.subject_prefix') . " | " .
+                    __('email.subject_verify_email_address'))
                 ->view('emails.verify-email', [
                     'user' => $notifiable,
-                    'actionUrl'=> $url
+                    'actionUrl' => $url
+                ]);
+        });
+
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+
+            $url = str_replace('/admin', '', $url);
+            return (new MailMessage)
+                ->subject(__('email.subject_prefix') . " | " .
+                    __('email.subject_verify_email_address'))
+                ->view('emails.verify-email', [
+                    'user' => $notifiable,
+                    'actionUrl' => $url
                 ]);
         });
 

@@ -52,5 +52,6 @@ return [
     'App_configuration'  => 'App config',
     'media_management'=>'Media Management',
     'system_setting'=>'System Setting',
+    'ranking'=>'Ranking',
 
 ];

@@ -14,6 +14,14 @@ class SubscriptionResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+
+        $discount = 0;
+
+        $discount = ($this->amount / 100) * $this->discount_percentage;
+
+
+        return array_merge(parent::toArray($request), [
+            'discount_amount' =>  $discount , // Add your custom key-value pair here
+        ]);
     }
 }

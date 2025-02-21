@@ -74,6 +74,7 @@ return [
     'restore_form' => 'Record restored successfully!',
     'permanent_delete_form'=> 'Record permanently deleted successfully!',
     'plan' =>'Plan',
+    'payment_type' =>'Payment Type',
     'lbl_name'=>'Name',
     'lbl_status'=>'Status',
     'lbl_action'=>'Action',

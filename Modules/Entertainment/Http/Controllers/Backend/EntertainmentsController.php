@@ -80,12 +80,12 @@ class EntertainmentsController extends Controller
             $data['IMDb_rating'] = round($data['IMDb_rating'], 1);
         }
 
-        if ($request->trailer_url_type == 'Local') {
-            $data['trailer_video'] = extractFileNameFromUrl($data['trailer_video']);
-        }
-        if ($request->video_upload_type == 'Local') {
-            $data['video_file_input'] = extractFileNameFromUrl($data['video_file_input']);
-        }
+        // if ($request->trailer_url_type == 'Local') {
+        //     $data['trailer_video'] = extractFileNameFromUrl($data['trailer_video']);
+        // }
+        // if ($request->video_upload_type == 'Local') {
+        //     $data['video_file_input'] = extractFileNameFromUrl($data['video_file_input']);
+        // }
 
         $entertainment = $this->entertainmentService->create($data);
         $type = $entertainment->type;
@@ -199,7 +199,7 @@ class EntertainmentsController extends Controller
         $request_data['video_file_input'] = isset($request_data['video_file_input']) ? extractFileNameFromUrl($request_data['video_file_input']) : null;
 
 
-        
+
         if (isset($request_data['IMDb_rating'])) {
             // Round the IMDb rating to 1 decimal place
             $request_data['IMDb_rating'] = round($request_data['IMDb_rating'], 1);

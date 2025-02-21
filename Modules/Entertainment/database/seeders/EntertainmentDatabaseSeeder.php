@@ -2601,7 +2601,7 @@ class EntertainmentDatabaseSeeder extends Seeder
                     'countries' => [27,37],
                     'type' => 'movie',
                     'video_upload_type' => 'YouTube',
-                    'video_url_input' => 'https://youtu.be/o0OkTEK9KKs?si=BDW4TC4uDF7VluOz'
+                    'video_url_input' => 'https://youtu.be/ln4lDjT8Ab0?si=LIretoN3T65HTieV'
                 ]
 
     ];

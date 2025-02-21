@@ -56,25 +56,26 @@
 
                     $qualityOptions = [];
 
+                    if($data['enable_quality']==1){
+
                      $videoLinks = $data['video_links'];
 
                      foreach($videoLinks as $link) {
+                            $qualityOptions[$link->quality] = [
+                                'value' => $link->type === 'Local' ? setBaseUrlWithFileName($link->url) : Crypt::encryptString($link->url),
+                                'type' => $link->type // Add the type here
+                            ];
+                          }
 
-                        if($link->type != 'Local'){
 
-                            $qualityOptions[$link->quality] = $link->url;
+                }
 
-                        }else{
+                $qualityOptionsJson = json_encode($qualityOptions);
 
-                            $qualityOptions[$link->quality] =setBaseUrlWithFileName($link->url);
-                        }
 
-                     }
 
-                   $qualityOptionsJson = json_encode($qualityOptions);
 
                  @endphp
-
 
                     <div class="d-flex align-items-center flex-wrap gap-4 mt-5">
                         <div class="play-button-wrapper">
@@ -83,6 +84,7 @@
                                 id="watchNowButton"
                                 data-entertainment-id="{{ $data['entertainment_id'] }}"
                                 data-entertainment-type="tvshow"
+                                data-type="{{ $data['video_upload_type'] }}"
                                 data-video-url="{{ $data['video_url_input'] }}"
                                 data-movie-access="{{ $data['access'] }}"
                                 data-plan-id="{{ $data['plan_id'] }}"

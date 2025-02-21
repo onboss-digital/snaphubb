@@ -1,16 +1,25 @@
 <?php
 
 return [
-
-    'welcome' => '¡Bienvenido a SNAPHUB!',
+    'hello' => '¡Hola!',
+    'welcome' => '¡Bienvenido a SNAPHUBB!',
     'happy_to_have_you' => 'Estamos felices de tenerte con nosotros. Para completar tu registro y activar tu cuenta, haz clic en el enlace a continuación:',
     'confirm_account' => 'Confirmar Cuenta',
     'copy_link' => 'Si el botón anterior no funciona, copia y pega el siguiente enlace en tu navegador:',
     'link_expires' => 'Este enlace es personal y no debe ser compartido. Expira en 24 horas.',
     'ignore_email' => 'Si no realizaste este registro, ignora este correo electrónico.',
     'contact_us' => 'Cualquier duda, estamos a tu disposición! Contáctanos por correo electrónico',
-    'best_regards' => 'Saludos, Equipo SNAPHUB.',
+    'best_regards' => 'Saludos, Equipo SNAPHUBB.',
     'do_not_reply' => 'No respondas a este correo electrónico. Fue generado automáticamente.',
     'published_on' => 'Publicado en',
-
+    'user_pass' => 'Contraseña',
+    'user_login' => 'Iniciar sesión',
+    'user_details' => 'Detalles del Usuario',
+    'subject_prefix' => 'SNAPHUBB',
+    'subject_verify_email_address' => 'Verificar Dirección de Correo Electrónico',
+    'reset_password' => 'Restablecer Contraseña',
+    'reset_password_subject' => 'Notificación de Restablecimiento de Contraseña',
+    'you_are_receiving_this_email' => 'Estás recibiendo este correo electrónico porque recibimos una solicitud de restablecimiento de contraseña para tu cuenta.',
+    'this_password_reset_link_will_expire' => 'Este enlace de restablecimiento de contraseña expirará en :count minutos.',
+    'if_you_did_not_request' => 'Si no solicitaste un restablecimiento de contraseña, no se requiere ninguna acción adicional.',
 ];

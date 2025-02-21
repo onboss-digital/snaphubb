@@ -9,11 +9,17 @@
     <div class="d-flex align-items-center justify-content-start">
         <div class="logo-main">
             <a href="{{route('backend.home')}}" class="navbar-brand">
-            <img class="logo-normal img-fluid" src="{{asset(setting('logo'))}}" height="30" alt="{{ app_name() }}">
-                <img class="logo-normal dark-normal img-fluid" src="{{asset(setting('dark_logo'))}}" height="30" alt="{{ app_name() }}">
-                <img class="logo-mini img-fluid" src="{{asset(setting('mini_logo'))}}" height="30" alt="{{ app_name() }}">
-                <img class="logo-mini dark-mini img-fluid" src="{{asset(setting('dark_mini_logo'))}}" height="30" alt="{{ app_name() }}">
-            </a>
+                @php
+                   $dark_logo=GetSettingValue('dark_logo') ??  asset(setting('dark_logo')); 
+                   $logo=GetSettingValue('logo') ??  asset(setting('logo')); 
+                   $mini_logo=GetSettingValue('mini_logo') ??  asset(setting('mini_logo'));
+                    $dark_mini_logo=GetSettingValue('dark_mini_logo') ??  asset(setting('dark_mini_logo'));
+                @endphp
+                <img class="logo-normal img-fluid" src="{{ $logo }}" height="30" alt="{{ app_name() }}">
+               <img class="logo-normal dark-normal img-fluid" src="{{ $dark_logo}}" height="30" alt="{{ app_name() }}">
+               <img class="logo-mini img-fluid" src="{{$mini_logo}}" height="30" alt="{{ app_name() }}">
+               <img class="logo-mini dark-mini img-fluid" src="{{$dark_mini_logo}}" height="30" alt="{{ app_name() }}">
+           </a>
         </div>
         <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
             <i class="icon">

@@ -21,7 +21,11 @@ if (user_registration()) {
     });
 }
 
+Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->name('password.request');
 
+Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->name('password.email');
 
 
 Route::middleware('guest')->prefix('admin')->group(function () {

@@ -163,7 +163,7 @@
                         @enderror
                         <div class="invalid-feedback" id="desc-error">Description field is required</div>
                     </div>
-                    <div class="col-md-6 col-lg-4">
+                    {{-- <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_trailer_url_type'). ' <span class="text-danger">*</span>', 'type')->class('form-label') }}
                         {{ html()->select(
                                 'trailer_url_type',
@@ -175,7 +175,7 @@
                         @enderror
                         <div class="invalid-feedback" id="name-error">Trailer Type field is required</div>
 
-                    </div>
+                    </div> --}}
                     <div class="col-md-6 col-lg-4 d-none" id="url_input">
                         {{ html()->label(__('movie.lbl_trailer_url'). ' <span class="text-danger">*</span>', 'trailer_url')->class('form-label') }}
                         {{ html()->text('trailer_url')->attribute('value', $data->trailer_url)->placeholder(__('placeholder.lbl_trailer_url'))->class('form-control') }}
@@ -684,12 +684,12 @@ tinymce.init({
                             return true;
                         }
                     }
-            var initialSelectedValue = document.getElementById('trailer_url_type').value;
-            handleTrailerUrlTypeChange(initialSelectedValue);
-            $('#trailer_url_type').change(function() {
-                var selectedValue = $(this).val();
-                handleTrailerUrlTypeChange(selectedValue);
-            });
+            // var initialSelectedValue = document.getElementById('trailer_url_type').value;
+            // handleTrailerUrlTypeChange(initialSelectedValue);
+            // $('#trailer_url_type').change(function() {
+            //     var selectedValue = $(this).val();
+            //     handleTrailerUrlTypeChange(selectedValue);
+            // });
             var URLInput = document.querySelector('input[name="trailer_url"]');
                 if (URLInput) {
                     URLInput.addEventListener('input', function() {

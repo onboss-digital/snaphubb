@@ -137,7 +137,7 @@
             <h3>{{ $settingValue = App\Models\Setting::where('name', 'app_name')->value('val') ?? '-'}}</h3>
 
             {{-- <div style="width: 50%; margin-top: 10px;">
-                <p>1234 Innovation Avenue, Suite 500, Tech City, Silicon Valley, California, 94043, United States</p>
+                <p>1234 Innovation Avenue,Suite 500, Tech City, Silicon Valley,California, 94043, United States</p>
             </div> --}}
         </div>
         <div class="right-content c-col-5" style="text-align: right; float: right">
@@ -183,6 +183,12 @@
             <td>-</td>
             <td class="c-text-end">{{ \Currency::format($data->amount) }}</td>
         </tr>
+
+        @php
+
+        $amount_after_discount = 0;
+       @endphp
+
 
         @if($data->discount_percentage >0)
 

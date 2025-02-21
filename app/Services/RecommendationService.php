@@ -207,7 +207,7 @@ public function getTrendingMoviesByCountry($user)
 
     }
     $countryId = $dialCode ? Country::where('dial_code', $dialCode)->pluck('id')->toArray() : null;
-    // dd($countryId);
+
 
     if (!$countryId) {
         return collect();

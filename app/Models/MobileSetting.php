@@ -19,7 +19,7 @@ class MobileSetting extends Model
     {
         // Retrieve the setting by slug
         $setting = self::where('slug', $slug)->first();
-        // dd($setting);
+
 
         // If the setting exists, return its value, otherwise return null
         return $setting ? $setting->value : null;

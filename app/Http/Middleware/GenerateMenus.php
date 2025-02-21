@@ -17,7 +17,7 @@ class GenerateMenus
     public function handle()
     {
         return \Menu::make('menu', function ($menu) {
-            if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('demo_admin')) {
+            if (auth()->user()->hasRole('admin') ) {
                 $this->staticMenu($menu, ['title' =>  __('sidebar.main'), 'order' => 0]);
                 $this->mainRoute($menu, [
                     'icon' => 'ph ph-squares-four',
@@ -259,6 +259,17 @@ class GenerateMenus
                 'title' => __('sidebar.review'),
                 'route' => 'backend.reviews.index',
                 'active' => ['app/reviews'],
+                'order' => 0,
+            ]);
+
+            $this->mainRoute($menu, [
+                'icon' => 'ph ph-ranking',
+                'title' => __('sidebar.ranking'),
+                'nickname' => 'ranking',
+                'route' => ['backend.users.ranking.index_list'],
+                'shortTitle' => 'se',
+                'active' => ['app/app/users/ranking'],
+                'permission' => ['view_subscriptions'],
                 'order' => 0,
             ]);
 

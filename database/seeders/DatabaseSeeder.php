@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         \Artisan::call('cache:clear');
         Schema::disableForeignKeyConstraints();
         $file = new Filesystem;
-        $file->cleanDirectory('storage/app/public');
+        // $file->cleanDirectory('storage/app/public');
         $this->call(AuthTableSeeder::class);
         $this->call(SettingSeeder::class);
         $this->call(UserProfilesSeeder::class);
