@@ -262,6 +262,17 @@ class GenerateMenus
                 'order' => 0,
             ]);
 
+            $this->mainRoute($menu, [
+                'icon' => 'ph ph-ranking',
+                'title' => __('sidebar.ranking'),
+                'nickname' => 'ranking',
+                'route' => ['backend.users.ranking.index_list'],
+                'shortTitle' => 'se',
+                'active' => ['app/app/users/ranking'],
+                'permission' => ['view_subscriptions'],
+                'order' => 0,
+            ]);
+
             $permissionsToCheck = ['view_taxes','view_page','view_setting'];
 
             if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
