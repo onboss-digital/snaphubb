@@ -265,7 +265,7 @@
                     html()->text('cartpanda_product_id', old('cartpanda_product_id', $data->cartpanda_product_id ?? ''))
                         ->class('form-control')
                         ->id('cartpanda_product_id')
-                        ->attribute('placeholder', __('messages.lbl_cartpanda_product_id'))
+                        ->attribute('placeholder', __('plan.lbl_cartpanda_product_id'))
                         ->attribute('required','required')
                 }}
                 @error('cartpanda_product_id')
@@ -280,7 +280,7 @@
                     html()->text('cartpanda_checkout_url', old('cartpanda_checkout_url', $data->cartpanda_checkout_url ?? ''))
                         ->class('form-control')
                         ->id('cartpanda_checkout_url')
-                        ->attribute('placeholder', __('messages.lbl_cartpanda_checkout_url'))
+                        ->attribute('placeholder', __('plan.lbl_cartpanda_checkout_url'))
                         ->attribute('required','required')
                 }}
                 @error('cartpanda_checkout_url')
