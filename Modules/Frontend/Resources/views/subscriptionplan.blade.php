@@ -158,12 +158,19 @@
                             </ul>
                         </div>
 
-                        <button type="button"
-                                class="rounded btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }} subscription-btn"
-                                data-plan-id="{{ $plan->id }}"
-                                data-plan-name="{{ $plan->name }}">
-                            {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
-                        </button>
+                        @if($plan->cartpanda_active == 1)
+                            <a href="{{$plan->cartpanda_checkout_url}}" class="rounded col-12 p-3 btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }}">   
+                                {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
+                            </a>
+                           
+                        @else
+                            <button type="button"
+                                    class="rounded btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }} subscription-btn"
+                                    data-plan-id="{{ $plan->id }}"
+                                    data-plan-name="{{ $plan->name }}">
+                                {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
+                            </button>
+                        @endif
                     </div>
                 </div>
                 @endforeach

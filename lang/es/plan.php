@@ -25,6 +25,10 @@ return [
     'enter_discount_percentage'=>'Enter percentage',
     'lbl_total_price'=>'Total Price',
     'lbl_supported_device_type_options'=>'Device Types',
-    'lbl_profile_limit'=>'Profile Limit'
+    'lbl_profile_limit'=>'Profile Limit',
+
+    'lbl_cartpanda_active' => 'CartPanda Active',
+    'lbl_cartpanda_product_id' => 'CartPanda Product ID',
+    'lbl_cartpanda_checkout_url' => 'CartPanda Checkout URL',
     
 ];

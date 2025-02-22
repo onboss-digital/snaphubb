@@ -109,7 +109,7 @@ class WebHookController extends Controller
         $data = $request->all();
         $logFile = $logFile == false ? $this->logData($data) : $logFile;
 
-        // $logFile = storage_path('logs/cartpanda') . '/cartpanda_20250129_184844.log';
+        // $logFile = storage_path('logs/cartpanda/success') . '/cartpanda_20250204_100410.log';
         try {
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
@@ -139,7 +139,11 @@ class WebHookController extends Controller
                             'user_type' => 'user',
                         ]);
 
-                        $plan = Plan::orderBy('price', 'asc')->first();
+                        $plan = Plan::where('cartpanda_product_id', $logData['order']['line_items'][0]['product_id'])->first();
+
+                        if (!$plan) {
+                            $plan = Plan::orderBy('price', 'asc')->first();
+                        }
 
                         $this->handleSubscrible($plan->id, $plan->price, 'cartpanda', $logData['order']['id'], $user);
 

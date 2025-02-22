@@ -147,9 +147,18 @@ const columns = [
             {
                 data: 'name',
                 name: 'name',
-                title: "{{ __('plan.lbl_name') }}",
+                title: "{{ __(key: 'plan.lbl_name') }}",
                 render: function(data, type, row, meta) {
-                    return '<h6 class="mb-0">' + data + '</h6>';
+                    console.log(data);
+                    console.log(type);
+                    console.log();
+                    console.log(meta);
+                    if(row.cartpanda_active == 1) {
+                        var span = '<span class="badge" style="color: #ffffff;background-color: #1aadff;margin: 5px;">Cartpanda</span>';
+
+                    }
+                   
+                    return '<h6 class="mb-0">' + data + span + '</h6>';
                 }
             },
             {   data: 'duration',
