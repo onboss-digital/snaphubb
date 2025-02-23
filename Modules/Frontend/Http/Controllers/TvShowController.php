@@ -299,6 +299,7 @@ class TvShowController extends Controller
 
     public function stream($encryptedUrl)
     {
+        dd('oi');
 
         $result = decryptVideoUrl($encryptedUrl);
 
