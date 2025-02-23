@@ -70,7 +70,7 @@ class MovieController extends Controller
         // Retrieve cached data
         $data = Cache::get($cacheKey);
 
-        if (!$data || true) {
+        if (!$data) {
             $movie = Entertainment::where('id', $movieId)
                 ->with([
                     'entertainmentGenerMappings',
