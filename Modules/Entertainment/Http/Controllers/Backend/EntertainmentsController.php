@@ -130,10 +130,10 @@ class EntertainmentsController extends Controller
         $data->thumbnail_url = !empty($data->tmdb_id) ? $data->thumbnail_url : getImageUrlOrDefault($data->thumbnail_url);
         $data->poster_url = !empty($data->tmdb_id) ? $data->poster_url : getImageUrlOrDefault($data->poster_url);
 
-        if ($data->trailer_url_type == 'Local') {
+        // if ($data->trailer_url_type == 'Local') {
 
-            $data->trailer_url = setBaseUrlWithFileName($data->trailer_url);
-        }
+        //     $data->trailer_url = setBaseUrlWithFileName($data->trailer_url);
+        // }
 
         if ($data->video_upload_type == 'Local') {
 
