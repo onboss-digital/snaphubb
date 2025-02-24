@@ -61,6 +61,13 @@ return [
     'lbl_select_video_type'=>'Select Video Type',
     'lbl_select_quality'=>'Select Quality',
     'lbl_select_tvcategory'=>'Select TV Category',
-    'lbl_select_country'=>'Select Country'
+    'lbl_select_country'=>'Select Country',
+
+    'lbl_ranking_modal_title'=>'Painel de votação',
+    'lbl_ranking_modal_request'=>'Não achou a criadora que queria? O Snaphubb vai colocar para você de graça!',
+    'lbl_ranking_modal_label_input'=>'Copie e cole o link da plataforma da criadora que você quer ver no Snaphubb',
+    'lbl_ranking_modal_label_submit'=>'Enviar',
+
+
    
 ];
