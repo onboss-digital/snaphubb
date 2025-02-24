@@ -75,16 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const playButton = document.querySelector('.vjs-big-play-button')
   if (playButton) {
     playButton.addEventListener('click', async function (e) {
+      e.preventDefault() 
       if (!isAuthenticated) {
-        e.preventDefault() // Prevent play
         window.location.href = loginUrl // Redirect to login
-      } else {
-        const canPlay = await checkAuthenticationAndDeviceSupport()
-        if (!canPlay) {
-          e.preventDefault() // Prevent play if conditions are not met
-          $('#watchNowButton').trigger('click')
-        }
       }
+      $('#watchNowButton').trigger('click')
     })
   }
 

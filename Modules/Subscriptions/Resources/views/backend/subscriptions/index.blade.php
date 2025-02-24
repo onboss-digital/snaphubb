@@ -69,7 +69,7 @@
             },
             {
                 data: 'subscription_transaction.payment_type',
-                name: 'payment_type',
+                name: 'subscription_transaction.payment_type',
                 title: "{{ __('messages.payment_type') }}",
                 render: function(data, type, row) {
                     let className, style;

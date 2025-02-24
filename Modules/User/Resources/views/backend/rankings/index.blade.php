@@ -98,9 +98,9 @@ const columns = [
             },
             { 
                 data: 'name', 
-                name: 'name', 
-                title: "{{ __('messages.name') }}", 
-                visible: false 
+                name: 'name',  
+                title: "{{ __('messages.name') }}",
+                className:"name-column",
             },
             { 
                 data: 'description', 
