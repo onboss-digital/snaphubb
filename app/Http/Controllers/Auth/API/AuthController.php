@@ -72,13 +72,15 @@ class AuthController extends Controller
         }
 
         if ($user->subscriptionPackage) {
-            $planlimitation = optional(optional($user->subscriptionPackage)->plan)->planLimitation;
+            $planlimitation = optional(optional($user->subscriptionPackage)->plan)->planLimitation->where('limitation_value', 1);
+            
 
             if ($planlimitation != null) {
                 $device_limit = $planlimitation->where('limitation_slug', 'device-limit')->first();
-                $device = $device_limit ? $device_limit->limit : 0;
+                $device = $device_limit ? $device_limit->limit : false;
 
-                if ($count == $device) {
+
+                if ($device !== false && $count == $device) {
                     return response()->json(['status' => false, 'message' => "Your device limit has been reached."]);
                     // return response()->json([
                     //     'error' => 'Your device limit has been reached.',
