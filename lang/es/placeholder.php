@@ -67,7 +67,12 @@ return [
     'lbl_ranking_modal_request'=>'Não achou a criadora que queria? O Snaphubb vai colocar para você de graça!',
     'lbl_ranking_modal_label_input'=>'Copie e cole o link da plataforma da criadora que você quer ver no Snaphubb',
     'lbl_ranking_modal_label_submit'=>'Enviar',
-
-
+    'lbl_ranking_modal_link'=>'Link da criadora',
+    'lbl_ranking_modal_name'=>'Nome da criadora',
+    'lbl_ranking_modal_label_vote'=>'Votar',
+    'lbl_ranking_modal_label_send'=>'Enviar',
+    'lbl_ranking_modal_return_save_sugestion'=>'Sugestão registrada com sucesso',
+    'lbl_ranking_modal_return_save_vote'=>'Voto registrado com sucesso',
+    'lbl_ranking_modal_return_save_error'=>'Erro ao registrar voto',
    
 ];

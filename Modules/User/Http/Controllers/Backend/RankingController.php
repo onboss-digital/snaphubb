@@ -170,4 +170,12 @@ class RankingController extends Controller
         return $this->edit($ranking->id);
     }
 
+    public function resetResponses($id)
+    {
+        $ranking = Ranking::findOrFail($id);
+        $ranking->resetResponses();
+
+        return redirect()->route('backend.users.ranking.edit', $id)->with('success', __('Ranking responses have been reset.'));
+    }
+
 }

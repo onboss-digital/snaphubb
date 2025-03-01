@@ -14,6 +14,7 @@ use Modules\Frontend\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Http;
 use Modules\Frontend\Http\Controllers\Auth\UserController;
+use App\View\Components\RankingModal;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -118,6 +119,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/account-setting', [FrontendController::class, 'accountSetting'])->name('accountSetting');
     Route::get('/edit-profile', [UserController::class, 'editProfile'])->name('edit-profile');
     Route::post('/device-logout', [FrontendController::class, 'deviceLogout'])->name('device-logout');
+    Route::post('/ranking/vote', [RankingModal::class, 'vote'])->name('ranking.vote');
 });
 
 Route::get('/video/stream/{encryptedUrl}', [TvShowController::class, 'stream'])->name('video.stream');
@@ -134,3 +136,8 @@ Route::group(['as' => 'frontend.'], function () {
         return response()->json(['message' => 'Cache and Config cleared']);
     })->name('cache_config_clear'); // Define the name for the route
 });
+
+
+/**Ranking */
+
+

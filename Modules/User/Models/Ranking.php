@@ -48,6 +48,31 @@ class Ranking extends BaseModel
         return $this->belongsToMany(Plan::class, 'ranking_plan', 'ranking_id', 'plan_id');
     }
 
+    public function sugestions()
+    {
+        return $this->hasMany(RankingResponse::class, 'ranking_id')->where('sugestion_name', '!=', null);
+    }
+
+    public function responses()
+    {
+        return $this->hasMany(RankingResponse::class, 'ranking_id');
+    }
+
+    public function resetResponses()
+    {
+
+        $contents = json_decode($this->contents);
+        $contents = collect($contents)->map(function ($content) {
+            $content->votes = 0;
+            return $content;
+        });
+
+        $this->contents = $contents->toJson();
+        $this->save();
+
+        $this->responses()->delete();
+    }
+
     protected static function boot()
     {
         parent::boot();

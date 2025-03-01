@@ -5,6 +5,8 @@ namespace App\View\Components;
 use Illuminate\View\Component;
 use Modules\User\Models\Ranking;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Modules\User\Models\RankingResponse;
 
 class RankingModal extends Component
 {
@@ -17,7 +19,7 @@ class RankingModal extends Component
     {
         $user = Auth::user();
 
-        if(!$user) {
+        if (!$user) {
             return '';
         }
         $plan = $user->subscriptionPackage->where('status', 'active')->first();
@@ -29,15 +31,85 @@ class RankingModal extends Component
             })
             ->first();
 
-        if(!$ranking) {
+        if (!$ranking) {
             return '';
         }
+
+        // Check if the user has already responded to the ranking
+        $responseExists = RankingResponse::where('user_id', $user->id)
+            ->where('ranking_id', $ranking->id)
+            ->exists();
+
+        if ($responseExists) {
+            return '';
+        }
+
+        $contents = json_decode($ranking->contents);
+
         $data = [
+            'id' => $ranking->id,
             'description' => $ranking->description ?? 'No description available',
             'title' => $ranking->name ?? 'No title available',
-            'contents' => (array)json_decode($ranking->contents) ?? [],
+            'contents' => $contents,
         ];
 
         return view('frontend::components.partials.modals.ranking-modal', compact('data'));
+    }
+
+    public function vote(Request $request)
+    {
+        $user = Auth::user();
+
+        $data = $request->validate([
+            'ranking_id' => 'required',
+            'content_slug' => 'required',
+        ]);
+
+        $plan = $user->subscriptionPackage->where('status', 'active')->first();
+        $currentDate = now()->toDateString();
+
+        try {
+            if($request->has('sugestion_name') && $request->has('sugestion_link') && $request->get('sugestion_name') != null && $request->get('sugestion_link') != null) {
+                RankingResponse::create([
+                    'user_id' => $user->id,
+                    'ranking_id' => $data['ranking_id'],
+                    'response_date' => $currentDate,
+                    'sugestion_name' => $request->get('sugestion_name'),
+                    'sugestion_link' => $request->get('sugestion_link'),
+                ]);
+                
+                return response()->json(['message' => __('placeholder.lbl_ranking_modal_return_save_sugestion')]);
+            }
+
+            $ranking = Ranking::where('id', $data['ranking_id'])
+                ->where('start_date', '<=', $currentDate)
+                ->where('end_date', '>=', $currentDate)
+                ->whereHas('plans', function ($query) use ($plan) {
+                    $query->where('plan_id', $plan->plan_id);
+                })
+                ->firstOrFail();
+
+            $contents = collect(json_decode($ranking->contents));
+
+            foreach ($contents as &$content) {
+                if ($content->slug === $data['content_slug']) {
+                    $content->votes = $content->votes + 1;
+                }
+            }
+
+            $ranking->contents = $contents->toJson();
+            $ranking->save();
+
+            // Save the user's response
+            RankingResponse::create([
+                'user_id' => $user->id,
+                'ranking_id' => $ranking->id,
+                'response_date' => $currentDate,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => __('placeholder.lbl_ranking_modal_return_save_error')], 500);
+        }
+
+        return response()->json(['message' => __('placeholder.lbl_ranking_modal_return_save_vote')]);
     }
 }

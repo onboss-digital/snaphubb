@@ -70,6 +70,7 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth', 'a
 
       Route::put('update/{id}', [RankingController::class, 'update'])->name(name: 'update');
       Route::delete('destroy/{id}', [RankingController::class, 'destroy'])->name('destroy');
+      Route::get('reset-responses/{id}', [RankingController::class, 'resetResponses'])->name('reset_responses');
 
     });
 
