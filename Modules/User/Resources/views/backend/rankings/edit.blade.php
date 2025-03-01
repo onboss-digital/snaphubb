@@ -135,8 +135,8 @@
         </div>
     </div>
     <div class="d-grid d-sm-flex justify-content-sm-end gap-3">
-        {{ html()->submit(trans('messages.save'))->class('btn btn-md btn-primary float-right')->id('submit-button') }}
         <button type="button" class="btn btn-md btn-secondary" onclick="resetRankingResponses({{ $ranking->id }})">{{ __('Reset Responses') }}</button>
+        {{ html()->submit(trans('messages.save'))->class('btn btn-md btn-primary float-right')->id('submit-button') }}
     </div>
     {{ html()->form()->close() }}
     @include('components.media-modal')
