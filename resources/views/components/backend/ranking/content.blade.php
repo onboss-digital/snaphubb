@@ -41,7 +41,7 @@
             <div class="col-12">
 
             {{ html()->hidden('contents['.$index.'][votes]')->id('remove_image_flag' . $index)->value($ranking->contents[$index]['votes'] ?? 0) }}
-            {{ html()->hidden('contents['.$index.'][slug]')->value($ranking->contents[$index]['slug']??'' }}
+            {{ html()->hidden('contents['.$index.'][slug]')->value($ranking->contents[$index]['slug']??'') }}
                 {{ html()->label(__(''), 'contents['.$index.'][title]')->class('form-label') }}
                 {{
     html()->text('contents['.$index.'][title]', $ranking->contents[$index]['title'] ?? '')

@@ -10,6 +10,13 @@ use Modules\User\Models\RankingResponse;
 
 class RankingModal extends Component
 {
+    public $class;
+
+    public function __construct($class = '')
+    {
+        $this->class = $class;
+    }
+
     /**
      * Get the view / contents that represents the component.
      *
@@ -53,7 +60,7 @@ class RankingModal extends Component
             'contents' => $contents,
         ];
 
-        return view('frontend::components.partials.modals.ranking-modal', compact('data'));
+        return view('frontend::components.partials.modals.ranking-modal', compact('data'))->with('class', $this->class);
     }
 
     public function vote(Request $request)

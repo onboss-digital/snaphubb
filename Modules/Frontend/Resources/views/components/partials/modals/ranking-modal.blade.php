@@ -2,7 +2,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="ranking-modal-title text-center" id="rankingModalLabel">{{__('placeholder.lbl_ranking_modal_title')}}
+                <h4 class="ranking-modal-title text-center" id="rankingModalLabel">
+                    {{__('placeholder.lbl_ranking_modal_title')}}
                 </h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -34,9 +35,11 @@
                                             <h5 class="card-title mb-2">{{$content->title}}</h5>
                                             <p class="card-text">{{$content->description}}</p>
                                         </div>
-                                        <button class="voteButton btn btn-primary cursor-pointer float-end mt-2" data-ranking-id="{{ $data['id'] }}" data-content-slug="{{ $content->slug }}">{{ __('placeholder.lbl_ranking_modal_label_vote') }}</button>
+                                        <button class="voteButton btn btn-primary cursor-pointer float-end mt-2"
+                                            data-ranking-id="{{ $data['id'] }}"
+                                            data-content-slug="{{ $content->slug }}">{{ __('placeholder.lbl_ranking_modal_label_vote') }}</button>
                                     </div>
-                                    
+
                                 </div>
                             @endforeach
                             <div class="swiper-slide">
@@ -72,7 +75,10 @@
                                             </div>
                                             <div class="end mt-5 mb-1">
                                                 <div class="d-grid d-sm-flex justify-content-sm-end gap-3">
-                                                    <button class="voteButton btn btn-primary cursor-pointer float-end mt-2" data-ranking-id="{{ $data['id'] }}" data-content-slug="sugestion">{{ __('placeholder.lbl_ranking_modal_label_send') }}</button>
+                                                    <button
+                                                        class="voteButton btn btn-primary cursor-pointer float-end mt-2"
+                                                        data-ranking-id="{{ $data['id'] }}"
+                                                        data-content-slug="sugestion">{{ __('placeholder.lbl_ranking_modal_label_send') }}</button>
                                                 </div>
 
                                             </div>
@@ -103,10 +109,14 @@
             keyboard: true,
         });
 
-        $(document).ready(function () {
-            $('#rankingModal').modal('show');
+        //get screen width
 
-            $('.voteButton').on('click', function() {
+        $(document).ready(function () {
+            var screenWidth = $(window).width();
+            if (screenWidth < 768) {
+                $('#rankingModal').modal('show');
+            }
+            $('.voteButton').on('click', function () {
                 var rankingId = $(this).data('ranking-id');
                 var contentSlug = $(this).data('content-slug');
 
@@ -124,11 +134,11 @@
                         sugestion_name: sugestionName,
                         sugestion_link: sugestionLink
                     },
-                    success: function(response) {
+                    success: function (response) {
                         alert(response.message);
                         $('#rankingModal').modal('hide');
                     },
-                    error: function(response) {
+                    error: function (response) {
                         alert(response.responseJSON.message);
                     }
                 });
@@ -177,10 +187,12 @@
     .swiper-slide .model-card {
         height: 430px;
     }
-    .card-text{
+
+    .card-text {
         font-size: 14px;
     }
-    .card-title{
+
+    .card-title {
         font-size: 18px;
         font-weight: bold;
     }

@@ -63,7 +63,12 @@ class RankingController extends Controller
     {
         $data = $request->all();
 
-        $data['contents'] = json_encode($data['contents'] ?? []);
+        //set slug
+        $data['contents'] = collect($data['contents'])->
+            map(function ($item) {
+                $item['slug'] = str_slug($item['title']);
+                return $item;
+            })->toJson();
 
         $ranking = Ranking::findOrFail($id);
         $ranking->update($data);

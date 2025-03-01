@@ -65,8 +65,8 @@
 
     @include('frontend::components.partials.scripts.plugins')
 
-    {{-- @include('frontend::components.partials.modal') --}}
-    <x-ranking-modal />
+    {{-- Only mobile --}}
+    <x-ranking-modal  />
 
    
 
