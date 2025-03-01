@@ -29,10 +29,14 @@ class RankingModal extends Component
         if (!$user) {
             return '';
         }
+        if ($user->subscriptionPackage == null) {
+            return '';
+        }
         $plan = $user->subscriptionPackage->where('status', 'active')->first();
         if (!$plan) {
             return '';
         }
+        
         $currentDate = now()->toDateString();
         $ranking = Ranking::where('start_date', '<=', $currentDate)
             ->where('end_date', '>=', $currentDate)
