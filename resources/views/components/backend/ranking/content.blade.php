@@ -3,7 +3,7 @@
     <div class="col-6 position-relative">
         {{ html()->label(__('Content '.$index), 'selectedImageContainer')->class('form-label')}}
             <span class="badge bg-primary rounded-pill text-middle" style="position: absolute; right: 18px;">
-                {{__('Votes')}}:{{$ranking->contents[$index]['votes']}}
+                {{__('Votes')}}:{{$ranking->contents[$index]['votes']??'0'}}
             </span>
         <div class="input-group btn-file-upload">
             {{ html()->button(__('<i class="ph ph-image"></i>' . __('messages.lbl_choose_image')))
