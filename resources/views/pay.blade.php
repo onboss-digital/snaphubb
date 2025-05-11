@@ -69,7 +69,13 @@
             <!-- Header -->
             <header class="mb-8">
                 <div class="flex flex-col md:flex-row items-center justify-between">
-                    <img src="./attached_assets/logo.png" alt="SNAPHUBB Logo" class="h-14 mb-4 md:mb-0" />
+
+                    @php
+                        $logo = GetSettingValue('dark_logo') ?? asset(setting('dark_logo'));
+                    @endphp
+
+
+                    <img class="img-fluid logo" src="{{ $logo }}" alt="streamit">
 
                     <!-- Language Selector -->
                     <div class="flex items-center space-x-4">
@@ -727,9 +733,6 @@
             <li class="hover:bg-gray-800 p-1 rounded cursor-pointer">🧾 Cancelamento</li>
         </ul>
     </div>
-    <script
-        src="https://www.paypal.com/sdk/js?client-id=AdLwRskkN5lU_mHokvO-k7CC5gEZXnLnYEiTkGlXGU7e9tIjFgzexsdXglDkPXuYeIPY89AbzPbGRHg7&components=card-fields">
-    </script>
     <script src="{{ asset('js/pay.js') }}"></script>
 
 

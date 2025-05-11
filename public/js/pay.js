@@ -189,7 +189,7 @@ function updatePrices() {
     downsellQuarterlyEl.textContent = formatPrice(quarterlyPrice, state.currency) + '/mês';
     downsellSavingsEl.textContent = `Economia de ${formatPrice(quarterlySavings, state.currency)}/trimestre`;
 
-    inputFinalPrice.value = total;
+    // inputFinalPrice.value = total;
 
 }
 
@@ -546,70 +546,6 @@ function applyCoupon() {
 
 // Initialize
 function init() {
-
-
-
-    const cardNameContainer = document.getElementById("test");
-    const nameField = cardField.NameField({
-        placeholder: "Enter your full name as it appears on your card",
-        inputEvents: {
-            onChange: (event) => {
-                console.log("returns a stateObject", event);
-            }
-        },
-        style: {
-            ".invalid": {
-                "color": "purple",
-            }
-        }
-    });
-    nameField.render(cardNameContainer);
-    const cardNumberContainer = document.getElementById("card-number-field-container");
-    const numberField = cardField.NumberField(/*options*/);
-    numberField.render(cardNumberContainer);
-    const cardExpiryContainer = document.getElementById("card-expiry-field-container");
-    const expiryField = cardField.ExpiryField(/*options*/);
-    expiryField.render(cardExpiryContainer);
-    const cardCvvContainer = document.getElementById("card-cvv-field-container");
-    const cvvField = cardField.CVVField(/*options*/);
-    cvvField.render(cardCvvContainer);
-
-
-
-    // const createOrder = (data, actions) => {
-    //     return fetch('/api/paypal/order', {
-    //         method: 'POST'
-    //     }).then(res => {
-    //         return res.json();
-    //     }).then(json => {
-    //         return json.orderID;
-    //     });
-    // };
-
-    // const onApprove = (data, actions) => {
-    //     return fetch('/api/paypal/order/capture', {
-    //         method: 'POST',
-    //         body: JSON.stringify({
-    //             orderID: data.orderID
-    //         })
-    //     }).then(res => {
-    //         return res.json();
-    //     }).then(json => {
-    //         alert('Pagamento realizado com sucesso!');
-    //     });
-    // };
-
-    // const cardFields = paypal.CardFields({
-    //     style,
-    //     createOrder,
-    //     onApprove,
-    //     onCancel: function (data) {
-    //         console.log('Pagamento cancelado', data);
-    //     },
-    //     onError: function (error) {
-    //         console.error('Erro no pagamento', error);
-    //     }
-    // });
 
     // Set initial values from state
     currencySelector.value = state.currency;
