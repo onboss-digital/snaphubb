@@ -189,7 +189,10 @@ function updatePrices() {
     downsellQuarterlyEl.textContent = formatPrice(quarterlyPrice, state.currency) + '/mês';
     downsellSavingsEl.textContent = `Economia de ${formatPrice(quarterlySavings, state.currency)}/trimestre`;
 
-    // inputFinalPrice.value = total;
+    console.log('Total:', total);
+    if (inputFinalPrice) {
+        inputFinalPrice.value = total;
+    }
 
 }
 

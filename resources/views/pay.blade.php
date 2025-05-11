@@ -468,7 +468,7 @@
                             <div class="flex justify-between text-sm font-bold mt-2 pt-2 border-t border-gray-700">
                                 <span>TOTAL A PAGAR:</span>
                                 <span id="final-price">R$58,99</span>
-                                <input type="hidden" id="input" name="final-price" value="" />
+                                <input type="hidden" id="input-final-price" name="final-price" value="" />
                             </div>
                         </div>
 

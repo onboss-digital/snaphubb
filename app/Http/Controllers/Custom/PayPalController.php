@@ -13,7 +13,11 @@ class PayPalController extends Controller
      */
     public function sendCheckout(Request $request)
     {
-        dd($request->all());
+
+        $data = $request->all();
+        $data['message'] = 'Token error please try again';
+        $data['status'] = 'error';
+        dd($data);
         // return view('pay');
         return redirect()->route('pay.snapphub');
     }
