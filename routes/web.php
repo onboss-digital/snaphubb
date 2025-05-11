@@ -17,6 +17,20 @@ use App\Http\Controllers\Backend\MobileSettingController;
 use Modules\Setting\Http\Controllers\Backend\SettingsController;
 use Modules\Frontend\Http\Controllers\FrontendController;
 
+
+use App\Http\Controllers\Custom\{
+    PayPalController,
+    PagesController
+};
+
+
+Route::domain('{subdomain}.'.env('APP_URL'))->group(function () {
+    Route::get('/', [PagesController::class, 'paySnapphub'])->name('pay.snapphub');
+});
+
+Route::post('send-checkout', [PayPalController::class, 'sendCheckout'])->name('send-checkout');
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +54,11 @@ Route::group(['middleware' => ['auth','admin']], function () {
     Route::get('notification-counts', [NotificationsController::class, 'notificationCounts'])->name('notification.counts');
     Route::delete('notification-remove/{id}', [NotificationsController::class, 'notificationRemove'])->name('notification.remove');
 });
+
+
+//subdominio pay.snapphub
+
+
 
 Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function () {
     // Language Switch
