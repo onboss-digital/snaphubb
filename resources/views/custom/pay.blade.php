@@ -175,44 +175,6 @@
                                 </label>
                             </div>
 
-                            <div class="relative">
-                                <input type="radio" id="payment-mercado-pago" name="payment_method"
-                                    value="mercado-pago" class="peer sr-only" />
-                                <label for="payment-mercado-pago"
-                                    class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-700 bg-[#2D2D2D] cursor-pointer transition-all hover:bg-gray-800 peer-checked:border-[#E50914] peer-checked:bg-[#2D2D2D] h-24">
-                                    <svg class="w-8 h-8 mb-2" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M17.6842 4.76077V12.8493C17.6842 13.8899 16.8361 14.7381 15.7954 14.7381H3.98781C3.80703 14.7381 3.62897 14.723 3.45703 14.6947C1.97748 14.474 0.873047 13.1821 0.873047 11.6399V5.90404C0.873047 4.65588 1.61782 3.56826 2.69904 3.09432C3.08861 2.91264 3.52557 2.81213 3.98781 2.81213H14.4635C16.2295 2.81213 17.6842 3.74779 17.6842 4.76077Z"
-                                            stroke="white" stroke-width="1.5" />
-                                        <path
-                                            d="M17.0391 6.9708H20.0119C21.0526 6.9708 21.9007 7.81896 21.9007 8.85965V16.9483C21.9007 18.1964 21.1559 19.2841 20.0747 19.758C19.6851 19.9397 19.2481 20.0402 18.7859 20.0402H8.3102C6.54421 20.0402 5.08948 19.1045 5.08948 18.0916V9.9951"
-                                            stroke="white" stroke-width="1.5" />
-                                        <path
-                                            d="M13.7827 8.65747C13.7827 9.4518 13.2568 10.0578 12.7964 10.0578H5.57693C5.11652 10.0578 4.59061 9.4518 4.59061 8.65747C4.59061 7.86315 5.11652 7.28522 5.57693 7.28522H12.7964C13.2568 7.28522 13.7827 7.86315 13.7827 8.65747Z"
-                                            stroke="white" stroke-width="1.5" />
-                                    </svg>
-                                    <span class="text-sm font-medium text-white">Mercado Pago</span>
-                                </label>
-                            </div>
-
-                            <div class="relative">
-                                <input type="radio" id="payment-paypal" name="payment_method" value="paypal"
-                                    class="peer sr-only" />
-                                <label for="payment-paypal"
-                                    class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-700 bg-[#2D2D2D] cursor-pointer transition-all hover:bg-gray-800 peer-checked:border-[#E50914] peer-checked:bg-[#2D2D2D] h-24">
-                                    <svg class="w-8 h-8 mb-2" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M19.2857 7.85714C19.2857 10.3142 17.3 12.2999 14.8428 12.2999H12.8571C12.4387 12.2999 12.1 12.6387 12.1 13.0571V17.6571C12.1 18.0754 11.7613 18.4142 11.3429 18.4142H9.35714C8.93875 18.4142 8.6 18.0754 8.6 17.6571V4.34286C8.6 3.92446 8.93875 3.58571 9.35714 3.58571H14.8428C17.3 3.58571 19.2857 5.57143 19.2857 7.85714Z"
-                                            stroke="white" stroke-width="1.5" />
-                                        <path
-                                            d="M8.6 6.7998H6.61429C5.7775 6.7998 5.1 7.4773 5.1 8.31409V21.6284C5.1 22.0468 5.43875 22.3855 5.85714 22.3855H7.84286C8.26125 22.3855 8.6 22.0468 8.6 21.6284V17.0284C8.6 16.6101 8.93875 16.2713 9.35714 16.2713H11.3429C11.7613 16.2713 12.1 15.9325 12.1 15.5141V13.0855C12.1 12.6671 11.7613 12.3284 11.3429 12.3284H9.35714C8.93875 12.3284 8.6 11.9896 8.6 11.5713V6.7998Z"
-                                            stroke="white" stroke-width="1.5" />
-                                    </svg>
-                                    <span class="text-sm font-medium text-white">PayPal</span>
-                                </label>
-                            </div>
                         </div>
 
                         <!-- Card payment form - shown conditionally -->
@@ -734,7 +696,7 @@
             <li class="hover:bg-gray-800 p-1 rounded cursor-pointer">🧾 Cancelamento</li>
         </ul>
     </div>
-    <script src="{{ asset('js/pay.js') }}"></script>
+    <script src="{{ asset('js/custom/pay.js') }}"></script>
 
 
 </body>

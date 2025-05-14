@@ -12,6 +12,6 @@ class PagesController extends Controller
      */
     public function paySnapphub()
     {
-        return view('pay');
+        return view('custom.pay');
     }
 }
