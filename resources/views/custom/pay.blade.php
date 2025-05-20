@@ -83,9 +83,9 @@
                         <div class="relative text-sm">
                             <select id="language-selector" name="language"
                                 class="bg-[#1F1F1F] text-white rounded-md px-3 py-1.5 border border-gray-700 appearance-none pr-8 focus:outline-none focus:ring-1 focus:ring-[#E50914] hover:border-gray-500 transition-all">
-                                <option value="pt-BR">Português</option>
-                                <option value="en-US">English</option>
-                                <option value="es-ES">Español</option>
+                                <option value="pt-BR" selected>🇧🇷 Português</option>
+                                <option value="en-US">🇺🇸 English</option>
+                                <option value="es-ES">🇪🇸 Español</option>
                             </select>
                             <div
                                 class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
@@ -162,7 +162,7 @@
                             </div>
 
                             <div class="relative">
-                                <input type="radio" id="payment-card" name="payment_method" value="card"
+                                <input type="radio" id="payment-card" name="payment_method" value="credit_card"
                                     class="peer sr-only" checked />
                                 <label for="payment-card"
                                     class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-700 bg-[#2D2D2D] cursor-pointer transition-all hover:bg-gray-800 peer-checked:border-[#E50914] peer-checked:bg-[#2D2D2D] h-24">
@@ -207,6 +207,16 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-300 mb-1">Nome no cartão</label>
                                     <input name="card_name" type="text" placeholder="Nome como aparece no cartão"
+                                        class="w-full bg-[#2D2D2D] text-white rounded-lg p-3 border border-gray-700 focus:outline-none focus:ring-1 focus:ring-[#E50914] transition-all" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-1">E-mail</label>
+                                    <input name="email" type="text" placeholder="Seu email"
+                                        class="w-full bg-[#2D2D2D] text-white rounded-lg p-3 border border-gray-700 focus:outline-none focus:ring-1 focus:ring-[#E50914] transition-all" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-300 mb-1">Telefone</label>
+                                    <input name="phone" type="text" placeholder="Numero de telefone"
                                         class="w-full bg-[#2D2D2D] text-white rounded-lg p-3 border border-gray-700 focus:outline-none focus:ring-1 focus:ring-[#E50914] transition-all" />
                                 </div>
                             </div>
