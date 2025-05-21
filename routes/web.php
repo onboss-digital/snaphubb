@@ -29,6 +29,7 @@ Route::domain('{subdomain}.'.env('APP_URL'))->group(function () {
     
 });
 Route::get('pay', [PagesController::class, 'paySnapphub'])->name('pay.snapphub');
+Route::post('change-language', [PagesController::class, 'changeLanguage'])->name('change.language');
 
 Route::post('send-checkout', [TriboPayController::class, 'sendCheckout'])->name('send-checkout');
 
