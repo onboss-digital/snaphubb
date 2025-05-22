@@ -12,7 +12,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermission;
 use App\Http\Controllers\SearchController;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\{Route, Artisan};
 use App\Http\Controllers\Backend\MobileSettingController;
 use Modules\Setting\Http\Controllers\Backend\SettingsController;
 use Modules\Frontend\Http\Controllers\FrontendController;
@@ -20,15 +20,18 @@ use Modules\Frontend\Http\Controllers\FrontendController;
 
 use App\Http\Controllers\Custom\{
     PayPalController,
-    PagesController
+    PagesController,
+    TriboPayController
 };
 
 
 Route::domain('{subdomain}.'.env('APP_URL'))->group(function () {
-    Route::get('/', [PagesController::class, 'paySnapphub'])->name('pay.snapphub');
+    
 });
+Route::get('pay', [PagesController::class, 'paySnapphub'])->name('pay.snapphub');
+Route::post('change-language', [PagesController::class, 'changeLanguage'])->name('change.language');
 
-Route::post('send-checkout', [PayPalController::class, 'sendCheckout'])->name('send-checkout');
+Route::post('send-checkout', [TriboPayController::class, 'sendCheckout'])->name('send-checkout');
 
 
 /*
