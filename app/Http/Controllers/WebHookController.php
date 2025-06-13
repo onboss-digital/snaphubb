@@ -199,7 +199,13 @@ class WebHookController extends Controller
         }
 
         return response()->json(['status' => 'success']);
+    }
 
+    public function triboPay(Request $request, $logFile = false)
+    {
+        $data = $request->all();
+        $logFile = $logFile == false ? $this->logData($data) : $logFile;
+
+        return response()->json(['status' => 'success']);
     }
 }
-

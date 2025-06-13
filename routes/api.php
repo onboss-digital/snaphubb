@@ -50,7 +50,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('delete-account', [AuthController::class, 'deleteAccount']);
 
     Route::get('vendor-dashboard-list', [DashboardController::class, 'VendorDashboardDetail']);
-
 });
 Route::get('app-configuration', [SettingController::class, 'appConfiguraton']);
 
@@ -60,6 +59,7 @@ Route::post('execute-webhook-logs/{webhook}', [WebHookController::class, 'execut
 Route::group(['prefix' => 'webhook'], function () {
     Route::controller(WebHookController::class)->group(function () {
         Route::post('cartpanda', 'cartpanda');
+        Route::post('tribopay', 'tribopay');
     });
 });
 
