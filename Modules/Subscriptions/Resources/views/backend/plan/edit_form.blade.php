@@ -98,7 +98,7 @@
                             ->id('price')
                             ->attribute('step', '1')
                             ->attribute('placeholder', __('placeholder.lbl_plan_price'))
-                            ->attribute('oninput', "this.value = Math.abs(this.value)")
+                            // ->attribute('oninput', "this.value = Math.abs(this.value)")
                             // ->attribute('min', '0')
                             ->attribute('required','required')
                     }}

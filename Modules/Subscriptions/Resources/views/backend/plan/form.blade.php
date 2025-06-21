@@ -65,7 +65,7 @@
                             ->id('price')
                             ->attribute('step', '0.01')
                             ->attribute('placeholder', __('placeholder.lbl_plan_price'))
-                            ->attribute('oninput', "this.value = Math.abs(this.value)")
+                            // ->attribute('oninput', "this.value = Math.abs(this.value)")
                             ->attribute('required','required')
                     }}
                     @error('price')
