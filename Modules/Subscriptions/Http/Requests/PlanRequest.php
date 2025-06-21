@@ -22,7 +22,10 @@ class PlanRequest extends FormRequest
                 'description' => ['required'],
                 'duration_value' => ['required', 'numeric', 'min:1'],
                 'price' => ['required', 'numeric', 'min:1'],
-
+                'language' => ['nullable', 'string'],
+                'custom_gateway' => ['nullable', 'in:CartPanda,For4pay,TriboPay'],
+                'external_product_id' => ['nullable', 'string'],
+                'external_url' => ['nullable', 'url'],
             ];
 
             if ($this->isMethod('put')) {
@@ -40,12 +43,15 @@ class PlanRequest extends FormRequest
             'level.required' =>'Level is required',
             'duration.required' =>'Duration is required',
             'duration_value.required' =>'Duration value is required',
-            'duration_value.numeric' => 'Price must be a number.', // Error message for non-numeric price
-            'duration_value.min' => 'Price must be at least 1.',
+            'duration_value.numeric' => 'Duration value must be a number.',
+            'duration_value.min' => 'Duration value must be at least 1.',
             'price.required' => 'Price is required.',
-            'price.numeric' => 'Price must be a number.', // Error message for non-numeric price
+            'price.numeric' => 'Price must be a number.',
             'price.min' => 'Price must be at least 1.',
-           
+            'language.string' => 'Language must be a valid string.',
+            'custom_gateway.in' => 'Custom gateway must be one of: CartPanda, For4pay, TriboPay.',
+            'external_product_id.string' => 'External product ID must be a valid string.',
+            'external_url.url' => 'External URL must be a valid URL.',
         ];
     }
 }

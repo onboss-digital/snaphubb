@@ -91,37 +91,6 @@
                     <div class="invalid-feedback" id="name-error">currency field is required</div>
                 </div>
                 <div class="col-md-3 col-lg-2">
-                    {{ html()->label(__('plan.lbl_duration_value') . '<span class="text-danger">*</span>', 'duration_value')->class('form-label') }}
-                    {{
-                            html()->input('number', 'duration_value', $data->duration_value)
-                                ->class('form-control')
-                                ->id('duration_value')
-                                ->attribute('placeholder', __('placeholder.lbl_plan_duration_value'))
-                                ->attribute('oninput', "this.value = Math.abs(this.value)")
-                                // ->attribute('min', '1')
-                                ->attribute('required','required')
-                        }}
-                    @error('duration_value')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="col-md-3 col-lg-2">
-                    {{ html()->label(__('plan.lbl_currency') . '<span class="text-danger">*</span>', 'currency')->class('form-label') }}
-                    {{
-                         html()->select('currency',
-                                        collect(Modules\Currency\Models\Currency::get()->toArray())->pluck('currency_code','currency_code'),
-                                        $data->currency)
-                            ->class('form-control select2')
-                            ->id('currency')
-                            ->attribute('placeholder', __('placeholder.lbl_plan_currency'))
-                            ->attribute('required','required')
-                    }}
-                    @error('currency')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">currency field is required</div>
-                </div>
-                <div class="col-md-3 col-lg-2">
                     {{ html()->label(__('plan.lbl_amount') . '<span class="text-danger">*</span>', 'price')->class('form-label') }}
                     {{
                         html()->input('number', 'price', $data->price)
@@ -187,6 +156,66 @@
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
+
+            <!-- Language Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_language'), 'language')->class('form-label') }}
+                    {{
+                        html()->select('language', collect(['' => __('plan.lbl_select_language')])->merge(config('app.available_locales')), old('language', $data->language))
+                            ->class('form-control select2')
+                            ->id('language')
+                    }}
+                @error('language')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Custom Gateway Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_custom_gateway'), 'custom_gateway')->class('form-label') }}
+                    {{
+                        html()->select('custom_gateway', [
+                                '' => __('plan.lbl_select_gateway'),
+                                'CartPanda' => 'CartPanda',
+                                'For4pay' => 'For4pay',
+                                'TriboPay' => 'TriboPay'
+                            ], old('custom_gateway', $data->custom_gateway))
+                            ->class('form-control select2')
+                            ->id('custom_gateway')
+                    }}
+                @error('custom_gateway')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- External Product ID Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_external_product_id'), 'external_product_id')->class('form-label') }}
+                {{
+                    html()->text('external_product_id', old('external_product_id', $data->external_product_id))
+                        ->class('form-control')
+                        ->id('external_product_id')
+                        ->attribute('placeholder', __('plan.lbl_external_product_id_placeholder'))
+                }}
+                @error('external_product_id')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- External URL Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_external_url'), 'external_url')->class('form-label') }}
+                {{
+                    html()->text('external_url', old('external_url', $data->external_url))
+                        ->class('form-control')
+                        ->id('external_url')
+                        ->attribute('placeholder', __('plan.lbl_external_url_placeholder'))
+                }}
+                @error('external_url')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
             <!-- Discount Toggle -->
             <div class="col-md-4 col-lg-2">
                 {{ html()->label(__('plan.lbl_discount'), 'discount')->class('form-label') }}
@@ -207,23 +236,6 @@
             </div>
 
             {{-- CartPanda Toggle --}}
-            <div class="col-md-4 col-lg-2">
-                {{ html()->label(__('plan.lbl_cartpanda_active'), 'cartpanda_active')->class('form-label') }}
-                <div class="d-flex align-items-center justify-content-between form-control">
-                    {{ html()->label(__('messages.active'), 'cartpanda_active')->class('form-label mb-0 text-body') }}
-                    <div class="form-check form-switch">
-                        {{ html()->hidden('cartpanda_active', 0) }}
-                        {{
-                            html()->checkbox('cartpanda_active', old('cartpanda_active', $data->cartpanda_active))
-                                ->class('form-check-input')
-                                ->id('cartpanda-toggle')
-                        }}
-                    </div>
-                </div>
-                @error('cartpanda_active')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
             <div class="col-md-2 col-lg-4 discount-section {{ $data->discount ? '' : 'd-none' }}" id="discountPercentageSection">
                 {{ html()->label(__('plan.lbl_discount_percentage') . '<span class="text-danger">*</span>', 'discount_percentage')->class('form-label') }}
                 {{
@@ -255,38 +267,6 @@
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
                 <div class="invalid-feedback" id="total-price-error">Total price field is required</div>
-            </div>
-           
-            
-            {{-- CartPanda Section --}}
-            <div class="col-md-6 col-lg-4 cartpanda-section {{ $data->cartpanda_active ? '' : 'd-none' }}" id="cartpandaProductIdSection">
-                {{ html()->label(__('plan.lbl_cartpanda_product_id') . '<span class="text-danger">*</span>', 'cartpanda_product_id')->class('form-label') }}
-                {{
-                    html()->text('cartpanda_product_id', old('cartpanda_product_id', $data->cartpanda_product_id ?? ''))
-                        ->class('form-control')
-                        ->id('cartpanda_product_id')
-                        ->attribute('placeholder', __('plan.lbl_cartpanda_product_id'))
-                        ->attribute('required','required')
-                }}
-                @error('cartpanda_product_id')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <div class="invalid-feedback" id="cartpanda_product_id-error">CartPanda Product ID field is required</div>
-            </div>
-
-            <div class="col-md-6 col-lg-4 cartpanda-section {{ $data->cartpanda_active ? '' : 'd-none' }}" id="cartpandaCheckoutUrlSection">
-                {{ html()->label(__('plan.lbl_cartpanda_checkout_url') . '<span class="text-danger">*</span>', 'cartpanda_checkout_url')->class('form-label') }}
-                {{
-                    html()->text('cartpanda_checkout_url', old('cartpanda_checkout_url', $data->cartpanda_checkout_url ?? ''))
-                        ->class('form-control')
-                        ->id('cartpanda_checkout_url')
-                        ->attribute('placeholder', __('plan.lbl_cartpanda_checkout_url'))
-                        ->attribute('required','required')
-                }}
-                @error('cartpanda_checkout_url')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <div class="invalid-feedback" id="cartpanda_checkout_url-error">CartPanda Checkout URL field is required</div>
             </div>
 
 
@@ -519,9 +499,6 @@ tinymce.init({
             const $discountError = $('#discount-error'); // Error for invalid percentage
             const $discountMaxError = $('#discount-max-error'); // Error for max percentage
 
-            const $cartpandaTogle = $('#cartpanda-toggle');
-            const $cartpandaSection  = $('.cartpanda-section');
-
 
             function updateSections() {
                 const price = parseFloat($priceInput.val()) || 0;
@@ -538,21 +515,9 @@ tinymce.init({
                     $discountPercentageInput.val(0);  // Set discount to 0 when off
                     $totalPriceInput.val(price.toFixed(2)); // Reset total price to match price when discount is off
                 }
-
-                if ($cartpandaTogle.is(':checked')) {
-                    $cartpandaSection.removeClass('d-none');
-                    $cartpandaSection.find('input').prop('required', true);
-                } else {
-                    $cartpandaSection.addClass('d-none');
-                    $cartpandaSection.find('input').prop('required', false);
-                }
-
-
-
             }
 
             $discountToggle.change(updateSections);
-            $cartpandaTogle.change(updateSections);
             updateSections();
 
 

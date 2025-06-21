@@ -43,7 +43,7 @@ class WebHookController extends Controller
             if (!is_dir($logDir)) {
                 mkdir($logDir, 0755, true);
             }
-            $logFile = $logDir . "/{$type}" . date('Ymd_His') . 'log';
+            $logFile = $logDir . "/{$type}" . date('Ymd_His') . '.log';
             $log = json_encode($data) . PHP_EOL;
             file_put_contents($logFile, $log);
             return $logFile;
@@ -246,38 +246,48 @@ class WebHookController extends Controller
                 $logData = $data;
             }
 
-            app()->setLocale(env('APP_LOCALE', 'es'));
-            switch ($logData['event'] ?? null) {
-                case 'order.paid':
-                    $customer = $logData['order']['customer'] ?? [];
-                    $user = \App\Models\User::firstOrCreate([
-                        'email' => $customer['email'] ?? $logData['order']['email'] ?? null
-                    ], [
-                        'first_name' => $customer['first_name'] ?? null,
-                        'last_name' => $customer['last_name'] ?? null,
-                        'email' => $customer['email'] ?? $logData['order']['email'] ?? null,
-                        'password' => bcrypt('P@55w0rd'),
-                        'user_type' => 'user',
-                    ]);
+            app()->setLocale(env('APP_LOCALE', 'br'));
 
-                    $product_id = $logData['order']['line_items'][0]['product_id'] ?? null;
-                    $plan = \Modules\Subscriptions\Models\Plan::where('cartpanda_product_id', $product_id)->first();
-                    if (!$plan) {
-                        $plan = \Modules\Subscriptions\Models\Plan::orderBy('price', 'asc')->first();
-                    }
+            // Novo formato TriboPay: event = 'transaction', status = 'paid'
+            if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'paid') {
+                $customer = $logData['customer'] ?? [];
+                $user = \App\Models\User::firstOrCreate([
+                    'email' => $customer['email'] ?? null
+                ], [
+                    'first_name' => $customer['name'] ?? null,
+                    'last_name' => null,
+                    'email' => $customer['email'] ?? null,
+                    'password' => bcrypt('P@55w0rd'),
+                    'user_type' => 'user',
+                ]);
 
-                    $this->handleSubscrible($plan->id, $plan->price, 'tribopay', $logData['order']['id'] ?? null, $user);
+                // Buscar plano pelo hash do offer, se existir, senão pelo menor preço
+                $offer = $logData['offer'] ?? [];
+                $product_hash = $offer['hash'] ?? null;
+                $plan = null;
+                if ($product_hash) {
+                    $plan = \Modules\Subscriptions\Models\Plan::where('cartpanda_product_id', $product_hash)
+                        ->orWhere('hash', $product_hash)
+                        ->first();
+                }
+                if (!$plan) {
+                    $plan = \Modules\Subscriptions\Models\Plan::orderBy('price', 'asc')->first();
+                }
 
-                    $user->password_decrypted = 'P@55w0rd';
+                $amount = $logData['transaction']['amount'] ?? ($offer['price'] ?? ($plan ? $plan->price : 0));
+                $transaction_id = $logData['transaction']['id'] ?? null;
 
-                    event(new \Illuminate\Auth\Events\Registered($user));
-                    break;
-                case 'order.failed':
-                    break;
-                case 'order.cancelled':
-                    break;
-                default:
-                    return response()->json(['status' => 'error']);
+                $this->handleSubscrible($plan->id, $amount, 'tribopay', $transaction_id, $user);
+
+                $user->password_decrypted = 'P@55w0rd';
+
+                event(new \Illuminate\Auth\Events\Registered($user));
+            } else if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'failed') {
+                // Lógica para transação falhada
+            } else if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'cancelled') {
+                // Lógica para transação cancelada
+            } else {
+                return response()->json(['status' => 'error']);
             }
 
             if (file_exists($logFile)) {

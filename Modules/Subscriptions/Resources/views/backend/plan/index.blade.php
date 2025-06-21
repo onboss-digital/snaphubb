@@ -150,8 +150,8 @@ const columns = [
                 title: "{{ __(key: 'plan.lbl_name') }}",
                 render: function(data, type, row, meta) {
                     var span = '';
-                    if(row.cartpanda_active == 1) {
-                        span = '<span class="badge" style="color: #ffffff;background-color: #1aadff;margin: 5px;">Cartpanda</span>';
+                    if(row.custom_gateway) {
+                        span = '<span class="badge" style="color: #ffffff;background-color: #1aadff;margin: 5px;">' + row.custom_gateway + '</span>';
                     }
                     return '<h6 class="mb-0">' + data + span + '</h6>';
                 }

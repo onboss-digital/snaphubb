@@ -25,6 +25,14 @@ return [
     'enter_discount_percentage'=>'Enter percentage',
     'lbl_total_price'=>'Total Price',
     'lbl_supported_device_type_options'=>'Device Types',
-    'lbl_profile_limit'=>'Profile Limit'
+    'lbl_profile_limit'=>'Profile Limit',
+    'lbl_language' => 'Language',
+    'lbl_select_language' => 'Select Language',
+    'lbl_custom_gateway' => 'Custom Gateway',
+    'lbl_select_gateway' => 'Select Gateway',
+    'lbl_external_product_id' => 'External Product ID',
+    'lbl_external_product_id_placeholder' => 'Enter external product ID',
+    'lbl_external_url' => 'External URL',
+    'lbl_external_url_placeholder' => 'Enter external URL',
     
 ];

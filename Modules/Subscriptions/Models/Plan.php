@@ -27,9 +27,10 @@ class Plan extends BaseModel
         'discount_percentage',
         'total_price',
         'currency',
-        'cartpanda_active',
-        'cartpanda_product_id',
-        'cartpanda_checkout_url',
+        'language',
+        'custom_gateway',
+        'external_product_id',
+        'external_url',
     ];
 
     const CUSTOM_FIELD_MODEL = 'Modules\Subscriptions\Models\Plan';

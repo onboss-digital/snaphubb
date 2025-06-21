@@ -283,6 +283,8 @@ class PlanController extends Controller
         $planLimits=PlanLimitation::where('status',1)->get();
 
         $downloadoptions=Constant::where('type','video_quality')->get();
+        
+        $languages=Constant::where('type','movie_language')->where('status',1)->get();
 
         $purchaseMethodEnabled  = Setting::where('name', 'iap_payment_method')->value('val') == 1;
 
@@ -290,7 +292,7 @@ class PlanController extends Controller
 
         $module_title = __('plan.lbl_add_new_plan');
 
-       return view('subscriptions::backend.plan.form',compact('planLimits','downloadoptions','module_title','assets','purchaseMethodEnabled'));
+       return view('subscriptions::backend.plan.form',compact('planLimits','downloadoptions','languages','module_title','assets','purchaseMethodEnabled'));
      }
 
 
@@ -386,12 +388,13 @@ class PlanController extends Controller
             $limits[$mapping->limitation_slug] = json_decode($mapping->limit, true);
         }
         $downloadoptions=Constant::where('type','video_quality')->get();
+        $languages=Constant::where('type','language')->where('status',1)->get();
         $discount = $data->discount;
         $discount_percentage = $data->discount_percentage;
         $total_price = $data->total_price;
         $module_title = __('plan.lbl_edit_plan');
 
-        return view('subscriptions::backend.plan.edit_form',compact('plan','data','planLimits','downloadoptions','discount','discount_percentage','total_price','module_title','assets','limits','purchaseMethodEnabled'));
+        return view('subscriptions::backend.plan.edit_form',compact('plan','data','planLimits','downloadoptions','languages','discount','discount_percentage','total_price','module_title','assets','limits','purchaseMethodEnabled'));
 
     }
 
