@@ -171,6 +171,7 @@
             </div>
 
             <!-- Custom Gateway Field -->
+            
             <div class="col-md-4 col-lg-2">
                 {{ html()->label(__('plan.lbl_custom_gateway'), 'custom_gateway')->class('form-label') }}
                     {{

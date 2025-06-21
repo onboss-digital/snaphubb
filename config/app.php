@@ -244,4 +244,20 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+
+    /*|--------------------------------------------------------------------------
+    | Available Custom Payment Gateways
+    |--------------------------------------------------------------------------
+    |
+    | This array defines the available custom payment gateways that can be
+    | selected for subscription plans. Each gateway should be defined with
+    | a unique key and a user-friendly name.
+    |
+    */
+    'available_custom_gatways' => [
+        'cartpanda' => 'CartPanda',
+        'for4pay' => 'For4payments',
+        'tribopay' => 'TriboPay'
+    ],
+
 ];
