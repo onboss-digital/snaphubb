@@ -27,6 +27,7 @@ return [
     'lbl_supported_device_type_options'=>'Device Types',
     'lbl_profile_limit'=>'Profile Limit',
     'lbl_currency'=>'Currency',
+    'lbl_language' => 'Idioma',
 
     'lbl_cartpanda_active' => 'CartPanda Active',
     'lbl_cartpanda_product_id' => 'CartPanda Product ID',

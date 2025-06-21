@@ -35,6 +35,14 @@ class Plan extends BaseModel
 
     const CUSTOM_FIELD_MODEL = 'Modules\Subscriptions\Models\Plan';
 
+    protected $casts = [
+        'price' => 'decimal:2',
+        'discount_percentage' => 'decimal:2',
+        'total_price' => 'decimal:2',
+        'status' => 'boolean',
+        'discount' => 'boolean',
+    ];
+
     public function planLimitation()
     {
         return $this->hasMany(PlanLimitationMapping::class, 'plan_id', 'id')->with('limitation_data');

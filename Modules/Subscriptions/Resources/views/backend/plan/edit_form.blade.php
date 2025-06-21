@@ -96,7 +96,7 @@
                         html()->input('number', 'price', $data->price)
                             ->class('form-control')
                             ->id('price')
-                            ->attribute('step', '1')
+                            ->attribute('step', '0.01')
                             ->attribute('placeholder', __('placeholder.lbl_plan_price'))
                             // ->attribute('oninput', "this.value = Math.abs(this.value)")
                             // ->attribute('min', '0')

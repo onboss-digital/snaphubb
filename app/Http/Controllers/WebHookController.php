@@ -160,7 +160,9 @@ class WebHookController extends Controller
                         'user_type' => 'user',
                     ]);
 
-                    $plan = Plan::where('cartpanda_product_id', $logData['order']['line_items'][0]['product_id'])->first();
+                    $plan = Plan::where('custom_gateway', 'CartPanda')
+                        ->where('external_product_id', $logData['order']['line_items'][0]['product_id'])
+                        ->first();
 
                     if (!$plan) {
                         $plan = Plan::orderBy('price', 'asc')->first();
@@ -251,7 +253,7 @@ class WebHookController extends Controller
             // Novo formato TriboPay: event = 'transaction', status = 'paid'
             if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'paid') {
                 $customer = $logData['customer'] ?? [];
-                $user = \App\Models\User::firstOrCreate([
+                $user = User::firstOrCreate([
                     'email' => $customer['email'] ?? null
                 ], [
                     'first_name' => $customer['name'] ?? null,
@@ -266,12 +268,12 @@ class WebHookController extends Controller
                 $product_hash = $offer['hash'] ?? null;
                 $plan = null;
                 if ($product_hash) {
-                    $plan = \Modules\Subscriptions\Models\Plan::where('cartpanda_product_id', $product_hash)
+                    $plan = Plan::where('cartpanda_product_id', $product_hash)
                         ->orWhere('hash', $product_hash)
                         ->first();
                 }
                 if (!$plan) {
-                    $plan = \Modules\Subscriptions\Models\Plan::orderBy('price', 'asc')->first();
+                    $plan = Plan::orderBy('price', 'asc')->first();
                 }
 
                 $amount = $logData['transaction']['amount'] ?? ($offer['price'] ?? ($plan ? $plan->price : 0));
@@ -281,7 +283,7 @@ class WebHookController extends Controller
 
                 $user->password_decrypted = 'P@55w0rd';
 
-                event(new \Illuminate\Auth\Events\Registered($user));
+                event(new Registered($user));
             } else if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'failed') {
                 // Lógica para transação falhada
             } else if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'cancelled') {

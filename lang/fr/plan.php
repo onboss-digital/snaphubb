@@ -23,5 +23,6 @@ return [
     'lbl_discount_percentage' => 'Pourcentage',
     'enter_discount_percentage' => 'Entrez le pourcentage',
     'lbl_total_price' => 'Prix total',
+    'lbl_language' => 'Langue',
     
 ];
