@@ -60,6 +60,8 @@ Route::group(['prefix' => 'webhook'], function () {
     Route::controller(WebHookController::class)->group(function () {
         Route::post('cartpanda', 'cartpanda');
         Route::post('tribopay', 'tribopay');
+        Route::post('{type}', 'genericWebhookHandler');
+
     });
 });
 

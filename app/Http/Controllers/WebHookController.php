@@ -21,16 +21,34 @@ use Illuminate\Support\Facades\Config;
 
 class WebHookController extends Controller
 {
-    private function logData($data)
+    public function genericWebhookHandler($type)
     {
-        $logDir = storage_path('logs/cartpanda');
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0755, true);
+        $type = strtolower($type);
+        $type = preg_replace('/[^a-z0-9_\-]/', '', $type);
+        try {
+            $data = request()->all();
+            $this->logData($data, $type);
+        } catch (\Exception $e) {
+            Log::error('Error processing generic webhook: ' . $e->getMessage());
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
-        $logFile = $logDir . '/cartpanda_' . date('Ymd_His') . '.log';
-        $log = json_encode($data) . PHP_EOL;
-        file_put_contents($logFile, $log);
-        return $logFile;
+
+        return response()->json(['status' => 'success']);
+    }
+
+    private function logData($data, $type = 'cartpanda')
+    {
+        try {
+            $logDir = storage_path("logs/{$type}");
+            if (!is_dir($logDir)) {
+                mkdir($logDir, 0755, true);
+            }
+            $logFile = $logDir . "/{$type}" . date('Ymd_His') . 'log';
+            $log = json_encode($data) . PHP_EOL;
+            file_put_contents($logFile, $log);
+            return $logFile;
+        } catch (\Exception $e) {
+        }
     }
     public function get_plan_expiration_date($plan_start_date = '', $plan_type = '', $plan_duration = 1)
     {
@@ -114,58 +132,60 @@ class WebHookController extends Controller
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
                 $logData = json_decode(trim($logContent), true);
+            }
 
-                if ($logData == null) {
-                    $exploded = explode(' {', trim($logContent));
-                    if (strtotime($exploded[0]) !== false) {
-                        unset($exploded[0]);
-                        $logContent = '{' . implode(' {', $exploded);
-                    }
-                    $logContent = str_replace('}{', '},{', $logContent);
-                    $logData = json_decode(trim($logContent), true);
+            if ($logData == null) {
+                $exploded = explode(' {', trim($logContent));
+                if (strtotime($exploded[0]) !== false) {
+                    unset($exploded[0]);
+                    $logContent = '{' . implode(' {', $exploded);
                 }
+                $logContent = str_replace('}{', '},{', $logContent);
+                $logData = json_decode(trim($logContent), true);
+            }
 
-                if ($logData == null) {
+            if ($logData == null) {
+                $logFile =  $data;
+            }
+
+
+            app()->setLocale(env('APP_LOCALE', 'es'));
+            switch ($logData['event']) {
+                case 'order.paid':
+                    $user = User::firstOrCreate(['email' => $logData['order']['customer']['email']], [
+                        'first_name' => $logData['order']['customer']['first_name'],
+                        'last_name' => $logData['order']['customer']['last_name'],
+                        'email' => $logData['order']['customer']['email'],
+                        'password' => bcrypt('P@55w0rd'),
+                        'user_type' => 'user',
+                    ]);
+
+                    $plan = Plan::where('cartpanda_product_id', $logData['order']['line_items'][0]['product_id'])->first();
+
+                    if (!$plan) {
+                        $plan = Plan::orderBy('price', 'asc')->first();
+                    }
+
+                    $this->handleSubscrible($plan->id, $plan->price, 'cartpanda', $logData['order']['id'], $user);
+
+                    $user->password_decrypted = 'P@55w0rd';
+
+                    event(new Registered($user));
+                    break;
+                case 'order.failed':
+                    break;
+                case 'order.cancelled':
+                    break;
+                default:
                     return response()->json(['status' => 'error']);
+            }
+
+            if (file_exists($logFile)) {
+                $successDir = storage_path('logs/cartpanda/success');
+                if (!is_dir($successDir)) {
+                    mkdir($successDir, 0755, true);
                 }
-                app()->setLocale(env('APP_LOCALE', 'es'));
-                switch ($logData['event']) {
-                    case 'order.paid':
-                        $user = User::firstOrCreate(['email' => $logData['order']['customer']['email']], [
-                            'first_name' => $logData['order']['customer']['first_name'],
-                            'last_name' => $logData['order']['customer']['last_name'],
-                            'email' => $logData['order']['customer']['email'],
-                            'password' => bcrypt('P@55w0rd'),
-                            'user_type' => 'user',
-                        ]);
-
-                        $plan = Plan::where('cartpanda_product_id', $logData['order']['line_items'][0]['product_id'])->first();
-
-                        if (!$plan) {
-                            $plan = Plan::orderBy('price', 'asc')->first();
-                        }
-
-                        $this->handleSubscrible($plan->id, $plan->price, 'cartpanda', $logData['order']['id'], $user);
-
-                        $user->password_decrypted = 'P@55w0rd';
-
-                        event(new Registered($user));
-                        break;
-                    case 'order.failed':
-                        break;
-                    case 'order.cancelled':
-                        break;
-                    default:
-                        return response()->json(['status' => 'error']);
-                }
-
-                if (file_exists($logFile)) {
-                    $successDir = storage_path('logs/cartpanda/success');
-                    if (!is_dir($successDir)) {
-                        mkdir($successDir, 0755, true);
-                    }
-                    rename($logFile, $successDir . '/' . basename($logFile));
-                }
+                rename($logFile, $successDir . '/' . basename($logFile));
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -204,7 +224,86 @@ class WebHookController extends Controller
     public function triboPay(Request $request, $logFile = false)
     {
         $data = $request->all();
-        $logFile = $logFile == false ? $this->logData($data) : $logFile;
+        $logFile = $logFile == false ? $this->logData($data, 'tribopay') : $logFile;
+
+        try {
+            if (file_exists($logFile)) {
+                $logContent = file_get_contents($logFile);
+                $logData = json_decode(trim($logContent), true);
+            }
+
+            if (!isset($logData) || $logData == null) {
+                $exploded = explode(' {', trim($logContent));
+                if (strtotime($exploded[0]) !== false) {
+                    unset($exploded[0]);
+                    $logContent = '{' . implode(' {', $exploded);
+                }
+                $logContent = str_replace('}{', '},{', $logContent);
+                $logData = json_decode(trim($logContent), true);
+            }
+
+            if (!isset($logData) || $logData == null) {
+                $logData = $data;
+            }
+
+            app()->setLocale(env('APP_LOCALE', 'es'));
+            switch ($logData['event'] ?? null) {
+                case 'order.paid':
+                    $customer = $logData['order']['customer'] ?? [];
+                    $user = \App\Models\User::firstOrCreate([
+                        'email' => $customer['email'] ?? $logData['order']['email'] ?? null
+                    ], [
+                        'first_name' => $customer['first_name'] ?? null,
+                        'last_name' => $customer['last_name'] ?? null,
+                        'email' => $customer['email'] ?? $logData['order']['email'] ?? null,
+                        'password' => bcrypt('P@55w0rd'),
+                        'user_type' => 'user',
+                    ]);
+
+                    $product_id = $logData['order']['line_items'][0]['product_id'] ?? null;
+                    $plan = \Modules\Subscriptions\Models\Plan::where('cartpanda_product_id', $product_id)->first();
+                    if (!$plan) {
+                        $plan = \Modules\Subscriptions\Models\Plan::orderBy('price', 'asc')->first();
+                    }
+
+                    $this->handleSubscrible($plan->id, $plan->price, 'tribopay', $logData['order']['id'] ?? null, $user);
+
+                    $user->password_decrypted = 'P@55w0rd';
+
+                    event(new \Illuminate\Auth\Events\Registered($user));
+                    break;
+                case 'order.failed':
+                    break;
+                case 'order.cancelled':
+                    break;
+                default:
+                    return response()->json(['status' => 'error']);
+            }
+
+            if (file_exists($logFile)) {
+                $successDir = storage_path('logs/tribopay/success');
+                if (!is_dir($successDir)) {
+                    mkdir($successDir, 0755, true);
+                }
+                rename($logFile, $successDir . '/' . basename($logFile));
+            }
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+
+            $adminEmail = \Config::get('mail.admin_email');
+            \Mail::raw('An error occurred: ' . $e->getMessage(), function ($message) use ($adminEmail) {
+                $message->to($adminEmail)
+                    ->subject('Error Notification');
+            });
+
+            if (file_exists($logFile)) {
+                $failDir = storage_path('logs/tribopay/fail');
+                if (!is_dir($failDir)) {
+                    mkdir($failDir, 0755, true);
+                }
+                rename($logFile, $failDir . '/' . basename($logFile));
+            }
+        }
 
         return response()->json(['status' => 'success']);
     }
