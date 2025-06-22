@@ -95,19 +95,38 @@
                     </div>
                     </a>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-2 col-sm-3">
                     <a href="{{ route('backend.subscriptions.index') }}">
-                    <div class="card card-stats">
-                        <div class="card-body">
-                            <div class="card-icon mb-5 fs-1">
-                                <i class="ph ph-money"></i>
-                            </div>
-                            <div class="card-data">
-                                <h1 class="">{{ Currency::format( $total_revenue) }}</h1>
-                                <p class="mb-0 fs-6">{{ __('dashboard.lbl_total_revenue') }}</p>
+                        <div class="card card-stats">
+                            <div class="card-body">
+                                <div class="card-icon mb-5 fs-1">
+                                    <i class="ph ph-money"></i>
+                                </div>
+                                <div class="card-data">
+                                    <h1 class="">
+                                        {{ Number::currency($totals['BRL'] ?? 0, 'BRL') }}
+                                    </h1>
+                                    <p class="mb-0 fs-6">{{ __('dashboard.lbl_total_revenue') }}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
+                </div>
+                <div class="col-md-2 col-sm-3">
+                    <a href="{{ route('backend.subscriptions.index') }}">
+                        <div class="card card-stats">
+                            <div class="card-body">
+                                <div class="card-icon mb-5 fs-1">
+                                    <i class="ph ph-money"></i>
+                                </div>
+                                <div class="card-data">
+                                    <h1 class="">
+                                        {{ Number::currency($totals['USD'] ?? 0, 'USD') }}
+                                    </h1>
+                                    <p class="mb-0 fs-6">{{ __('dashboard.lbl_total_revenue') }}</p>
+                                </div>
+                            </div>
+                        </div>
                     </a>
                 </div>
                 <!-- @if(isenablemodule('movie')==1)

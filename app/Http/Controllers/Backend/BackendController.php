@@ -102,6 +102,15 @@ class BackendController extends Controller
         $subscriptionData = Subscription::with('user', 'subscription_transaction', 'plan')->orderBy('updated_at', 'desc')->take(6)->get();
         $total_revenue = (float) Subscription::sum('amount');
 
+        $collection = collect($subscriptionData);
+        $totals = $collection->groupBy('plan.currency')->map(function($group){
+            return $group->sum(function($sub){
+                return $sub->plan->total_price;
+            });
+        });
+
+        
+
         $diskType = env('ACTIVE_STORAGE', 'local');
         // if ($diskType == 'local') {
         //     // Use local storage disk
@@ -115,7 +124,7 @@ class BackendController extends Controller
 
         $totalUsageFormatted=0;
 
-        return view('backend.dashboard.index', compact('totalUsageFormatted','totalreview','totalsoontoexpire','total_revenue','allUsers', 'newUsersCount', 'totalDownloads', 'totalTransactions', 'transactions', 'entertainments','totalusers','activeusers','totalSubscribers','totalmovies','totaltvshow','totalvideo','reviewData','subscriptionData'));
+        return view('backend.dashboard.index', compact('totalUsageFormatted','totalreview','totalsoontoexpire','total_revenue', 'totals','allUsers', 'newUsersCount', 'totalDownloads', 'totalTransactions', 'transactions', 'entertainments','totalusers','activeusers','totalSubscribers','totalmovies','totaltvshow','totalvideo','reviewData','subscriptionData'));
     }
 
     private function getTotalStorageUsage($disk)
