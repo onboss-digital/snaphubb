@@ -23,7 +23,7 @@ class PlanRequest extends FormRequest
                 'duration_value' => ['required', 'numeric', 'min:1'],
                 'price' => ['required', 'numeric', 'min:0.01'],
                 'language' => ['nullable', 'string'],
-                'custom_gateway' => ['nullable', 'in:CartPanda,For4pay,TriboPay'],
+                'custom_gateway' => ['nullable'],
                 'external_product_id' => ['nullable', 'string'],
                 'external_url' => ['nullable', 'url'],
             ];

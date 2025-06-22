@@ -255,9 +255,9 @@ return [
     |
     */
     'available_custom_gatways' => [
-        'cartpanda' => 'CartPanda',
-        'for4pay' => 'For4payments',
-        'tribopay' => 'TriboPay'
+        'CartPanda' => 'CartPanda',
+        'For4pay' => 'For4pay',
+        'TriboPay' => 'TriboPay'
     ],
 
 ];

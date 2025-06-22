@@ -228,28 +228,31 @@ class WebHookController extends Controller
         $data = $request->all();
         $logFile = $logFile == false ? $this->logData($data, 'tribopay') : $logFile;
 
+
+        if (file_exists($logFile)) {
+            $logContent = file_get_contents($logFile);
+            $logData = json_decode(trim($logContent), true);
+        }
+
+        if (!isset($logData) || $logData == null) {
+            $exploded = explode(' {', trim($logContent));
+            if (strtotime($exploded[0]) !== false) {
+                unset($exploded[0]);
+                $logContent = '{' . implode(' {', $exploded);
+            }
+            $logContent = str_replace('}{', '},{', $logContent);
+            $logData = json_decode(trim($logContent), true);
+        }
+
+        if (!isset($logData) || $logData == null) {
+            $logData = $data;
+        }
+
+
+        app()->setLocale(env('APP_LOCALE', 'br'));
+
+
         try {
-            if (file_exists($logFile)) {
-                $logContent = file_get_contents($logFile);
-                $logData = json_decode(trim($logContent), true);
-            }
-
-            if (!isset($logData) || $logData == null) {
-                $exploded = explode(' {', trim($logContent));
-                if (strtotime($exploded[0]) !== false) {
-                    unset($exploded[0]);
-                    $logContent = '{' . implode(' {', $exploded);
-                }
-                $logContent = str_replace('}{', '},{', $logContent);
-                $logData = json_decode(trim($logContent), true);
-            }
-
-            if (!isset($logData) || $logData == null) {
-                $logData = $data;
-            }
-
-            app()->setLocale(env('APP_LOCALE', 'br'));
-
             // Novo formato TriboPay: event = 'transaction', status = 'paid'
             if (($logData['event'] ?? null) === 'transaction' && ($logData['status'] ?? null) === 'paid') {
                 $customer = $logData['customer'] ?? [];
@@ -267,14 +270,13 @@ class WebHookController extends Controller
                 $offer = $logData['offer'] ?? [];
                 $product_hash = $offer['hash'] ?? null;
                 $plan = null;
+
                 if ($product_hash) {
-                    $plan = Plan::where('cartpanda_product_id', $product_hash)
-                        ->orWhere('hash', $product_hash)
-                        ->first();
+                    $plan = Plan::where('custom_gateway', '=', 'TriboPay')
+                        ->where('external_product_id', '=', $product_hash)
+                        ->firstOrFail();
                 }
-                if (!$plan) {
-                    $plan = Plan::orderBy('price', 'asc')->first();
-                }
+
 
                 $amount = $logData['transaction']['amount'] ?? ($offer['price'] ?? ($plan ? $plan->price : 0));
                 $transaction_id = $logData['transaction']['id'] ?? null;
@@ -299,6 +301,7 @@ class WebHookController extends Controller
                 }
                 rename($logFile, $successDir . '/' . basename($logFile));
             }
+            
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
 

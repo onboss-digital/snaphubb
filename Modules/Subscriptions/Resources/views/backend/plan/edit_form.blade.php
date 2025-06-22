@@ -175,12 +175,7 @@
             <div class="col-md-4 col-lg-2">
                 {{ html()->label(__('plan.lbl_custom_gateway'), 'custom_gateway')->class('form-label') }}
                     {{
-                        html()->select('custom_gateway', [
-                                '' => __('plan.lbl_select_gateway'),
-                                'CartPanda' => 'CartPanda',
-                                'For4pay' => 'For4pay',
-                                'TriboPay' => 'TriboPay'
-                            ], old('custom_gateway', $data->custom_gateway))
+                        html()->select('custom_gateway', collect(['' => __('plan.lbl_select_gateway')])->merge(config('app.available_custom_gatways')), old('custom_gateway', $data->custom_gateway))
                             ->class('form-control select2')
                             ->id('custom_gateway')
                     }}
