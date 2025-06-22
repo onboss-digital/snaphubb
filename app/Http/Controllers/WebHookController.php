@@ -278,7 +278,7 @@ class WebHookController extends Controller
                 }
 
 
-                $amount = $logData['transaction']['amount'] ?? ($offer['price'] ?? ($plan ? $plan->price : 0));
+                $amount = $plan->total_price;
                 $transaction_id = $logData['transaction']['id'] ?? null;
 
                 $this->handleSubscrible($plan->id, $amount, 'tribopay', $transaction_id, $user);
