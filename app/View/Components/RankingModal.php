@@ -24,7 +24,10 @@ class RankingModal extends Component
      */
     public function render()
     {
+
+        // dd('RankingModal render method called');
         $user = Auth::user();
+
 
         if (!$user) {
             return '';
@@ -33,10 +36,12 @@ class RankingModal extends Component
             return '';
         }
         $plan = $user->subscriptionPackage->where('status', 'active')->first();
+
         if (!$plan) {
             return '';
         }
-        
+
+
         $currentDate = now()->toDateString();
         $ranking = Ranking::where('start_date', '<=', $currentDate)
             ->where('end_date', '>=', $currentDate)
@@ -44,6 +49,7 @@ class RankingModal extends Component
                 $query->where('plan_id', $plan->plan_id);
             })
             ->first();
+
 
         if (!$ranking) {
             return '';
@@ -53,6 +59,7 @@ class RankingModal extends Component
         $responseExists = RankingResponse::where('user_id', $user->id)
             ->where('ranking_id', $ranking->id)
             ->exists();
+
 
         if ($responseExists) {
             return '';
@@ -83,7 +90,7 @@ class RankingModal extends Component
         $currentDate = now()->toDateString();
 
         try {
-            if($request->has('sugestion_name') && $request->has('sugestion_link') && $request->get('sugestion_name') != null && $request->get('sugestion_link') != null) {
+            if ($request->has('sugestion_name') && $request->has('sugestion_link') && $request->get('sugestion_name') != null && $request->get('sugestion_link') != null) {
                 RankingResponse::create([
                     'user_id' => $user->id,
                     'ranking_id' => $data['ranking_id'],
@@ -91,7 +98,7 @@ class RankingModal extends Component
                     'sugestion_name' => $request->get('sugestion_name'),
                     'sugestion_link' => $request->get('sugestion_link'),
                 ]);
-                
+
                 return response()->json(['message' => __('placeholder.lbl_ranking_modal_return_save_sugestion')]);
             }
 

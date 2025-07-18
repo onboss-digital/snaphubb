@@ -98,24 +98,41 @@
 @push('after-scripts')
     <script>
         var swiper = new Swiper(".ranking-swiper", {
+            slidesPerView: 1,
+            spaceBetween: 10,
             navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
             },
             pagination: {
                 el: ".swiper-pagination",
+                clickable: true,
             },
             mousewheel: true,
             keyboard: true,
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                768: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 4,
+                    spaceBetween: 40,
+                },
+                1400: {
+                    slidesPerView: 4,
+                    spaceBetween: 50,
+                }
+            }
         });
 
-        //get screen width
-
         $(document).ready(function () {
-            var screenWidth = $(window).width();
-            if (screenWidth < 768) {
-                $('#rankingModal').modal('show');
-            }
+            // Exibir modal para todos os dispositivos
+            $('#rankingModal').modal('show');
             $('.voteButton').on('click', function () {
                 var rankingId = $(this).data('ranking-id');
                 var contentSlug = $(this).data('content-slug');
@@ -154,6 +171,12 @@
         margin-left: auto;
     }
 
+    @media (max-width: 767px) {
+        .ranking-modal-title {
+            font-size: 1.5rem;
+        }
+    }
+
     .ranking-modal-input {
         background-color: white;
         color: black;
@@ -172,12 +195,38 @@
     }
 
     #rankingModal {
-        --bs-modal-width: 1600px;
+        --bs-modal-width: 95%;
+    }
+
+    @media (min-width: 768px) {
+        #rankingModal {
+            --bs-modal-width: 90%;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        #rankingModal {
+            --bs-modal-width: 85%;
+        }
+    }
+
+    @media (min-width: 1600px) {
+        #rankingModal {
+            --bs-modal-width: 1600px;
+        }
     }
 
     #rankingModal .modal-content,
     #rankingModal .modal-dialog {
-        height: 100%;
+        height: auto;
+        min-height: 80vh;
+    }
+
+    @media (max-width: 767px) {
+        #rankingModal .modal-content,
+        #rankingModal .modal-dialog {
+            height: 100%;
+        }
     }
 
     .swiper-pagination-bullet {
@@ -186,6 +235,26 @@
 
     .swiper-slide .model-card {
         height: 430px;
+    }
+
+    .swiper-slide .card {
+        height: 430px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .swiper-slide .card .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    @media (max-width: 767px) {
+        .swiper-slide .model-card,
+        .swiper-slide .card {
+            height: 380px;
+        }
     }
 
     .card-text {

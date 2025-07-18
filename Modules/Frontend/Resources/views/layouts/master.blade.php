@@ -53,8 +53,9 @@
 </head>
 
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
-    
 
+    <x-ranking-modal />
+    
     @include('frontend::layouts.header')
 
     @yield('content')
@@ -65,10 +66,9 @@
 
     @include('frontend::components.partials.scripts.plugins')
 
-    {{-- Only mobile --}}
-    <x-ranking-modal  />
 
-   
+
+
 
     {{-- <x-frontend::components.partials.modal id="DeviceSupport" title="Device Support" /> --}}
 
