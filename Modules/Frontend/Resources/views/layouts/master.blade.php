@@ -35,7 +35,7 @@
     @stack('after-styles')
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-frontend', 'resources/assets/sass/app.scss') }} --}}
-    <x-google-analytics />
+   
 
     <script type="text/javascript">
         (function(c, l, a, r, i, t, y) {
@@ -49,6 +49,8 @@
             y.parentNode.insertBefore(t, y);
         })(window, document, "clarity", "script", "t57wrq2get");
     </script>
+
+     <x-google-analytics />
 
 </head>
 
