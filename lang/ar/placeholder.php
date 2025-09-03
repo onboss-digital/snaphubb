@@ -62,5 +62,19 @@ return [
     'lbl_select_quality' => 'اختر الجودة',
     'lbl_select_tvcategory'=>'اختر فئة التلفزيون',
     'lbl_select_country' => 'اختر البلد',
+
+    // Subscription Expired Modal
+    'lbl_subscription_expired_modal_title' => 'انتهت صلاحية الاشتراك',
+    'lbl_subscription_expired_modal_message' => 'انتهت صلاحية اشتراكك ولم تعد تملك الوصول إلى المحتوى المميز.',
+    'lbl_subscription_expired_modal_plan_name' => 'الخطة',
+    'lbl_subscription_expired_modal_expired_on' => 'انتهت في',
+    'lbl_subscription_expired_modal_days_ago' => 'انتهت منذ :days أيام',
+    'lbl_subscription_expired_modal_benefits_title' => 'جدد اشتراكك للاستمتاع بـ:',
+    'lbl_subscription_expired_modal_benefit_1' => 'وصول غير محدود لجميع المحتوى المميز',
+    'lbl_subscription_expired_modal_benefit_2' => 'جودة البث عالية الدقة HD/4K',
+    'lbl_subscription_expired_modal_benefit_3' => 'تجربة مشاهدة بدون إعلانات',
+    'lbl_subscription_expired_modal_benefit_4' => 'تحميل المحتوى للمشاهدة دون اتصال',
+    'lbl_subscription_expired_modal_renew_button' => 'تجديد الاشتراك',
+    'lbl_subscription_expired_modal_later_button' => 'ربما لاحقاً'
    
 ];

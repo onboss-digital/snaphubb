@@ -61,5 +61,19 @@ return [
     'lbl_select_video_type' => 'Επιλέξτε Τύπο Βίντεο',
     'lbl_select_quality' => 'Επιλέξτε Ποιότητα',
     'lbl_select_tvcategory'=>'Επιλέξτε κατηγορία τηλεόρασης',
-   'lbl_select_country' => 'Επιλέξτε χώρα',
+    'lbl_select_country' => 'Επιλέξτε χώρα',
+
+    // Subscription Expired Modal
+    'lbl_subscription_expired_modal_title' => 'Η Συνδρομή Έληξε',
+    'lbl_subscription_expired_modal_message' => 'Η συνδρομή σας έχει λήξει και δεν έχετε πλέον πρόσβαση στο premium περιεχόμενο.',
+    'lbl_subscription_expired_modal_plan_name' => 'Πλάνο',
+    'lbl_subscription_expired_modal_expired_on' => 'Έληξε στις',
+    'lbl_subscription_expired_modal_days_ago' => 'Έληξε πριν από :days ημέρες',
+    'lbl_subscription_expired_modal_benefits_title' => 'Ανανεώστε τη συνδρομή σας για να απολαύσετε:',
+    'lbl_subscription_expired_modal_benefit_1' => 'Απεριόριστη πρόσβαση σε όλο το premium περιεχόμενο',
+    'lbl_subscription_expired_modal_benefit_2' => 'Ποιότητα streaming HD/4K',
+    'lbl_subscription_expired_modal_benefit_3' => 'Εμπειρία χωρίς διαφημίσεις',
+    'lbl_subscription_expired_modal_benefit_4' => 'Λήψη περιεχομένου για offline προβολή',
+    'lbl_subscription_expired_modal_renew_button' => 'Ανανέωση Συνδρομής',
+    'lbl_subscription_expired_modal_later_button' => 'Ίσως Αργότερα'
 ];

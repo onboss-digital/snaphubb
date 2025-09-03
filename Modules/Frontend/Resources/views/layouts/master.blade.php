@@ -55,6 +55,7 @@
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
 
     <x-ranking-modal />
+    <x-subscription-expired-modal />
     
     @include('frontend::layouts.header')
 

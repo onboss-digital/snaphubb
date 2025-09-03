@@ -45,6 +45,7 @@ class RankingModal extends Component
         $currentDate = now()->toDateString();
         $ranking = Ranking::where('start_date', '<=', $currentDate)
             ->where('end_date', '>=', $currentDate)
+            ->where('status','=', '1')
             ->whereHas('plans', function ($query) use ($plan) {
                 $query->where('plan_id', $plan->plan_id);
             })

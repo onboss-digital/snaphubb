@@ -74,5 +74,19 @@ return [
     'lbl_ranking_modal_return_save_sugestion'=>'Sugestão registrada com sucesso',
     'lbl_ranking_modal_return_save_vote'=>'Voto registrado com sucesso',
     'lbl_ranking_modal_return_save_error'=>'Erro ao registrar voto',
+
+    // Subscription Expired Modal
+    'lbl_subscription_expired_modal_title' => 'Suscripción Expirada',
+    'lbl_subscription_expired_modal_message' => 'Tu suscripción ha expirado y ya no tienes acceso al contenido premium.',
+    'lbl_subscription_expired_modal_plan_name' => 'Plan',
+    'lbl_subscription_expired_modal_expired_on' => 'Expiró el',
+    'lbl_subscription_expired_modal_days_ago' => 'Expiró hace :days días',
+    'lbl_subscription_expired_modal_benefits_title' => 'Renueva tu suscripción para disfrutar de:',
+    'lbl_subscription_expired_modal_benefit_1' => 'Acceso ilimitado a todo el contenido premium',
+    'lbl_subscription_expired_modal_benefit_2' => 'Calidad de streaming HD/4K',
+    'lbl_subscription_expired_modal_benefit_3' => 'Experiencia sin anuncios',
+    'lbl_subscription_expired_modal_benefit_4' => 'Descarga contenido para ver sin conexión',
+    'lbl_subscription_expired_modal_renew_button' => 'Renovar Suscripción',
+    'lbl_subscription_expired_modal_later_button' => 'Tal vez Después'
    
 ];

@@ -61,5 +61,19 @@ return [
     'lbl_select_video_type' => 'Videotyp auswählen',
     'lbl_select_quality' => 'Qualität auswählen',
     'lbl_select_tvcategory'=>'Wählen Sie die TV-Kategorie',
-   'lbl_select_country' => 'Land auswählen',
+    'lbl_select_country' => 'Land auswählen',
+
+    // Subscription Expired Modal
+    'lbl_subscription_expired_modal_title' => 'Abonnement Abgelaufen',
+    'lbl_subscription_expired_modal_message' => 'Ihr Abonnement ist abgelaufen und Sie haben keinen Zugang mehr zu Premium-Inhalten.',
+    'lbl_subscription_expired_modal_plan_name' => 'Plan',
+    'lbl_subscription_expired_modal_expired_on' => 'Abgelaufen am',
+    'lbl_subscription_expired_modal_days_ago' => 'Vor :days Tagen abgelaufen',
+    'lbl_subscription_expired_modal_benefits_title' => 'Erneuern Sie Ihr Abonnement, um zu genießen:',
+    'lbl_subscription_expired_modal_benefit_1' => 'Unbegrenzter Zugang zu allen Premium-Inhalten',
+    'lbl_subscription_expired_modal_benefit_2' => 'HD/4K-Streaming-Qualität',
+    'lbl_subscription_expired_modal_benefit_3' => 'Werbefreies Seherlebnis',
+    'lbl_subscription_expired_modal_benefit_4' => 'Inhalte für Offline-Ansicht herunterladen',
+    'lbl_subscription_expired_modal_renew_button' => 'Abonnement Erneuern',
+    'lbl_subscription_expired_modal_later_button' => 'Vielleicht Später'
 ];
