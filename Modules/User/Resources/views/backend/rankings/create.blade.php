@@ -49,7 +49,7 @@
                             </div>
                             <div class="col-md-2 col-lg-2">
                                 {{ html()->label(__('Start date') . '<span class="text-danger">*</span>', 'start_date')->class('form-label') }}
-                                {{ html()->text('start_date', '')->placeholder(__('Start date'))->class('form-control datetimepicker')->attribute('required', 'required')->id('start_date') }}
+                                {{ html()->text('start_date')->placeholder(__('Start date'))->class('form-control datetimepicker')->attribute('required', 'required')->id('start_date') }}
                                 @error('start_date')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-md-2 col-lg-2">
                                 {{ html()->label(__('End date'), 'end_date')->class('form-label') }}
-                                {{ html()->text('end_date', '')->placeholder(__('End date'))->class('form-control datetimepicker')->id('end_date') }}
+                                {{ html()->text('end_date')->placeholder(__('End date'))->class('form-control datetimepicker')->id('end_date') }}
                                 @error('end_date')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
@@ -97,5 +97,27 @@
     {{ html()->form()->close() }}
 
     @include('components.media-modal')
+    <script>
+        function removeImage(hiddenInputId, removedFlagId) {
+            var container = document.getElementById('selectedImageContainer1');
+            var hiddenInput = document.getElementById(hiddenInputId);
+            var removedFlag = document.getElementById(removedFlagId);
+
+            container.innerHTML = '';
+            hiddenInput.value = '';
+            removedFlag.value = 1;
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr('.min-datetimepicker-time', {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true
+            });
+            flatpickr('.datetimepicker', {
+                dateFormat: "Y-m-d"
+            });
+        });
+    </script>
 
 @endsection

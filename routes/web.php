@@ -12,10 +12,27 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePermission;
 use App\Http\Controllers\SearchController;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\{Route, Artisan};
 use App\Http\Controllers\Backend\MobileSettingController;
 use Modules\Setting\Http\Controllers\Backend\SettingsController;
 use Modules\Frontend\Http\Controllers\FrontendController;
+
+
+use App\Http\Controllers\Custom\{
+    PayPalController,
+    PagesController,
+    TriboPayController
+};
+
+
+Route::domain('{subdomain}.'.env('APP_URL'))->group(function () {
+    
+});
+Route::get('pay', [PagesController::class, 'paySnapphub'])->name('pay.snapphub');
+Route::post('change-language', [PagesController::class, 'changeLanguage'])->name('change.language');
+
+Route::post('send-checkout', [TriboPayController::class, 'sendCheckout'])->name('send-checkout');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +57,11 @@ Route::group(['middleware' => ['auth','admin']], function () {
     Route::get('notification-counts', [NotificationsController::class, 'notificationCounts'])->name('notification.counts');
     Route::delete('notification-remove/{id}', [NotificationsController::class, 'notificationRemove'])->name('notification.remove');
 });
+
+
+//subdominio pay.snapphub
+
+
 
 Route::group(['prefix' => 'app', ['middleware' => ['auth','admin']]], function () {
     // Language Switch

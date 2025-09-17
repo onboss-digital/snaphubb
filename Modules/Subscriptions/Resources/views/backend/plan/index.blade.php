@@ -116,6 +116,16 @@
         @endfor
     </select>
    </div>
+
+   <div class="form-group">
+        <label for="language" class="form-label">{{ __('plan.lbl_language') }}</label>
+        <select class="form-control select2" name="language" id="language">
+            <option value="">{{ __('Select Language') }}</option>
+            @foreach($languages as $language)
+                <option value="{{ $language->value }}" {{ old('language') == $language->value ? 'selected' : '' }}>{{ $language->name }}</option>
+            @endforeach
+        </select>
+   </div>
     </form>
     <button type="reset" class="btn btn-danger" id="reset-filter">{{__('messages.reset')}}</button>
 </x-backend.advance-filter>
@@ -147,9 +157,13 @@ const columns = [
             {
                 data: 'name',
                 name: 'name',
-                title: "{{ __('plan.lbl_name') }}",
+                title: "{{ __(key: 'plan.lbl_name') }}",
                 render: function(data, type, row, meta) {
-                    return '<h6 class="mb-0">' + data + '</h6>';
+                    var span = '';
+                    if(row.custom_gateway) {
+                        span = '<span class="badge" style="color: #ffffff;background-color: #1aadff;margin: 5px;">' + row.custom_gateway + '</span>';
+                    }
+                    return '<h6 class="mb-0">' + data + span + '</h6>';
                 }
             },
             {   data: 'duration',
@@ -161,6 +175,12 @@ const columns = [
                 name: 'level',
                 searchable: true,
                 title: "{{ __('plan.lbl_level') }}"  
+            },
+            { 
+                data: 'language',
+                name: 'language',
+                searchable: true,
+                title: "{{ __('plan.lbl_language') }}"  
             },
             { 
                 data: 'price',
@@ -213,6 +233,18 @@ const columns = [
    $('#name').on('input', function() {
         window.renderedDataTable.ajax.reload(null, false);
     });
+
+    $('#level').on('change', function() {
+        window.renderedDataTable.ajax.reload(null, false);
+    });
+
+    $('#price').on('change', function() {
+        window.renderedDataTable.ajax.reload(null, false);
+    });
+
+    $('#language').on('change', function() {
+        window.renderedDataTable.ajax.reload(null, false);
+    });
     $('#price').on('input', function() {
         window.renderedDataTable.ajax.reload(null, false);
     });
@@ -247,7 +279,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 $('#reset-filter').on('click', function(e) {
     $('#name').val(''),
-    $('#email').val('')
+    $('#level').val(''),
+    $('#price').val(''),
+    $('#language').val('')
     window.renderedDataTable.ajax.reload(null, false)
 })
 

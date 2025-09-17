@@ -42,10 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (accessType === 'paid') {
       canPlay = await checkAuthenticationAndDeviceSupport()
     }
+    const encryptedData = document.querySelector('#videoPlayer').getAttribute('data-encrypted')
 
-    if (canPlay && !isVideoLoaded) {
-      const encryptedData = document.querySelector('#videoPlayer').getAttribute('data-encrypted')
-
+    if (canPlay && !isVideoLoaded && encryptedData) {
       fetch(`${baseUrl}/video/stream/${encodeURIComponent(encryptedData)}`)
         .then((response) => response.json())
         .then((data) => {
@@ -66,8 +65,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch((error) => console.error('Error fetching video:'+ error))
     }
    else{
-    $('#DeviceSupport').modal('show')
-  }
+      // $('#DeviceSupport').modal('show')
+      console.log('modal');
+    }
   }
 
   loadVideoIfAuthenticated()
@@ -75,15 +75,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const playButton = document.querySelector('.vjs-big-play-button')
   if (playButton) {
     playButton.addEventListener('click', async function (e) {
+      e.preventDefault() 
       if (!isAuthenticated) {
-        e.preventDefault() // Prevent play
         window.location.href = loginUrl // Redirect to login
-      } else {
-        const canPlay = await checkAuthenticationAndDeviceSupport()
-        if (!canPlay) {
-          e.preventDefault() // Prevent play if conditions are not met
-        }
       }
+      $('#watchNowButton').trigger('click')
     })
   }
 

@@ -158,12 +158,20 @@
                             </ul>
                         </div>
 
-                        <button type="button"
-                                class="rounded btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }} subscription-btn"
-                                data-plan-id="{{ $plan->id }}"
-                                data-plan-name="{{ $plan->name }}">
-                            {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
-                        </button>
+                        @if($plan->custom_gateway && $plan->external_url)
+                            <a href="{{$plan->external_url}}" class="rounded col-12 p-3 btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }}">   
+                                {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
+                            </a>
+                            </a>
+                           
+                        @else
+                            <button type="button"
+                                    class="rounded btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }} subscription-btn"
+                                    data-plan-id="{{ $plan->id }}"
+                                    data-plan-name="{{ $plan->name }}">
+                                {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
+                            </button>
+                        @endif
                     </div>
                 </div>
                 @endforeach

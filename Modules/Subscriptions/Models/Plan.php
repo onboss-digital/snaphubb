@@ -12,9 +12,36 @@ class Plan extends BaseModel
 
     protected $table = 'plan';
 
-    protected $fillable = ['name', 'identifier','android_identifier','apple_identifier', 'level', 'duration', 'duration_value', 'price', 'description', 'status', 'discount', 'discount_percentage', 'total_price', 'currency'];
+    protected $fillable = [
+        'name',
+        'identifier',
+        'android_identifier',
+        'apple_identifier',
+        'level',
+        'duration',
+        'duration_value',
+        'price',
+        'description',
+        'status',
+        'discount',
+        'discount_percentage',
+        'total_price',
+        'currency',
+        'language',
+        'custom_gateway',
+        'external_product_id',
+        'external_url',
+    ];
 
     const CUSTOM_FIELD_MODEL = 'Modules\Subscriptions\Models\Plan';
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'discount_percentage' => 'decimal:2',
+        'total_price' => 'decimal:2',
+        'status' => 'boolean',
+        'discount' => 'boolean',
+    ];
 
     public function planLimitation()
     {

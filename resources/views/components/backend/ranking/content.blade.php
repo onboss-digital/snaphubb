@@ -1,9 +1,10 @@
 <div class="row py-5 col-4">
-    @php
-    @endphp
 
     <div class="col-6 position-relative">
         {{ html()->label(__('Content '.$index), 'selectedImageContainer')->class('form-label')}}
+            <span class="badge bg-primary rounded-pill text-middle" style="position: absolute; right: 18px;">
+                {{__('Votes')}}:{{$ranking->contents[$index]['votes']??'0'}}
+            </span>
         <div class="input-group btn-file-upload">
             {{ html()->button(__('<i class="ph ph-image"></i>' . __('messages.lbl_choose_image')))
     ->class('input-group-text form-control')
@@ -11,7 +12,7 @@
     ->attribute('data-bs-toggle', 'modal')
     ->attribute('data-bs-target', '#exampleModal')
     ->attribute('data-image-container', 'selectedImageContainer' . $index)
-    ->attribute('data-hidden-input', value: 'file_url'. $index)
+    ->attribute('data-hidden-input',  'file_url'. $index)
             }}
             {{ html()->text('contents['.$index.'][image]')
     ->class('form-control')
@@ -38,6 +39,9 @@
         </div>
         <div class="col-6">
             <div class="col-12">
+
+            {{ html()->hidden('contents['.$index.'][votes]')->id('remove_image_flag' . $index)->value($ranking->contents[$index]['votes'] ?? 0) }}
+            {{ html()->hidden('contents['.$index.'][slug]')->value($ranking->contents[$index]['slug']??'') }}
                 {{ html()->label(__(''), 'contents['.$index.'][title]')->class('form-label') }}
                 {{
     html()->text('contents['.$index.'][title]', $ranking->contents[$index]['title'] ?? '')

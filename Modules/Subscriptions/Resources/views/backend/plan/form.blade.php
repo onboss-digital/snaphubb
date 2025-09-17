@@ -65,7 +65,7 @@
                             ->id('price')
                             ->attribute('step', '0.01')
                             ->attribute('placeholder', __('placeholder.lbl_plan_price'))
-                            ->attribute('oninput', "this.value = Math.abs(this.value)")
+                            // ->attribute('oninput', "this.value = Math.abs(this.value)")
                             ->attribute('required','required')
                     }}
                     @error('price')
@@ -138,6 +138,61 @@
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                </div>
+
+                <!-- Language Field -->
+                <div class="col-md-6 col-lg-4">
+                    {{ html()->label(__('plan.lbl_language'), 'language')->class('form-label') }}
+                        {{
+                            html()->select('language', collect(['' => __('plan.lbl_select_language')])->merge(config('app.available_locales')), old('language'))
+                                ->class('form-control select2')
+                                ->id('language')
+                        }}
+                    @error('language')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- Custom Gateway Field -->
+                <div class="col-md-6 col-lg-4">
+                    {{ html()->label(__('plan.lbl_custom_gateway'), 'custom_gateway')->class('form-label') }}
+                        {{
+                            html()->select('custom_gateway', 
+                            collect(['' => __('plan.lbl_select_gateway')])->merge(config('app.available_custom_gatways')),old('custom_gateway'))
+                                ->class('form-control select2')
+                                ->id('custom_gateway')
+                        }}
+                    @error('custom_gateway')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- External Product ID Field -->
+                <div class="col-md-6 col-lg-4">
+                    {{ html()->label(__('plan.lbl_external_product_id'), 'external_product_id')->class('form-label') }}
+                    {{
+                        html()->text('external_product_id', old('external_product_id'))
+                            ->class('form-control')
+                            ->id('external_product_id')
+                            ->attribute('placeholder', __('plan.lbl_external_product_id_placeholder'))
+                    }}
+                    @error('external_product_id')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <!-- External URL Field -->
+                <div class="col-md-6 col-lg-4">
+                    {{ html()->label(__('plan.lbl_external_url'), 'external_url')->class('form-label') }}
+                    {{
+                        html()->url('external_url', old('external_url'))
+                            ->class('form-control')
+                            ->id('external_url')
+                            ->attribute('placeholder', __('plan.lbl_external_url_placeholder'))
+                    }}
+                    @error('external_url')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <!-- Discount Percentage (shown when discount is enabled) -->

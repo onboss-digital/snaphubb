@@ -63,7 +63,12 @@ class RankingController extends Controller
     {
         $data = $request->all();
 
-        $data['contents'] = json_encode($data['contents'] ?? []);
+        //set slug
+        $data['contents'] = collect($data['contents'])->
+            map(function ($item) {
+                $item['slug'] = str_slug($item['title']);
+                return $item;
+            })->toJson();
 
         $ranking = Ranking::findOrFail($id);
         $ranking->update($data);
@@ -168,6 +173,14 @@ class RankingController extends Controller
         $ranking = Ranking::create($data);
         $ranking->plans()->sync($request->plans);
         return $this->edit($ranking->id);
+    }
+
+    public function resetResponses($id)
+    {
+        $ranking = Ranking::findOrFail($id);
+        $ranking->resetResponses();
+
+        return redirect()->route('backend.users.ranking.edit', $id)->with('success', __('Ranking responses have been reset.'));
     }
 
 }

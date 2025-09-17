@@ -91,45 +91,14 @@
                     <div class="invalid-feedback" id="name-error">currency field is required</div>
                 </div>
                 <div class="col-md-3 col-lg-2">
-                    {{ html()->label(__('plan.lbl_duration_value') . '<span class="text-danger">*</span>', 'duration_value')->class('form-label') }}
-                    {{
-                            html()->input('number', 'duration_value', $data->duration_value)
-                                ->class('form-control')
-                                ->id('duration_value')
-                                ->attribute('placeholder', __('placeholder.lbl_plan_duration_value'))
-                                ->attribute('oninput', "this.value = Math.abs(this.value)")
-                                // ->attribute('min', '1')
-                                ->attribute('required','required')
-                        }}
-                    @error('duration_value')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="col-md-3 col-lg-2">
-                    {{ html()->label(__('plan.lbl_currency') . '<span class="text-danger">*</span>', 'currency')->class('form-label') }}
-                    {{
-                         html()->select('currency',
-                                        collect(Modules\Currency\Models\Currency::get()->toArray())->pluck('currency_code','currency_code'),
-                                        $data->currency)
-                            ->class('form-control select2')
-                            ->id('currency')
-                            ->attribute('placeholder', __('placeholder.lbl_plan_currency'))
-                            ->attribute('required','required')
-                    }}
-                    @error('currency')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">currency field is required</div>
-                </div>
-                <div class="col-md-3 col-lg-2">
                     {{ html()->label(__('plan.lbl_amount') . '<span class="text-danger">*</span>', 'price')->class('form-label') }}
                     {{
                         html()->input('number', 'price', $data->price)
                             ->class('form-control')
                             ->id('price')
-                            ->attribute('step', '1')
+                            ->attribute('step', '0.01')
                             ->attribute('placeholder', __('placeholder.lbl_plan_price'))
-                            ->attribute('oninput', "this.value = Math.abs(this.value)")
+                            // ->attribute('oninput', "this.value = Math.abs(this.value)")
                             // ->attribute('min', '0')
                             ->attribute('required','required')
                     }}
@@ -138,58 +107,39 @@
                     @enderror
                     <div class="invalid-feedback" id="name-error">Price field is required</div>
                 </div>
-                <!-- Discount Toggle -->
-            <div class="col-md-6 col-lg-4">
-                {{ html()->label(__('plan.lbl_discount'), 'discount')->class('form-label') }}
-                <div class="d-flex align-items-center justify-content-between form-control">
-                    {{ html()->label(__('messages.active'), 'discount')->class('form-label mb-0 text-body') }}
-                    <div class="form-check form-switch">
-                        {{ html()->hidden('discount', 0) }}
-                        {{
-                            html()->checkbox('discount', old('discount', $data->discount))
-                                ->class('form-check-input')
-                                ->id('discount-toggle')
-                        }}
-                    </div>
-                </div>
-                @error('discount')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
             @if($purchaseMethodEnabled)
+                <div class="col-md-4 col-lg-2">
+                    {{ html()->label(__('messages.lbl_android_identifier') . '<span class="text-danger">*</span>', 'android_identifier')->class('form-label') }}
+                        {{
+                            html()->text('android_identifier', old('android_identifier', $data->android_identifier ?? ''))
+                                ->class('form-control')
+                                ->id('android_identifier')
+                                ->attribute('placeholder', __('messages.lbl_android_identifier'))
+                                ->attribute('required','required')
+                        }}
+                    @error('android_identifier')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <div class="invalid-feedback" id="android_identifier-error">Android Identifier field is required</div>
+                </div>
 
-            <div class="col-md-6 col-lg-4">
-                {{ html()->label(__('messages.lbl_android_identifier') . '<span class="text-danger">*</span>', 'android_identifier')->class('form-label') }}
-                    {{
-                        html()->text('android_identifier', old('android_identifier', $data->android_identifier ?? ''))
-                            ->class('form-control')
-                            ->id('android_identifier')
-                            ->attribute('placeholder', __('messages.lbl_android_identifier'))
-                            ->attribute('required','required')
-                    }}
-                @error('android_identifier')
-                <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <div class="invalid-feedback" id="android_identifier-error">Android Identifier field is required</div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                {{ html()->label(__('messages.lbl_apple_identifier') . '<span class="text-danger">*</span>', 'apple_identifier')->class('form-label') }}
-                    {{
-                        html()->text('apple_identifier', old('apple_identifier', $data->apple_identifier ?? ''))
-                            ->class('form-control')
-                            ->id('apple_identifier')
-                            ->attribute('placeholder', __('messages.lbl_apple_identifier'))
-                            ->attribute('required','required')
-                    }}
-                @error('apple_identifier')
-                <span class="text-danger">{{ $message }}</span>
-                @enderror
-                <div class="invalid-feedback" id="apple_identifier-error">Apple Identifier field is required</div>
-            </div>
+                <div class="col-md-6 col-lg-4">
+                    {{ html()->label(__('messages.lbl_apple_identifier') . '<span class="text-danger">*</span>', 'apple_identifier')->class('form-label') }}
+                        {{
+                            html()->text('apple_identifier', old('apple_identifier', $data->apple_identifier ?? ''))
+                                ->class('form-control')
+                                ->id('apple_identifier')
+                                ->attribute('placeholder', __('messages.lbl_apple_identifier'))
+                                ->attribute('required','required')
+                        }}
+                    @error('apple_identifier')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                    <div class="invalid-feedback" id="apple_identifier-error">Apple Identifier field is required</div>
+                </div>
             @endif
 
-            <div class="col-md-6 col-lg-4">
+            <div class="col-md-4 col-lg-2">
                 {{ html()->label(__('plan.lbl_status'), 'status')->class('form-label') }}
                 <div class="d-flex justify-content-between align-items-center form-control">
                     {{ html()->label(__('messages.active'), 'status')->class('form-label mb-0 text-body') }}
@@ -207,7 +157,82 @@
                 @enderror
             </div>
 
-            <div class="col-md-6 col-lg-4 discount-section {{ $data->discount ? '' : 'd-none' }}" id="discountPercentageSection">
+            <!-- Language Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_language'), 'language')->class('form-label') }}
+                    {{
+                        html()->select('language', collect(['' => __('plan.lbl_select_language')])->merge(config('app.available_locales')), old('language', $data->language))
+                            ->class('form-control select2')
+                            ->id('language')
+                    }}
+                @error('language')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Custom Gateway Field -->
+            
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_custom_gateway'), 'custom_gateway')->class('form-label') }}
+                    {{
+                        html()->select('custom_gateway', collect(['' => __('plan.lbl_select_gateway')])->merge(config('app.available_custom_gatways')), old('custom_gateway', $data->custom_gateway))
+                            ->class('form-control select2')
+                            ->id('custom_gateway')
+                    }}
+                @error('custom_gateway')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- External Product ID Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_external_product_id'), 'external_product_id')->class('form-label') }}
+                {{
+                    html()->text('external_product_id', old('external_product_id', $data->external_product_id))
+                        ->class('form-control')
+                        ->id('external_product_id')
+                        ->attribute('placeholder', __('plan.lbl_external_product_id_placeholder'))
+                }}
+                @error('external_product_id')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- External URL Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_external_url'), 'external_url')->class('form-label') }}
+                {{
+                    html()->text('external_url', old('external_url', $data->external_url))
+                        ->class('form-control')
+                        ->id('external_url')
+                        ->attribute('placeholder', __('plan.lbl_external_url_placeholder'))
+                }}
+                @error('external_url')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- Discount Toggle -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_discount'), 'discount')->class('form-label') }}
+                <div class="d-flex align-items-center justify-content-between form-control">
+                    {{ html()->label(__('messages.active'), 'discount')->class('form-label mb-0 text-body') }}
+                    <div class="form-check form-switch">
+                        {{ html()->hidden('discount', 0) }}
+                        {{
+                            html()->checkbox('discount', old('discount', $data->discount))
+                                ->class('form-check-input')
+                                ->id('discount-toggle')
+                        }}
+                    </div>
+                </div>
+                @error('discount')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- CartPanda Toggle --}}
+            <div class="col-md-2 col-lg-4 discount-section {{ $data->discount ? '' : 'd-none' }}" id="discountPercentageSection">
                 {{ html()->label(__('plan.lbl_discount_percentage') . '<span class="text-danger">*</span>', 'discount_percentage')->class('form-label') }}
                 {{
                     html()->input('number', 'discount_percentage', old('discount_percentage', $data->discount_percentage ?? 0))
@@ -239,6 +264,7 @@
                 @enderror
                 <div class="invalid-feedback" id="total-price-error">Total price field is required</div>
             </div>
+
 
                 <div class="col-md-12">
                     {{ html()->label(__('plan.lbl_description') . '<span class="text-danger">*</span>', 'description')->class('form-label') }}
@@ -344,7 +370,7 @@
                             @foreach(['tablet', 'laptop', 'mobile'] as $option)
                                 <div class="form-check form-check-inline">
                                     <input type="hidden" name="supported_device_types[{{ $option }}]" value="0">
-                                    <input type="checkbox" name="supported_device_types[{{ $option }}]" id="{{ $option }}" value="1" {{ isset($limits['supported-device-type'][$option]) && $limits['supported-device-type'][$option] ? 'checked' : '' }}>
+                                    <input type="checkbox" name="supported_device_types[{{ $option }}]}" id="{{ $option }}" value="1" {{ isset($limits['supported-device-type'][$option]) && $limits['supported-device-type'][$option] ? 'checked' : '' }}>
                                     <label for="{{ $option }}">{{ ucfirst($option) }}</label>
                                 </div>
                             @endforeach
@@ -469,6 +495,7 @@ tinymce.init({
             const $discountError = $('#discount-error'); // Error for invalid percentage
             const $discountMaxError = $('#discount-max-error'); // Error for max percentage
 
+
             function updateSections() {
                 const price = parseFloat($priceInput.val()) || 0;
 
@@ -488,6 +515,15 @@ tinymce.init({
 
             $discountToggle.change(updateSections);
             updateSections();
+
+
+
+
+
+
+
+
+
 
             $discountPercentageInput.on('input', function() {
                 const price = parseFloat($priceInput.val()) || 0;
@@ -563,6 +599,7 @@ tinymce.init({
 
             document.getElementById('profile-limit').addEventListener('change', toggleProfileSection);
 
+            
 
    </script>
 @endpush

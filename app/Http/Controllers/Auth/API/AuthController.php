@@ -58,48 +58,48 @@ class AuthController extends Controller
             return response()->json(['status' => false, 'message' => __('messages.register_before_login')]);
         }
         $count = Device::where('user_id', $user->id)->count();
-
         $devices = Device::where('user_id', $user->id)->get();
 
+        // dd($devices);
         $other_device = [];
 
-        if($devices){
+        if ($devices) {
 
             foreach ($devices as $device) {
 
-                    $other_device[] = $device;
-                }
-              }
-
-         $other_device= $other_device;
-
-        if (!$request->has('is_demo_user') || $request->is_demo_user != 1) {
+                $other_device[] = $device;
+            }
+        }
 
         if ($user->subscriptionPackage) {
-            $planlimitation = optional(optional($user->subscriptionPackage)->plan)->planLimitation;
+            $planlimitation = optional(optional($user->subscriptionPackage)->plan)->planLimitation->where('limitation_value', 1);
+            
 
             if ($planlimitation != null) {
                 $device_limit = $planlimitation->where('limitation_slug', 'device-limit')->first();
-                $device = $device_limit ? $device_limit->limit : 0;
+                $device = $device_limit ? $device_limit->limit : false;
 
-                if ($count == $device) {
-                    return response()->json([
-                        'error' => 'Your device limit has been reached.',
-                        'other_device'=> $other_device
-                    ], 406);
+
+                if ($device !== false && $count == $device) {
+                    return response()->json(['status' => false, 'message' => "Your device limit has been reached."]);
+                    // return response()->json([
+                    //     'error' => 'Your device limit has been reached.',
+                    //     'other_device' => $other_device
+                    // ], 406);
                 }
             }
-           }else{
+        } 
+        // else {
 
-                if ($count ==1) {
-                    return response()->json([
-                        'error' => 'Your device limit has been reached.',
-                        'other_device'=> $other_device
-                    ], 406);
-                }
-            }
+        //     if ($count == 1) {
+        //         return response()->json(['status' => false, 'message' => "Your device limit has been reached."]);
+        //         // return response()->json([
+        //         //     'error' => 'Your device limit has been reached.',
+        //         //     'other_device' => $other_device
+        //         // ], 406);
+        //     }
+        // }
 
-        }
 
         if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
@@ -126,15 +126,15 @@ class AuthController extends Controller
             $device_name = $request->device_name;
             $platform = $request->platform;
 
-            if($request->has('is_ajax') && $request->is_ajax==1 ){
+            if ($request->has('is_ajax') && $request->is_ajax == 1) {
 
                 $agent = new Agent();
                 $device_id = $request->getClientIp();
-                $device_name =  $agent->browser();
+                $device_name = $agent->browser();
                 $platform = $agent->platform();
             }
 
-            $profile=UserMultiProfile::where('user_id',$user->id)->first();
+            $profile = UserMultiProfile::where('user_id', $user->id)->first();
 
 
             $device = Device::updateOrCreate(
@@ -145,14 +145,14 @@ class AuthController extends Controller
                 [
                     'device_name' => $device_name,
                     'platform' => $platform,
-                    'active_profile'=> $profile->id ?? null,
+                    'active_profile' => $profile->id ?? null,
                 ]
             );
 
             $loginResource = new LoginResource($user);
             $message = __('messages.user_login');
 
-            if($request->has('is_ajax') && $request->is_ajax==1 ){
+            if ($request->has('is_ajax') && $request->is_ajax == 1) {
 
                 return $this->sendResponse($loginResource, $message);
             }
@@ -168,7 +168,7 @@ class AuthController extends Controller
     {
         $input = $request->except('file_url');
         if ($input['login_type'] === 'otp') {
-            $user_data = User::where('mobile',$input['mobile'])->where('login_type', 'otp')->first();
+            $user_data = User::where('mobile', $input['mobile'])->where('login_type', 'otp')->first();
         } else {
             $user_data = User::where('email', $input['email'])->first();
         }
@@ -186,15 +186,15 @@ class AuthController extends Controller
 
                 $other_device = [];
 
-                if($devices){
+                if ($devices) {
 
                     foreach ($devices as $device) {
 
-                            $other_device[] = $device;
-                        }
-                      }
+                        $other_device[] = $device;
+                    }
+                }
 
-                 $other_device= $other_device;
+                $other_device = $other_device;
 
                 if ($planlimitation != null) {
                     $device_limit = $planlimitation->where('limitation_slug', 'device-limit')->first();
@@ -203,16 +203,16 @@ class AuthController extends Controller
                     if ($count >= $device) {
                         return response()->json([
                             'error' => 'Your device limit has been reached.',
-                            'other_device'=> $other_device
+                            'other_device' => $other_device
                         ], 406);
                     }
-                }else{
+                } else {
 
-                    if ($count >=1) {
+                    if ($count >= 1) {
 
                         return response()->json([
                             'error' => 'Your device limit has been reached.',
-                            'other_device'=> $other_device
+                            'other_device' => $other_device
                         ], 406);
                     }
                 }
@@ -443,24 +443,24 @@ class AuthController extends Controller
         if ($request->hasFile('file_url')) {
             $file = $request->file('file_url');
 
-           $activeDisk = env('ACTIVE_STORAGE', 'local');
+            $activeDisk = env('ACTIVE_STORAGE', 'local');
 
-           $filename = $file->getClientOriginalName();
+            $filename = $file->getClientOriginalName();
 
-           if ($activeDisk == 'local') {
-            $destinationPath = 'streamit-laravel';
-            $filePath = $file->storeAs($destinationPath, $filename, 'public');
-            $file_url = '/storage/' . $filePath;
+            if ($activeDisk == 'local') {
+                $destinationPath = 'streamit-laravel';
+                $filePath = $file->storeAs($destinationPath, $filename, 'public');
+                $file_url = '/storage/' . $filePath;
 
-        } else {
+            } else {
 
-            $folderPath = 'streamit-laravel/' .  $filename ;
-            Storage::disk( $activeDisk )->put($folderPath, file_get_contents($file));
-            $baseUrl = env('DO_SPACES_URL');
-            $file_url = $baseUrl . '/' . $folderPath;
-        }
+                $folderPath = 'streamit-laravel/' . $filename;
+                Storage::disk($activeDisk)->put($folderPath, file_get_contents($file));
+                $baseUrl = env('DO_SPACES_URL');
+                $file_url = $baseUrl . '/' . $folderPath;
+            }
 
-            $data['file_url']=extractFileNameFromUrl($file_url);
+            $data['file_url'] = extractFileNameFromUrl($file_url);
 
         } else {
             $data['file_url'] = $user->file_url;
@@ -518,8 +518,8 @@ class AuthController extends Controller
         Subscription::where('user_id', $user->id)->update(['status' => 'deactivated']);
         User::where('id', $user->id)->forceDelete();
         ContinueWatch::where('user_id', $user->id)->delete();
-        Watchlist::where('user_id',$user->id)->delete();
-        EntertainmentDownload::where('user_id',$user->id)->delete();
+        Watchlist::where('user_id', $user->id)->delete();
+        EntertainmentDownload::where('user_id', $user->id)->delete();
         UserReminder::where('user_id', $user->id)->delete();
 
         $user->forceDelete();

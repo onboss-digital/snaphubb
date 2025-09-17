@@ -275,12 +275,11 @@
                     </div>
 
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_imdb_rating') . ' <span class="text-danger">*</span>', 'IMDb_rating')->class('form-label') }}
+                        {{ html()->label(__('movie.lbl_imdb_rating'), 'IMDb_rating')->class('form-label') }}
                         {{ html()->text('IMDb_rating')
                                 ->attribute('value', old('IMDb_rating', $data->IMDb_rating)) // Use old value or the existing movie value
                                 ->placeholder(__('movie.lbl_imdb_rating'))
-                                ->class('form-control')
-                                ->required() }}
+                                ->class('form-control') }}
 
                         @error('IMDb_rating')
                             <span class="text-danger">{{ $message }}</span>
@@ -289,8 +288,8 @@
                     </div>
 
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_content_rating') . '<span class="text-danger">*</span>', 'content_rating')->class('form-label') }}
-                        {{ html()->text('content_rating')->attribute('value', $data->content_rating)->placeholder(__('placeholder.lbl_content_rating'))->class('form-control')->attribute('required','required') }}
+                        {{ html()->label(__('movie.lbl_content_rating') , 'content_rating')->class('form-label') }}
+                        {{ html()->text('content_rating')->attribute('value', $data->content_rating)->placeholder(__('placeholder.lbl_content_rating'))->class('form-control') }}
                         @error('content_rating')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -693,71 +692,72 @@ tinymce.init({
             function handleTrailerUrlTypeChange(selectedValue) {
                 var FileInput = document.getElementById('url_file_input');
                 var URLInput = document.getElementById('url_input');
-                var trailervideo = document.querySelector('input[name="trailer_video"]');
-                var trailervideourl = document.querySelector('input[name="trailer_url"]');
+                // var trailervideo = document.querySelector('input[name="trailer_video"]');
+                // var trailervideourl = document.querySelector('input[name="trailer_url"]');
                 var trailerfile = document.querySelector('input[name="trailer_video"]');
                 var trailerfileError = document.getElementById('trailer-file-error');
                 var urlError = document.getElementById('trailer-url-error');
-                var URLInputField = document.querySelector('input[name="trailer_url"]');
+                // var URLInputField = document.querySelector('input[name="trailer_url"]');
 
                 if (selectedValue === 'Local') {
                     FileInput.classList.remove('d-none');
                     URLInput.classList.add('d-none');
                     trailerfile.setAttribute('required', 'required');
                     trailerfileError.style.display = 'block';
-                    URLInputField.removeAttribute('required');
+                    // URLInputField.removeAttribute('required');
 
-                    if (trailervideo) {
-                        trailervideo.value = trailervideo.value;
-                    }
-                    if (trailervideourl) {
-                        trailervideourl.value = '';
-                    }
+                    // if (trailervideo) {
+                    //     trailervideo.value = trailervideo.value;
+                    // }
+                    // if (trailervideourl) {
+                    //     trailervideourl.value = '';
+                    // }
                 } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' ||
                     selectedValue === 'Vimeo') {
                     URLInput.classList.remove('d-none');
                     FileInput.classList.add('d-none');
-                    URLInputField.setAttribute('required', 'required');
+                    // URLInputField.setAttribute('required', 'required');
                     trailerfile.removeAttribute('required');
                     validateTrailerUrlInput()
-                    if (trailervideourl) {
-                        trailervideourl.value = trailervideourl.value;
-                    }
-                    if (trailervideo) {
-                        trailervideo.value = '';
-                    }
+                    // if (trailervideourl) {
+                    //     trailervideourl.value = trailervideourl.value;
+                    // }
+                    // if (trailervideo) {
+                    //     trailervideo.value = '';
+                    // }
                 } else {
                     FileInput.classList.add('d-none');
                     URLInput.classList.add('d-none');
-                    URLInputField.removeAttribute('required');
+                    // URLInputField.removeAttribute('required');
                     trailerfile.removeAttribute('required');
                 }
             }
 
             function validateTrailerUrlInput() {
-                    var URLInput = document.querySelector('input[name="trailer_url"]');
-                    var urlPatternError = document.getElementById('trailer-pattern-error');
-                    selectedValue = document.getElementById('trailer_url_type').value;
-                    if (selectedValue === 'YouTube') {
-                        urlPattern = /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
-                        urlPatternError.innerText = '';
-                        urlPatternError.innerText='Please enter a valid Youtube URL'
-                    } else if (selectedValue === 'Vimeo') {
-                        urlPattern = /^(https?:\/\/)?(www\.vimeo\.com)\/.+$/;
-                        urlPatternError.innerText = '';
-                        urlPatternError.innerText='Please enter a valid Vimeo URL'
-                    } else {
-                        // General URL pattern for other types
-                        urlPattern = /^https?:\/\/.+$/;
-                         urlPatternError.innerText='Please enter a valid URL'
-                    }
-                        if (!urlPattern.test(URLInput.value)) {
-                            urlPatternError.style.display = 'block';
-                            return false;
-                        } else {
-                            urlPatternError.style.display = 'none';
-                            return true;
-                        }
+                return true;
+                    // var URLInput = document.querySelector('input[name="trailer_url"]');
+                    // var urlPatternError = document.getElementById('trailer-pattern-error');
+                    // selectedValue = document.getElementById('trailer_url_type').value;
+                    // if (selectedValue === 'YouTube') {
+                    //     urlPattern = /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
+                    //     urlPatternError.innerText = '';
+                    //     urlPatternError.innerText='Please enter a valid Youtube URL'
+                    // } else if (selectedValue === 'Vimeo') {
+                    //     urlPattern = /^(https?:\/\/)?(www\.vimeo\.com)\/.+$/;
+                    //     urlPatternError.innerText = '';
+                    //     urlPatternError.innerText='Please enter a valid Vimeo URL'
+                    // } else {
+                    //     // General URL pattern for other types
+                    //     urlPattern = /^https?:\/\/.+$/;
+                    //      urlPatternError.innerText='Please enter a valid URL'
+                    // }
+                    //     if (!urlPattern.test(URLInput.value)) {
+                    //         urlPatternError.style.display = 'block';
+                    //         return false;
+                    //     } else {
+                    //         urlPatternError.style.display = 'none';
+                    //         return true;
+                    //     }
                     }
             // var initialSelectedValue = document.getElementById('trailer_url_type').value;
             // handleTrailerUrlTypeChange(initialSelectedValue);
@@ -766,13 +766,13 @@ tinymce.init({
             //     handleTrailerUrlTypeChange(selectedValue);
             // });
 
-            var URLInput = document.querySelector('input[name="trailer_url"]');
-                if (URLInput) {
-                    URLInput.addEventListener('input', function() {
+            // var URLInput = document.querySelector('input[name="trailer_url"]');
+            //     if (URLInput) {
+            //         URLInput.addEventListener('input', function() {
 
-                        validateTrailerUrlInput();
-                    });
-                }
+            //             validateTrailerUrlInput();
+            //         });
+            //     }
         });
 
         function showPlanSelection(show) {

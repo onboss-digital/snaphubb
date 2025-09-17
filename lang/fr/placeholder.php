@@ -62,4 +62,18 @@ return [
     'lbl_select_quality' => 'Sélectionner une qualité',
     'lbl_select_tvcategory'=>'Sélectionner la catégorie TV',
     'lbl_select_country' => 'Sélectionner un pays',
+
+    // Subscription Expired Modal
+    'lbl_subscription_expired_modal_title' => 'Abonnement Expiré',
+    'lbl_subscription_expired_modal_message' => 'Votre abonnement a expiré et vous n\'avez plus accès au contenu premium.',
+    'lbl_subscription_expired_modal_plan_name' => 'Plan',
+    'lbl_subscription_expired_modal_expired_on' => 'Expiré le',
+    'lbl_subscription_expired_modal_days_ago' => 'Expiré il y a :days jours',
+    'lbl_subscription_expired_modal_benefits_title' => 'Renouvelez votre abonnement pour profiter de:',
+    'lbl_subscription_expired_modal_benefit_1' => 'Accès illimité à tout le contenu premium',
+    'lbl_subscription_expired_modal_benefit_2' => 'Qualité de streaming HD/4K',
+    'lbl_subscription_expired_modal_benefit_3' => 'Expérience sans publicité',
+    'lbl_subscription_expired_modal_benefit_4' => 'Téléchargement de contenu pour visionnage hors ligne',
+    'lbl_subscription_expired_modal_renew_button' => 'Renouveler l\'Abonnement',
+    'lbl_subscription_expired_modal_later_button' => 'Peut-être Plus Tard'
 ];

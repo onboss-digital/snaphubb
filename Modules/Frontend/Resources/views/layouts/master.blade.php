@@ -35,7 +35,7 @@
     @stack('after-styles')
     {{-- Vite CSS --}}
     {{-- {{ module_vite('build-frontend', 'resources/assets/sass/app.scss') }} --}}
-    <x-google-analytics />
+   
 
     <script type="text/javascript">
         (function(c, l, a, r, i, t, y) {
@@ -47,12 +47,18 @@
             t.src = "https://www.clarity.ms/tag/" + i;
             y = l.getElementsByTagName(r)[0];
             y.parentNode.insertBefore(t, y);
-        })(window, document, "clarity", "script", "q5ddtgbeex");
+        })(window, document, "clarity", "script", "t57wrq2get");
     </script>
+
+     <x-google-analytics />
 
 </head>
 
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
+
+    <x-ranking-modal />
+    <x-subscription-expired-modal />
+    
     @include('frontend::layouts.header')
 
     @yield('content')
@@ -63,6 +69,11 @@
 
     @include('frontend::components.partials.scripts.plugins')
 
+
+
+
+
+    {{-- <x-frontend::components.partials.modal id="DeviceSupport" title="Device Support" /> --}}
 
     <script src="{{ mix('modules/frontend/script.js') }}"></script>
     <script src="{{ mix('js/backend-custom.js') }}"></script>

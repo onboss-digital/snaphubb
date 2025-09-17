@@ -15,6 +15,7 @@ use Yajra\DataTables\DataTables;
 use Currency;
 use Modules\Constant\Models\Constant;
 use App\Trait\ModuleTrait;
+use Illuminate\Support\Number;
 use Modules\Setting\Models\Setting;
 
 class PlanController extends Controller
@@ -22,7 +23,7 @@ class PlanController extends Controller
     protected string $exportClass = '\App\Exports\PlanExport';
     use ModuleTrait {
         initializeModuleTrait as private traitInitializeModuleTrait;
-        }
+    }
     public function __construct()
     {
         // // Page Title
@@ -94,10 +95,12 @@ class PlanController extends Controller
             'status' => $request->status,
         ];
 
-        $plan= Plan::count();
+        $plan = Plan::count();
 
         $minPrice = Plan::min('price');
         $maxPrice = Plan::max('price');
+
+        $languages = \Modules\Constant\Models\Constant::where('type', 'language')->get();
 
         $export_import = true;
         $export_columns = [
@@ -126,12 +129,16 @@ class PlanController extends Controller
                 'text' => __('plan.lbl_level'),
             ],
             [
+                'value' => 'language',
+                'text' => __('plan.lbl_language'),
+            ],
+            [
                 'value' => 'status',
                 'text' => __('plan.lbl_status'),
             ],
         ];
         $export_url = route('backend.plans.export');
-        return view('subscriptions::backend.plan.index', compact('module_action', 'module_name' , 'export_import', 'export_columns', 'export_url','filter','plan','minPrice','maxPrice'));
+        return view('subscriptions::backend.plan.index', compact('module_action', 'module_name', 'export_import', 'export_columns', 'export_url', 'filter', 'plan', 'minPrice', 'maxPrice', 'languages'));
     }
 
     public function index_data(Datatables $datatable, Request $request)
@@ -147,7 +154,7 @@ class PlanController extends Controller
 
             if (isset($filter['name'])) {
                 $namePattern = '%' . $filter['name'] . '%';
-               $query->where('name', 'like', $namePattern);
+                $query->where('name', 'like', $namePattern);
             }
 
             if (isset($filter['price'])) {
@@ -165,48 +172,53 @@ class PlanController extends Controller
                 $query->where('level', $filter['level']);
             }
 
-            
+            if (isset($filter['language'])) {
+                $query->where('language', $filter['language']);
+            }
         }
 
 
 
         $datatable = $datatable->eloquent($query)
             ->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$row->id.'"  name="datatable_ids[]" value="'.$row->id.'" data-type="plan" onclick="dataTableRowCheck('.$row->id.', this)">';
+                return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" data-type="plan" onclick="dataTableRowCheck(' . $row->id . ', this)">';
             })
             ->addColumn('action', function ($data) {
                 return view('subscriptions::backend.plan.action_column', compact('data'));
             })
             ->editColumn('price', function ($data) {
-                return Currency::format($data->price);
+                return Number::currency($data->price, $data->currency);
             })
             ->editColumn('discount_percentage', function ($data) {
                 if (is_null($data->discount_percentage)) {
-                    return '-'; 
-                }           
+                    return '-';
+                }
                 return intval($data->discount_percentage) . '%';
             })
-            
+
             ->editColumn('total_price', function ($data) {
-                return Currency::format($data->total_price);
+                return Number::currency($data->total_price, $data->currency);
             })
 
 
             ->editColumn('level', function ($data) {
-                return __("plan.lbl_level").' '.$data->level;
+                return __("plan.lbl_level") . ' ' . $data->level;
             })
-            
+
+            ->editColumn('language', function ($data) {
+                return $data->language ?? '-';
+            })
 
 
             ->editColumn('duration', function ($data) {
-                return $data->duration_value.' '.$data->duration;
+                return $data->duration_value . ' ' . $data->duration;
             })
 
 
             ->editColumn('status', function ($row) {
                 $checked = $row->status ? 'checked="checked"' : ''; // Set checked status based on the row's status
                 $disabled = $row->trashed() ? 'disabled' : ''; // Disable if the record is soft-deleted
-            
+
                 return '
                     <div class="form-check form-switch ">
                         <input type="checkbox" data-url="' . route('backend.plans.update_status', $row->id) . '" 
@@ -215,7 +227,7 @@ class PlanController extends Controller
                                ' . $checked . ' ' . $disabled . '>
                     </div>
                 ';
-            })            
+            })
             ->editColumn('updated_at', function ($data) {
                 $diff = Carbon::now()->diffInHours($data->updated_at);
 
@@ -225,24 +237,24 @@ class PlanController extends Controller
                     return $data->updated_at->isoFormat('llll');
                 }
             })
-            ->filterColumn('duration', function($query, $keyword) {
+            ->filterColumn('duration', function ($query, $keyword) {
                 $cleanedKeyword = trim($keyword);
-            
+
                 $query->whereRaw("LOWER(CONCAT(duration_value, ' ', duration)) LIKE ?", ["%" . strtolower($cleanedKeyword) . "%"]);
             })
 
-            ->filterColumn('price', function($query, $keyword) {
+            ->filterColumn('price', function ($query, $keyword) {
                 $cleanedKeyword = preg_replace('/[^0-9.]/', '', $keyword);
-        
+
                 if ($cleanedKeyword !== '') {
                     $query->whereRaw("CAST(REGEXP_REPLACE(price, '[^0-9.]', '') AS DECIMAL(10, 2)) LIKE ?", ["%{$cleanedKeyword}%"]);
                 }
-            }) 
-                     
-            
+            })
+
+
             ->orderColumns(['id'], '-:column $1');
 
-        return $datatable->rawColumns(array_merge(['action','name', 'type', 'duration', 'amount','discount_percentage','total_price', 'planlimitation', 'status', 'check']))
+        return $datatable->rawColumns(array_merge(['action', 'name', 'type', 'duration', 'amount', 'discount_percentage', 'total_price', 'language', 'planlimitation', 'status', 'check']))
             ->toJson();
     }
 
@@ -278,11 +290,13 @@ class PlanController extends Controller
      */
 
 
-     public function create()
-     {
-        $planLimits=PlanLimitation::where('status',1)->get();
+    public function create()
+    {
+        $planLimits = PlanLimitation::where('status', 1)->get();
 
-        $downloadoptions=Constant::where('type','video_quality')->get();
+        $downloadoptions = Constant::where('type', 'video_quality')->get();
+
+        $languages = Constant::where('type', 'movie_language')->where('status', 1)->get();
 
         $purchaseMethodEnabled  = Setting::where('name', 'iap_payment_method')->value('val') == 1;
 
@@ -290,8 +304,8 @@ class PlanController extends Controller
 
         $module_title = __('plan.lbl_add_new_plan');
 
-       return view('subscriptions::backend.plan.form',compact('planLimits','downloadoptions','module_title','assets','purchaseMethodEnabled'));
-     }
+        return view('subscriptions::backend.plan.form', compact('planLimits', 'downloadoptions', 'languages', 'module_title', 'assets', 'purchaseMethodEnabled'));
+    }
 
 
     public function store(PlanRequest $request)
@@ -299,25 +313,24 @@ class PlanController extends Controller
         // ->editColumn('currency', function ($data) {
         //     return $data->currency;
         // })
+
         $data = $request->all();
-        
+
         $data['identifier'] = strtolower(str_replace(' ', '_', $data['name']));
 
-        $plan_level=Plan::max('level');
+        $plan_level = Plan::max('level');
 
-        if($plan_level){
+        if ($plan_level) {
 
-            $data['level']=$plan_level+1;
+            $data['level'] = $plan_level + 1;
+        } else {
 
-        }else{
-
-            $data['level']=1;
-
+            $data['level'] = 1;
         }
         if (isset($data['discount']) && $data['discount'] == 1 && isset($data['discount_percentage']) && isset($data['price'])) {
             $discountPercentage = floatval($data['discount_percentage']);
             $price = floatval($data['price']);
-    
+
             $discountValue = ($discountPercentage / 100) * $price;
             $data['total_price'] = $price - $discountValue;
         } else {
@@ -331,7 +344,7 @@ class PlanController extends Controller
         if ($request->has('limits') && !empty($request->limits)) {
             foreach ($request->input('limits') as $limit) {
                 $additionalLimit = null;
-                
+
                 if ($limit['limitation_slug'] == 'supported-device-type') {
                     // Prepare the device types data
                     $deviceTypes = $request->input('supported_device_types', []);
@@ -345,8 +358,8 @@ class PlanController extends Controller
                     $additionalLimit = $request->input('device_limit_value');
                 } elseif ($limit['limitation_slug'] == 'profile-limit') {
                     $additionalLimit = $request->input('profile_limit_value');
-                }        
-        
+                }
+
                 PlanLimitationMapping::create([
                     'plan_id' => $plandata->id,
                     'planlimitation_id' => $limit['planlimitation_id'],
@@ -373,10 +386,10 @@ class PlanController extends Controller
     {
         $data = Plan::findOrFail($id);
         $purchaseMethodEnabled = Setting::where('name', 'iap_payment_method')->value('val') == 1;
-        $plan= Plan::max('level');
+        $plan = Plan::max('level');
         $assets = ['textarea'];
 
-        $plan=$plan;
+        $plan = $plan;
 
         $planLimits = PlanLimitationMapping::where('plan_id', $id)->get();
 
@@ -385,14 +398,14 @@ class PlanController extends Controller
         foreach ($planLimits as $mapping) {
             $limits[$mapping->limitation_slug] = json_decode($mapping->limit, true);
         }
-        $downloadoptions=Constant::where('type','video_quality')->get();
+        $downloadoptions = Constant::where('type', 'video_quality')->get();
+        $languages = Constant::where('type', 'language')->where('status', 1)->get();
         $discount = $data->discount;
         $discount_percentage = $data->discount_percentage;
         $total_price = $data->total_price;
         $module_title = __('plan.lbl_edit_plan');
 
-        return view('subscriptions::backend.plan.edit_form',compact('plan','data','planLimits','downloadoptions','discount','discount_percentage','total_price','module_title','assets','limits','purchaseMethodEnabled'));
-
+        return view('subscriptions::backend.plan.edit_form', compact('plan', 'data', 'planLimits', 'downloadoptions', 'languages', 'discount', 'discount_percentage', 'total_price', 'module_title', 'assets', 'limits', 'purchaseMethodEnabled'));
     }
 
     /**
@@ -404,16 +417,15 @@ class PlanController extends Controller
      */
     public function update(PlanRequest $request, $id)
     {
-
         $request_data = $request->all();
 
         $data = Plan::where('id', $id)->first();
 
-        $level=$data->level;
+        $level = $data->level;
 
-          $data->update($request_data);
+        $data->update($request_data);
 
-          if (isset($request_data['discount']) && $request_data['discount'] == 1 && isset($request_data['discount_percentage']) && isset($request_data['price'])) {
+        if (isset($request_data['discount']) && $request_data['discount'] == 1 && isset($request_data['discount_percentage']) && isset($request_data['price'])) {
             $discountPercentage = floatval($request_data['discount_percentage']);
             $price = floatval($request_data['price']);
             $discountValue = ($discountPercentage / 100) * $price;
@@ -423,7 +435,7 @@ class PlanController extends Controller
         }
         if ($level < $request_data['level']) {
 
-            $plansToUpdate = Plan::where('level', '>',$level)->where('id','!=',$id)->get();
+            $plansToUpdate = Plan::where('level', '>', $level)->where('id', '!=', $id)->get();
 
             foreach ($plansToUpdate as $plan) {
                 $plan->update(['level' => $plan->level + 1]);
@@ -431,17 +443,16 @@ class PlanController extends Controller
         }
 
 
-        if($level > $request_data['level']){
+        if ($level > $request_data['level']) {
 
-            $plansToUpdate = Plan::where('level', '<',$level)->where('id','!=',$id)->get();
+            $plansToUpdate = Plan::where('level', '<', $level)->where('id', '!=', $id)->get();
 
             foreach ($plansToUpdate as $plan) {
                 $plan->update(['level' => $plan->level + 1]);
             }
-
         }
 
-         if ($request->has('limits') && !empty($request->limits)) {
+        if ($request->has('limits') && !empty($request->limits)) {
             foreach ($request->input('limits') as $limit) {
                 $additionalLimit = null;
 
@@ -455,7 +466,7 @@ class PlanController extends Controller
                     $additionalLimit = $request->input('device_limit_value');
                 } elseif ($limit['limitation_slug'] == 'profile-limit') {
                     $additionalLimit = $request->input('profile_limit_value');
-                }   
+                }
 
                 PlanLimitationMapping::updateOrCreate(
                     [
@@ -470,12 +481,11 @@ class PlanController extends Controller
                 );
             }
         }
+       
 
         $message = __('messages.update_form', ['form' => __('plan.singular_title')]);
 
-        return redirect()->route('backend.plans.index')->with('success', $message );
-
-
+        return redirect()->route('backend.plans.index')->with('success', $message);
     }
 
     /**
@@ -485,7 +495,7 @@ class PlanController extends Controller
      * @return Renderable
      */
 
-    
+
     public function destroy($id)
     {
         $data = Plan::findOrFail($id);

@@ -69,23 +69,27 @@
             },
             {
                 data: 'subscription_transaction.payment_type',
-                name: 'payment_type',
+                name: 'subscription_transaction.payment_type',
                 title: "{{ __('messages.payment_type') }}",
                 render: function(data, type, row) {
                     let className, style;
 
                     switch (data) {
                         case 'cartpanda':
-                            className = 'badge p-2';
                             style = 'background-color: #ffff; color: #000;';
                             break;
-
+                        case 'tribopay':
+                            style = 'background-color: #3b5998; color: #fff;';
+                            break;
+                        case 'for4pay':
+                            style = 'background-color: #f39c12; color: #fff;';
+                            break;
                         default:
                             break;
                     }
 
 
-                    return '<span class="' + className + '" style="' + style + '">' + data + '</span>';
+                    return '<span class="badge p-2" style="' + style + '">' + data + '</span>';
                 }
             },
 

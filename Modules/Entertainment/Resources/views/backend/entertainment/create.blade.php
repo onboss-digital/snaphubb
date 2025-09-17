@@ -563,29 +563,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 function handleTrailerUrlTypeChange(selectedValue) {
                     var FileInput = document.getElementById('url_file_input');
                     var URLInput = document.getElementById('url_input');
-                    var trailerfile = document.querySelector('input[name="trailer_video"]');
+                    // var trailerfile = document.querySelector('input[name="trailer_video"]');
                     var trailerfileError = document.getElementById('trailer-file-error');
                     var urlError = document.getElementById('trailer-url-error');
-                    var URLInputField = document.querySelector('input[name="trailer_url"]');
+                    // var URLInputField = document.querySelector('input[name="trailer_url"]');
 
                     if (selectedValue === 'Local') {
-                        trailerfile.setAttribute('required', 'required');
-                        trailerfileError.style.display = 'block';
+                        // trailerfile.setAttribute('required', 'required');
+                        // trailerfileError.style.display = 'block';C
                         FileInput.classList.remove('d-none');
                         URLInput.classList.add('d-none');
-                        URLInputField.removeAttribute('required');
+                        // URLInputField.removeAttribute('required');
                     } else if (selectedValue === 'URL' || selectedValue === 'YouTube' || selectedValue === 'HLS' ||
                         selectedValue === 'Vimeo') {
                         URLInput.classList.remove('d-none');
                         FileInput.classList.add('d-none');
-                        URLInputField.setAttribute('required', 'required');
-                        trailerfile.removeAttribute('required');
+                        // URLInputField.setAttribute('required', 'required');
+                        // trailerfile.removeAttribute('required');
                         validateTrailerUrlInput()
                     } else {
                         FileInput.classList.add('d-none');
                         URLInput.classList.add('d-none');
-                        URLInputField.removeAttribute('required');
-                        trailerfile.removeAttribute('required');
+                        // URLInputField.removeAttribute('required');
+                        // trailerfile.removeAttribute('required');
                     }
                 }
 

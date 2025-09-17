@@ -104,7 +104,38 @@
             </div>
         </div>
     </div>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title
+            ">{{ __('Sugestions') }}</h4>
+        </div>
+        <div class="card-body">
+            
+            {{-- table sugestions --}}
+            <div class="col">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>{{ __('Name') }}</th>
+                            <th>{{ __('Link') }}</th>
+                            <th>{{ __('User') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($ranking->sugestions as $sugestion)
+                            <tr>
+                                <td>{{ $sugestion->sugestion_name }}</td>
+                                <td>{{ $sugestion->sugestion_link }}</td>
+                                <td>{{ $sugestion->user->first_name }} {{ $sugestion->user->last_name }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <div class="d-grid d-sm-flex justify-content-sm-end gap-3">
+        <button type="button" class="btn btn-md btn-secondary" onclick="resetRankingResponses({{ $ranking->id }})">{{ __('Reset Responses') }}</button>
         {{ html()->submit(trans('messages.save'))->class('btn btn-md btn-primary float-right')->id('submit-button') }}
     </div>
     {{ html()->form()->close() }}
@@ -119,6 +150,13 @@
             hiddenInput.value = '';
             removedFlag.value = 1;
         }
+
+        function resetRankingResponses(rankingId) {
+            if (confirm('{{ __('Are you sure you want to reset the responses?') }}')) {
+                window.location.href = '{{ route('backend.users.ranking.reset_responses', '') }}/' + rankingId;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             flatpickr('.min-datetimepicker-time', {
                 enableTime: true,
