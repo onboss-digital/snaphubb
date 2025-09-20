@@ -17,6 +17,7 @@ use Modules\Constant\Models\Constant;
 use App\Trait\ModuleTrait;
 use Illuminate\Support\Number;
 use Modules\Setting\Models\Setting;
+use Modules\Subscriptions\Models\OrderBump;
 
 class PlanController extends Controller
 {
@@ -187,8 +188,34 @@ class PlanController extends Controller
                 return view('subscriptions::backend.plan.action_column', compact('data'));
             })
             ->editColumn('price', function ($data) {
-                return Number::currency($data->price, $data->currency);
+                try {
+                    if (!isset($data->price) || $data->price === null) {
+                        return '-';
+                    }
+
+                    // Ajuste se seu price estiver em centavos (Stripe-style)
+                    $price = $data->price;
+                    if (is_int($price) && $price > 1000) {
+                        $price = $price / 100;
+                    }
+
+                    $currency = strtoupper($data->currency ?? 'BRL');
+
+                    if (class_exists(\NumberFormatter::class)) {
+                        $locale = $currency === 'BRL' ? 'pt_BR' : 'en_US';
+                        $fmt = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+                        return $fmt->formatCurrency((float)$price, $currency);
+                    }
+
+                    // Fallback simples se intl não estiver disponível
+                    $formatted = number_format((float)$price, 2, ',', '.');
+                    return ($currency === 'BRL' ? 'R$ ' : $currency . ' ') . $formatted;
+                } catch (\Throwable $e) {
+                    dump("Price formatting error: {$e->getMessage()}", ['row_id' => $data->id]);
+                    return '-';
+                }
             })
+
             ->editColumn('discount_percentage', function ($data) {
                 if (is_null($data->discount_percentage)) {
                     return '-';
@@ -197,8 +224,36 @@ class PlanController extends Controller
             })
 
             ->editColumn('total_price', function ($data) {
-                return Number::currency($data->total_price, $data->currency);
+                try {
+                    if (!isset($data->total_price)) {
+                        return '-';
+                    }
+
+                    // Se os preços vierem em centavos, divide por 100
+                    $price = $data->total_price;
+                    if (is_int($price) && $price > 1000) {
+                        $price = $price / 100;
+                    }
+
+                    $currency = strtoupper($data->currency ?? 'BRL');
+
+                    if (class_exists(\NumberFormatter::class)) {
+                        $locale = $currency === 'BRL' ? 'pt_BR' : 'en_US';
+                        $fmt = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+                        return $fmt->formatCurrency((float)$price, $currency);
+                    }
+
+                    // fallback simples
+                    $formatted = number_format((float)$price, 2, ',', '.');
+                    return ($currency === 'BRL' ? 'R$ ' : $currency . ' ') . $formatted;
+                } catch (\Throwable $e) {
+                    dump("Total price formatting error: {$e->getMessage()}", [
+                        'row_id' => $data->id
+                    ]);
+                    return '-';
+                }
             })
+
 
 
             ->editColumn('level', function ($data) {
@@ -481,7 +536,43 @@ class PlanController extends Controller
                 );
             }
         }
-       
+
+        // -------------------------
+        // ORDER BUMPS
+        // -------------------------
+        $submittedBumps = $request->input('orderBumps', []);
+        $submittedIds = [];
+        foreach ($submittedBumps as $bump) {
+            if (!empty($bump['id'])) {
+                // Atualiza bump existente
+                $existing = OrderBump::find($bump['id']);
+                if ($existing) {
+                    $existing->update([
+                        'external_id' => $bump['external_id'] ?? null,
+                        'title'       => $bump['title'] ?? null,
+                        'text_button'       => $bump['text_button'] ?? null,
+                        'description' => $bump['description'] ?? null,
+                    ]);
+                    $submittedIds[] = $existing->id;
+                }
+            } else {
+                // Cria novo bump
+                $newBump = OrderBump::create([
+                    'plan_id'     => $data->id,
+                    'external_id' => $bump['external_id'] ?? null,
+                    'title'       => $bump['title'] ?? null,
+                    'text_button'       => $bump['text_button'] ?? null,
+                    'description' => $bump['description'] ?? null,
+                ]);
+                $submittedIds[] = $newBump->id;
+            }
+        }
+
+        // Remove bumps não enviados no formulário
+        OrderBump::where('plan_id', $data->id)
+            ->whereNotIn('id', $submittedIds)
+            ->forceDelete();
+            //->delete();
 
         $message = __('messages.update_form', ['form' => __('plan.singular_title')]);
 

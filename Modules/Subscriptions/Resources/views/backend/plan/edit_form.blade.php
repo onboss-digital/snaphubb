@@ -9,24 +9,24 @@
 ->open()
 }}
 
-    <div class="card">
-        <div class="card-body">
-            <div class="row gy-3">
-                <div class="col-md-6 col-lg-4">
-                    {{ html()->label(__('plan.lbl_name') . ' <span class="text-danger">*</span>', 'name')->class('form-label') }}
-                    {{ html()->text('name')
+<div class="card">
+    <div class="card-body">
+        <div class="row gy-3">
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label(__('plan.lbl_name') . ' <span class="text-danger">*</span>', 'name')->class('form-label') }}
+                {{ html()->text('name')
                                 ->attribute('value', $data->name)  ->placeholder(__('placeholder.lbl_plan_name'))
                                 ->class('form-control')
                                 ->attribute('required','required')
                             }}
-                    @error('name')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">Name field is required</div>
-                </div>
-                <div class="col-md-4 col-lg-2">
-                    {{ html()->label(__('plan.lbl_level') . '<span class="text-danger">*</span>', 'level')->class('form-label') }}
-                    {{
+                @error('name')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">Name field is required</div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_level') . '<span class="text-danger">*</span>', 'level')->class('form-label') }}
+                {{
                     html()->select('level',
                         isset($plan) && $plan > 0
                             ? collect(range(1, $plan + 1))->mapWithKeys(fn($i) => [$i => 'Level ' . $i])->prepend(__('Select Level'), '')->toArray()
@@ -34,14 +34,14 @@
                         old('level', $data->level ?? '')
                     )->class('form-control select2')->id('level')->attribute('placeholder', __('placeholder.lbl_plan_level'))->attribute('required','required')
                     }}
-                    @error('level')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">Level field is required</div>
-                </div>
-                <div class="col-md-4 col-lg-2">
-                    {{ html()->label(__('plan.lbl_duration_value') . '<span class="text-danger">*</span>', 'duration_value')->class('form-label') }}
-                    {{
+                @error('level')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">Level field is required</div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_duration_value') . '<span class="text-danger">*</span>', 'duration_value')->class('form-label') }}
+                {{
                             html()->input('number', 'duration_value', $data->duration_value)
                                 ->class('form-control')
                                 ->id('duration_value')
@@ -50,14 +50,14 @@
                                 // ->attribute('min', '1')
                                 ->attribute('required','required')
                         }}
-                    @error('duration_value')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">Duration Value field is required</div>
-                </div>
-                <div class="col-md-4 col-lg-2">
-                    {{ html()->label(__('plan.lbl_duration') . '<span class="text-danger">*</span>', 'duration')->class('form-label') }}
-                    {{
+                @error('duration_value')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">Duration Value field is required</div>
+            </div>
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('plan.lbl_duration') . '<span class="text-danger">*</span>', 'duration')->class('form-label') }}
+                {{
                                 html()->select('duration', [
                                         '' => __('messages.lbl_select_duration'),
                                         'week' => 'Week',
@@ -69,14 +69,14 @@
                                     ->attribute('placeholder', __('placeholder.lbl_plan_duration_type'))
                                     ->attribute('required','required')
                             }}
-                    @error('duration')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">Duration field is required</div>
-                </div>
-                <div class="col-md-3 col-lg-2">
-                    {{ html()->label(__('plan.lbl_currency') . '<span class="text-danger">*</span>', 'currency')->class('form-label') }}
-                    {{
+                @error('duration')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">Duration field is required</div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                {{ html()->label(__('plan.lbl_currency') . '<span class="text-danger">*</span>', 'currency')->class('form-label') }}
+                {{
                          html()->select('currency',
                                         collect(Modules\Currency\Models\Currency::get()->toArray())->pluck('currency_code','currency_code'),
                                         $data->currency)
@@ -85,14 +85,14 @@
                             ->attribute('placeholder', __('placeholder.lbl_plan_currency'))
                             ->attribute('required','required')
                     }}
-                    @error('currency')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">currency field is required</div>
-                </div>
-                <div class="col-md-3 col-lg-2">
-                    {{ html()->label(__('plan.lbl_amount') . '<span class="text-danger">*</span>', 'price')->class('form-label') }}
-                    {{
+                @error('currency')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">currency field is required</div>
+            </div>
+            <div class="col-md-3 col-lg-2">
+                {{ html()->label(__('plan.lbl_amount') . '<span class="text-danger">*</span>', 'price')->class('form-label') }}
+                {{
                         html()->input('number', 'price', $data->price)
                             ->class('form-control')
                             ->id('price')
@@ -102,41 +102,41 @@
                             // ->attribute('min', '0')
                             ->attribute('required','required')
                     }}
-                    @error('price')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="name-error">Price field is required</div>
-                </div>
+                @error('price')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">Price field is required</div>
+            </div>
             @if($purchaseMethodEnabled)
-                <div class="col-md-4 col-lg-2">
-                    {{ html()->label(__('messages.lbl_android_identifier') . '<span class="text-danger">*</span>', 'android_identifier')->class('form-label') }}
-                        {{
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label(__('messages.lbl_android_identifier') . '<span class="text-danger">*</span>', 'android_identifier')->class('form-label') }}
+                {{
                             html()->text('android_identifier', old('android_identifier', $data->android_identifier ?? ''))
                                 ->class('form-control')
                                 ->id('android_identifier')
                                 ->attribute('placeholder', __('messages.lbl_android_identifier'))
                                 ->attribute('required','required')
                         }}
-                    @error('android_identifier')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="android_identifier-error">Android Identifier field is required</div>
-                </div>
+                @error('android_identifier')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="android_identifier-error">Android Identifier field is required</div>
+            </div>
 
-                <div class="col-md-6 col-lg-4">
-                    {{ html()->label(__('messages.lbl_apple_identifier') . '<span class="text-danger">*</span>', 'apple_identifier')->class('form-label') }}
-                        {{
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label(__('messages.lbl_apple_identifier') . '<span class="text-danger">*</span>', 'apple_identifier')->class('form-label') }}
+                {{
                             html()->text('apple_identifier', old('apple_identifier', $data->apple_identifier ?? ''))
                                 ->class('form-control')
                                 ->id('apple_identifier')
                                 ->attribute('placeholder', __('messages.lbl_apple_identifier'))
                                 ->attribute('required','required')
                         }}
-                    @error('apple_identifier')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="apple_identifier-error">Apple Identifier field is required</div>
-                </div>
+                @error('apple_identifier')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="apple_identifier-error">Apple Identifier field is required</div>
+            </div>
             @endif
 
             <div class="col-md-4 col-lg-2">
@@ -160,7 +160,7 @@
             <!-- Language Field -->
             <div class="col-md-4 col-lg-2">
                 {{ html()->label(__('plan.lbl_language'), 'language')->class('form-label') }}
-                    {{
+                {{
                         html()->select('language', collect(['' => __('plan.lbl_select_language')])->merge(config('app.available_locales')), old('language', $data->language))
                             ->class('form-control select2')
                             ->id('language')
@@ -171,10 +171,10 @@
             </div>
 
             <!-- Custom Gateway Field -->
-            
+
             <div class="col-md-4 col-lg-2">
                 {{ html()->label(__('plan.lbl_custom_gateway'), 'custom_gateway')->class('form-label') }}
-                    {{
+                {{
                         html()->select('custom_gateway', collect(['' => __('plan.lbl_select_gateway')])->merge(config('app.available_custom_gatways')), old('custom_gateway', $data->custom_gateway))
                             ->class('form-control select2')
                             ->id('custom_gateway')
@@ -227,7 +227,7 @@
                     </div>
                 </div>
                 @error('discount')
-                    <span class="text-danger">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
 
@@ -243,10 +243,10 @@
                         ->attribute('placeholder', __('plan.enter_discount_percentage'))
                 }}
                 @error('discount_percentage')
-                    <span class="text-danger">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
                 @enderror
                 <div id="discount-error" class="invalid-feedback" style="display: none;">Discount percentage is required</div>
-                <div id="discount-max-error" class="invalid-feedback" style="display: none;">Discount percentage cannot exceed 99%  and must be a positive number.</div>
+                <div id="discount-max-error" class="invalid-feedback" style="display: none;">Discount percentage cannot exceed 99% and must be a positive number.</div>
             </div>
 
             <div class="col-md-6 col-lg-4 discount-section {{ $data->discount ? '' : 'd-none' }}" id="totalPriceSection">
@@ -260,346 +260,507 @@
                         ->attribute('readonly', 'readonly')
                 }}
                 @error('total_price')
-                    <span class="text-danger">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
                 @enderror
                 <div class="invalid-feedback" id="total-price-error">Total price field is required</div>
             </div>
 
 
-                <div class="col-md-12">
-                    {{ html()->label(__('plan.lbl_description') . '<span class="text-danger">*</span>', 'description')->class('form-label') }}
-                    {{ html()->textarea('description', $data->description)
+            <div class="col-md-12">
+                {{ html()->label(__('plan.lbl_description') . '<span class="text-danger">*</span>', 'description')->class('form-label') }}
+                {{ html()->textarea('description', $data->description)
                                 ->placeholder(__('placeholder.lbl_plan_limit_description'))
                                 ->class('form-control')
                                 ->attribute('required','required')
                             }}
-                    @error('description')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                    <div class="invalid-feedback" id="desc-error">Description field is required</div>
-                </div>
+                @error('description')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="desc-error">Description field is required</div>
             </div>
         </div>
     </div>
+</div>
 
-   @if(!empty($planLimits))
-        <div class="d-flex align-items-center justify-content-between mt-5 pt-4 mb-3">
-            <h5>{{ __('plan.lbl_plan_limits') }}</h5>
+<!-- ORDER BUMPS -->
+@php
+$bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
+@endphp
+
+<div class="d-flex align-items-center justify-content-between mt-5 pt-4 mb-3">
+    <h2>Upsell and bumps (use for snappages)</h2>
+</div>
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Upsell (use for snappages)</span>
+    </div>
+    <div class="card-body">
+        <div class="row gy-3">
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label('Product External Id  (use for snappages)', 'pages_product_external_id')->class('form-label') }}
+                {{ html()->text('pages_product_external_id')
+        ->attribute('value', $data->pages_product_external_id)
+        ->placeholder('e.g. stripe -> prod_T3R54HHTDjP93y')
+        ->class('form-control')
+    }}
+                @error('pages_product_external_id')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label('URL de upsell  (use for snappages)', 'pages_upsell_url')->class('form-label') }}
+                {{ html()->text('pages_upsell_url')
+        ->attribute('value', $data->pages_upsell_url)
+        ->placeholder('e.g. https://upsell.com/')
+        ->class('form-control')
+    }}
+                @error('pages_upsell_url')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
-    @endif
-    <div class="card">
-        <div class="card-body">
-            <div class="row gy-3">
-                @foreach($planLimits as $planLimit)
-                    <div class="col-md-6 ">
-                        <label for="{{ $planLimit->limitation_slug }}" class="form-label">{{ $planLimit->limitation_data->title }}</label>
-                        <div class="d-flex align-items-center justify-content-between form-control">
-                            <label for="{{ $planLimit->limitation_slug }}" class="form-label mb-0 text-body">{{ __('messages.lbl_on') }}</label>
+        <div class="row gy-3">
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label('Upsell Pagamento concluído  (use for snappages)', 'pages_upsell_succes_url')->class('form-label') }}
+                {{ html()->text('pages_upsell_succes_url')
+        ->attribute('value', $data->pages_upsell_succes_url)
+        ->placeholder('e.g. https://upsell.com/')
+        ->class('form-control')
+    }}
+                @error('pages_upsell_succes_url')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+        <div class="row gy-3">
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label('Upsell Pagamento recusado  (use for snappages)', 'pages_upsell_fail_url')->class('form-label') }}
+                {{ html()->text('pages_upsell_fail_url')
+        ->attribute('value', $data->pages_upsell_fail_url)
+        ->placeholder('e.g. https://upsell.com/')
+        ->class('form-control')
+    }}
+                @error('pages_upsell_fail_url')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+        <div class="row gy-3">
+            <div class="col-md-6 col-lg-4">
+                {{ html()->label('Upsell Oferta recusada  (use for snappages)', 'pages_downsell_url')->class('form-label') }}
+                {{ html()->text('pages_downsell_url')
+        ->attribute('value', $data->pages_downsell_url)
+        ->placeholder('e.g. https://upsell.com/')
+        ->class('form-control')
+    }}
+                @error('pages_downsell_url')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+        </div>
+        <div class="card mb-3" id="order-bumps-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Order Bumps (use for snappages)</span>
+                <button type="button" class="btn btn-sm btn-primary" id="add-bump-btn">+</button>
+            </div>
+            <div class="card-body" id="bump-container">
+                @if(!empty($data->orderBumps) && $data->orderBumps->count())
+                @foreach($data->orderBumps as $index => $bump)
+                <div class="bump-item mb-2 border p-2 rounded" data-index="{{ $index }}">
+                    <input type="hidden" name="orderBumps[{{ $index }}][id]" value="{{ $bump->id ?? '' }}">
+                    <div class="mb-2">
+                        <label>External ID</label>
+                        <input type="text" name="orderBumps[{{ $index }}][external_id]" value="{{ $bump->external_id ?? '' }}" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label>Title</label>
+                        <input type="text" name="orderBumps[{{ $index }}][title]" value="{{ $bump->title ?? '' }}" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label>Text button</label>
+                        <input type="text" name="orderBumps[{{ $index }}][text_button]" value="{{ $bump->text_button ?? '' }}" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label>Description</label>
+                        <textarea name="orderBumps[{{ $index }}][description]" class="form-control">{{ $bump->description ?? '' }}</textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm remove-bump-btn">Remove</button>
+                </div>
+                @endforeach
+                @endif
 
-                            <div class="form-check form-switch">
-                                <input type="hidden" name="limits[{{ $planLimit->id }}][planlimitation_id]" value="{{ $planLimit->planlimitation_id }}">
-                                <input type="hidden" name="limits[{{ $planLimit->id }}][limitation_slug]" value="{{ $planLimit->limitation_slug }}">
-                                <input type="hidden" name="limits[{{ $planLimit->id }}][value]" value="0">
-                                <input type="checkbox" name="limits[{{ $planLimit->id }}][value]" id="{{ $planLimit->limitation_slug }}" class="form-check-input" value="1" {{ old("limits.{$planLimit->id}.value", $planLimit->limitation_value) ? 'checked' : '' }} onchange="toggleQualitySection()">
-                            </div>
-                        </div>
-                        @error("limits.{$planLimit->id}.value")
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                     </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let bumpIndex = {{$bumpCount}};
+    const bumpContainer = document.getElementById('bump-container');
+    const addBumpBtn = document.getElementById('add-bump-btn');
+
+    addBumpBtn.addEventListener('click', () => {
+        const newBump = document.createElement('div');
+        newBump.classList.add('bump-item', 'mb-2', 'border', 'p-2', 'rounded');
+        newBump.dataset.index = bumpIndex;
+
+        newBump.innerHTML = `
+   <input type="hidden" name="orderBumps[${bumpIndex}][id]" value="">
+    <div class="mb-2">
+        <label>External ID</label>
+        <input type="text" name="orderBumps[${bumpIndex}][external_id]" class="form-control">
+    </div>
+    <div class="mb-2">
+        <label>Title</label>
+        <input type="text" name="orderBumps[${bumpIndex}][title]" class="form-control">
+    </div>
+    <div class="mb-2">
+        <label>Text button</label>
+        <input type="text" name="orderBumps[${bumpIndex}][text_button]" class="form-control">
+    </div>
+    <div class="mb-2">
+        <label>Description</label>
+        <textarea name="orderBumps[${bumpIndex}][description]" class="form-control"></textarea>
+    </div>
+    <button type="button" class="btn btn-danger btn-sm remove-bump-btn">Remove</button>
+`;
 
 
-                    @if($planLimit->limitation_slug == 'device-limit')
-                        <div class="col-md-6" id="deviceLimitInput">
-                            {{ html()->label(__('plan.lbl_device_limit'), 'device_limit_value')->class('form-label') }}
-                            {{
+        bumpContainer.appendChild(newBump);
+
+        // Remover bump
+        newBump.querySelector('.remove-bump-btn').addEventListener('click', () => {
+            newBump.remove();
+        });
+
+        bumpIndex++;
+    });
+
+    // Remover bumps existentes
+    document.querySelectorAll('.remove-bump-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.target.closest('.bump-item').remove();
+        });
+    });
+</script>
+
+<!--  -->
+
+@if(!empty($planLimits))
+<div class="d-flex align-items-center justify-content-between mt-5 pt-4 mb-3">
+    <h5>{{ __('plan.lbl_plan_limits') }}</h5>
+</div>
+@endif
+<div class="card">
+    <div class="card-body">
+        <div class="row gy-3">
+            @foreach($planLimits as $planLimit)
+            <div class="col-md-6 ">
+                <label for="{{ $planLimit->limitation_slug }}" class="form-label">{{ $planLimit->limitation_data->title }}</label>
+                <div class="d-flex align-items-center justify-content-between form-control">
+                    <label for="{{ $planLimit->limitation_slug }}" class="form-label mb-0 text-body">{{ __('messages.lbl_on') }}</label>
+
+                    <div class="form-check form-switch">
+                        <input type="hidden" name="limits[{{ $planLimit->id }}][planlimitation_id]" value="{{ $planLimit->planlimitation_id }}">
+                        <input type="hidden" name="limits[{{ $planLimit->id }}][limitation_slug]" value="{{ $planLimit->limitation_slug }}">
+                        <input type="hidden" name="limits[{{ $planLimit->id }}][value]" value="0">
+                        <input type="checkbox" name="limits[{{ $planLimit->id }}][value]" id="{{ $planLimit->limitation_slug }}" class="form-check-input" value="1" {{ old("limits.{$planLimit->id}.value", $planLimit->limitation_value) ? 'checked' : '' }} onchange="toggleQualitySection()">
+                    </div>
+                </div>
+                @error("limits.{$planLimit->id}.value")
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+
+            @if($planLimit->limitation_slug == 'device-limit')
+            <div class="col-md-6" id="deviceLimitInput">
+                {{ html()->label(__('plan.lbl_device_limit'), 'device_limit_value')->class('form-label') }}
+                {{
                                 html()->input('number', 'device_limit_value', old('device_limit_value', $planLimit->limit))
                                     ->class('form-control')
                                     ->id('device_limit_value')
                                     ->attribute('placeholder', __('placeholder.lbl_device_limit'))
                                     ->attribute('value', $planLimit->limit ?? '0')
                             }}
-                            @error('device_limit_value')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                            <div class="invalid-feedback" id="name-error">Device Limit field is required</div>
-                        </div>
-                    @endif
+                @error('device_limit_value')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="name-error">Device Limit field is required</div>
+            </div>
+            @endif
 
-                    @if($planLimit->limitation_slug == 'download-status')
-                     <div class="row gy-4 d-none" id="DownloadStatus">
-                        <label class="form-label">{{ __('messages.lbl_quality_option') }}</label>
-                        @php
-                            $downloadOptions = json_decode($planLimit->limit, true) ?? [];
-                        @endphp
-                        @foreach($downloadoptions as $option)
-                        <div class="col-md-4">
-                            <div class="d-flex align-items-center justify-content-between form-control">
-                                <label for="{{ $option->value }}" class="form-label">{{ $option->name }}</label>
-                                <div class="form-check form-switch">
-                                    <input type="hidden" name="download_options[{{ $option->value }}]" value="0">
-                                    <input type="checkbox" name="download_options[{{ $option->value }}]" id="{{ $option->value }}" class="form-check-input" value="1" {{ (isset($downloadOptions[$option->value]) && $downloadOptions[$option->value] == "1") ? 'checked' : '' }}>
-                                </div>
-                            </div>
+            @if($planLimit->limitation_slug == 'download-status')
+            <div class="row gy-4 d-none" id="DownloadStatus">
+                <label class="form-label">{{ __('messages.lbl_quality_option') }}</label>
+                @php
+                $downloadOptions = json_decode($planLimit->limit, true) ?? [];
+                @endphp
+                @foreach($downloadoptions as $option)
+                <div class="col-md-4">
+                    <div class="d-flex align-items-center justify-content-between form-control">
+                        <label for="{{ $option->value }}" class="form-label">{{ $option->name }}</label>
+                        <div class="form-check form-switch">
+                            <input type="hidden" name="download_options[{{ $option->value }}]" value="0">
+                            <input type="checkbox" name="download_options[{{ $option->value }}]" id="{{ $option->value }}" class="form-check-input" value="1" {{ (isset($downloadOptions[$option->value]) && $downloadOptions[$option->value] == "1") ? 'checked' : '' }}>
                         </div>
-                        @endforeach
                     </div>
-                @endif
+                </div>
+                @endforeach
+            </div>
+            @endif
 
-                @if($planLimit->limitation_slug == 'profile-limit')
-                    <div class="col-md-6" id="profileLimitInput">
-                        {{ html()->label(__('plan.lbl_profile_limit'), 'profile_limit_value')->class('form-label') }}
-                        {{
+            @if($planLimit->limitation_slug == 'profile-limit')
+            <div class="col-md-6" id="profileLimitInput">
+                {{ html()->label(__('plan.lbl_profile_limit'), 'profile_limit_value')->class('form-label') }}
+                {{
                             html()->input('number', 'profile_limit_value', old('profile_limit_value', $planLimit->limit))
                                 ->class('form-control')
                                 ->id('profile_limit_value')
                                 ->attribute('placeholder', __('placeholder.lbl_device_limit'))
                                 ->attribute('value', $planLimit->limit ?? '0')
                         }}
-                        @error('profile_limit_value')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                        <div class="invalid-feedback" id="profile-limit-error">Profile Limit field is required</div>
-                    </div>
-                @endif
-
-               @if($planLimit->limitation_slug =='supported-device-type')
-                    <div class="col-md-6" id="supportedDeviceTypeInput">
-                        <label class="form-label">{{ __('plan.lbl_supported_device_type_options') }}</label>
-                        <div class="d-flex flex-wrap gap-3">
-                            @foreach(['tablet', 'laptop', 'mobile'] as $option)
-                                <div class="form-check form-check-inline">
-                                    <input type="hidden" name="supported_device_types[{{ $option }}]" value="0">
-                                    <input type="checkbox" name="supported_device_types[{{ $option }}]}" id="{{ $option }}" value="1" {{ isset($limits['supported-device-type'][$option]) && $limits['supported-device-type'][$option] ? 'checked' : '' }}>
-                                    <label for="{{ $option }}">{{ ucfirst($option) }}</label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                @endif
-
-                @endforeach
+                @error('profile_limit_value')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+                <div class="invalid-feedback" id="profile-limit-error">Profile Limit field is required</div>
             </div>
+            @endif
+
+            @if($planLimit->limitation_slug =='supported-device-type')
+            <div class="col-md-6" id="supportedDeviceTypeInput">
+                <label class="form-label">{{ __('plan.lbl_supported_device_type_options') }}</label>
+                <div class="d-flex flex-wrap gap-3">
+                    @foreach(['tablet', 'laptop', 'mobile'] as $option)
+                    <div class="form-check form-check-inline">
+                        <input type="hidden" name="supported_device_types[{{ $option }}]" value="0">
+                        <input type="checkbox" name="supported_device_types[{{ $option }}]}" id="{{ $option }}" value="1" {{ isset($limits['supported-device-type'][$option]) && $limits['supported-device-type'][$option] ? 'checked' : '' }}>
+                        <label for="{{ $option }}">{{ ucfirst($option) }}</label>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            @endforeach
         </div>
     </div>
+</div>
 
-    <div class="d-grid d-sm-flex justify-content-sm-end gap-3 mb-5">
-        {{ html()->submit(trans('messages.save'))->class('btn btn-md btn-primary float-right')->id('submit-button') }}
-    </div>
+<div class="d-grid d-sm-flex justify-content-sm-end gap-3 mb-5">
+    {{ html()->submit(trans('messages.save'))->class('btn btn-md btn-primary float-right')->id('submit-button') }}
+</div>
 {{ html()->form()->close() }}
 
 @endsection
 @push('after-scripts')
-      <script>
+<script>
+    tinymce.init({
+        selector: '#description',
+        plugins: 'link image code',
+        toolbar: 'undo redo | styleselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | removeformat | code | image',
+        setup: function(editor) {
+            // Setup TinyMCE to listen for changes
+            editor.on('change', function(e) {
+                // Get the editor content
+                const content = editor.getContent().trim();
+                const $textarea = $('#description');
+                const $error = $('#desc-error');
 
-tinymce.init({
-            selector: '#description',
-            plugins: 'link image code',
-            toolbar: 'undo redo | styleselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | removeformat | code | image',
-            setup: function(editor) {
-                // Setup TinyMCE to listen for changes
-                editor.on('change', function(e) {
-                    // Get the editor content
-                    const content = editor.getContent().trim();
-                    const $textarea = $('#description');
-                    const $error = $('#desc-error');
+                // Check if content is empty
+                if (content === '') {
+                    $textarea.addClass('is-invalid'); // Add invalid class if empty
+                    $error.show(); // Show validation message
 
-                    // Check if content is empty
-                    if (content === '') {
-                        $textarea.addClass('is-invalid'); // Add invalid class if empty
-                        $error.show(); // Show validation message
+                } else {
+                    $textarea.removeClass('is-invalid'); // Remove invalid class if not empty
+                    $error.hide(); // Hide validation message
+                }
+            });
+        }
+    });
+    $(document).on('click', '.variable_button', function() {
+        const textarea = $(document).find('.tab-pane.active');
+        const textareaID = textarea.find('textarea').attr('id');
+        tinyMCE.activeEditor.selection.setContent($(this).attr('data-value'));
+    });
 
-                    } else {
-                        $textarea.removeClass('is-invalid'); // Remove invalid class if not empty
-                        $error.hide(); // Hide validation message
-                    }
-                });
-            }
-        });
-        $(document).on('click', '.variable_button', function() {
-            const textarea = $(document).find('.tab-pane.active');
-            const textareaID = textarea.find('textarea').attr('id');
-            tinyMCE.activeEditor.selection.setContent($(this).attr('data-value'));
-        });
-          function toggleQualitySection() {
+    function toggleQualitySection() {
 
-             var enableQualityCheckbox = document.getElementById('device-limit');
-             var enableQualitySection = document.getElementById('deviceLimitInput');
-             const deviceLimitInput = document.getElementById('device_limit_value');
+        var enableQualityCheckbox = document.getElementById('device-limit');
+        var enableQualitySection = document.getElementById('deviceLimitInput');
+        const deviceLimitInput = document.getElementById('device_limit_value');
 
-             if (enableQualityCheckbox.checked) {
+        if (enableQualityCheckbox.checked) {
 
-              enableQualitySection.classList.remove('d-none');
-              deviceLimitInput.setAttribute('min', '1');
-              deviceLimitInput.setAttribute('required', 'required');
-             } else {
+            enableQualitySection.classList.remove('d-none');
+            deviceLimitInput.setAttribute('min', '1');
+            deviceLimitInput.setAttribute('required', 'required');
+        } else {
 
-               enableQualitySection.classList.add('d-none');
-               deviceLimitInput.removeAttribute('min');
-               deviceLimitInput.removeAttribute('required');
-             }
-             }
-             document.addEventListener('DOMContentLoaded', function () {
-             toggleQualitySection();
-        });
+            enableQualitySection.classList.add('d-none');
+            deviceLimitInput.removeAttribute('min');
+            deviceLimitInput.removeAttribute('required');
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleQualitySection();
+    });
 
-        function toggleDownloadSection() {
+    function toggleDownloadSection() {
 
 
-            var enableDownloadCheckbox = document.getElementById('download-status');
-            var enableDownloadSection = document.getElementById('DownloadStatus');
+        var enableDownloadCheckbox = document.getElementById('download-status');
+        var enableDownloadSection = document.getElementById('DownloadStatus');
 
-            if (enableDownloadCheckbox.checked) {
-                enableDownloadSection.classList.remove('d-none');
+        if (enableDownloadCheckbox.checked) {
+            enableDownloadSection.classList.remove('d-none');
+        } else {
+            enableDownloadSection.classList.add('d-none');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var enableDownloadCheckbox = document.getElementById('download-status');
+
+        toggleDownloadSection();
+
+        enableDownloadCheckbox.addEventListener('change', toggleDownloadSection);
+    });
+
+    function toggleSupportedDeviceTypeSection() {
+        const checkbox = document.getElementById('supported-device-type');
+        const section = document.getElementById('supportedDeviceTypeInput');
+
+        if (checkbox && checkbox.checked) {
+            section.classList.remove('d-none');
+        } else {
+            section.classList.add('d-none');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkbox = document.getElementById('supported-device-type');
+
+        toggleSupportedDeviceTypeSection();
+
+        checkbox.addEventListener('change', toggleSupportedDeviceTypeSection);
+    });
+
+
+    $(document).ready(function() {
+        const $discountToggle = $('#discount-toggle');
+        const $discountPercentageSection = $('#discountPercentageSection');
+        const $totalPriceSection = $('#totalPriceSection');
+        const $discountPercentageInput = $('#discount_percentage');
+        const $priceInput = $('#price');
+        const $totalPriceInput = $('#total_price');
+        const $form = $('#form-submit');
+        const $discountError = $('#discount-error'); // Error for invalid percentage
+        const $discountMaxError = $('#discount-max-error'); // Error for max percentage
+
+
+        function updateSections() {
+            const price = parseFloat($priceInput.val()) || 0;
+
+            if ($discountToggle.is(':checked')) {
+                $discountPercentageSection.removeClass('d-none');
+                $totalPriceSection.removeClass('d-none');
+                $discountPercentageInput.prop('required', true);
             } else {
-                enableDownloadSection.classList.add('d-none');
+                $discountPercentageSection.addClass('d-none');
+                $totalPriceSection.addClass('d-none');
+                $discountPercentageInput.prop('required', false);
+
+                $discountPercentageInput.val(0); // Set discount to 0 when off
+                $totalPriceInput.val(price.toFixed(2)); // Reset total price to match price when discount is off
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var enableDownloadCheckbox = document.getElementById('download-status');
+        $discountToggle.change(updateSections);
+        updateSections();
 
-              toggleDownloadSection();
 
-            enableDownloadCheckbox.addEventListener('change', toggleDownloadSection);
-        });
 
-        function toggleSupportedDeviceTypeSection() {
-            const checkbox = document.getElementById('supported-device-type');
-            const section = document.getElementById('supportedDeviceTypeInput');
 
-            if (checkbox && checkbox.checked) {
-                section.classList.remove('d-none');
+
+
+
+
+
+
+        $discountPercentageInput.on('input', function() {
+            const price = parseFloat($priceInput.val()) || 0;
+            let discountPercentage = parseFloat($(this).val()) || 0;
+
+            // Prevent negative input
+            if (discountPercentage < 0) {
+                $(this).val(0);
+                discountPercentage = 0;
+            }
+
+            // Check if discount exceeds 99%
+            if (discountPercentage > 99) {
+                discountPercentage = 0;
+                $(this).val(discountPercentage);
+                $discountMaxError.show();
             } else {
-                section.classList.add('d-none');
+                $discountMaxError.hide();
             }
+
+            // Validate if discount percentage is empty or less than 1
+            if (discountPercentage < 1 && discountPercentage > 0) {
+                $(this).addClass('is-invalid');
+                $discountError.show();
+            } else {
+                $(this).removeClass('is-invalid'); // Remove invalid class if valid
+                $discountError.hide(); // Hide validation message
+            }
+
+            const discountAmount = (price * discountPercentage) / 100;
+            const totalPrice = price - discountAmount;
+            $totalPriceInput.val(totalPrice.toFixed(2));
+        });
+
+        $form.on('submit', function(e) {
+            // Check if discount is active and percentage is empty
+            if ($discountToggle.is(':checked') && !$discountPercentageInput.val()) {
+                e.preventDefault();
+                $discountError.show();
+            }
+        });
+
+        // Handle price input change to recalculate total price if discount is active
+        $priceInput.on('input', function() {
+            const price = parseFloat($(this).val()) || 0;
+            const discountPercentage = parseFloat($discountPercentageInput.val()) || 0;
+            const discountAmount = (price * discountPercentage) / 100;
+            const totalPrice = $discountToggle.is(':checked') ? (price - discountAmount) : price;
+            $totalPriceInput.val(totalPrice.toFixed(2));
+        });
+    });
+
+    function toggleProfileSection() {
+        var enableProfileCheckbox = document.getElementById('profile-limit');
+        var enableProfileSection = document.getElementById('profileLimitInput');
+        const profileLimitInput = document.getElementById('profile_limit_value');
+        if (enableProfileCheckbox.checked) {
+            enableProfileSection.classList.remove('d-none');
+            profileLimitInput.setAttribute('min', '1');
+            profileLimitInput.setAttribute('required', 'required');
+
+        } else {
+            enableProfileSection.classList.add('d-none');
+            profileLimitInput.removeAttribute('min');
+            profileLimitInput.removeAttribute('required');
+
         }
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkbox = document.getElementById('supported-device-type');
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleProfileSection();
+    });
 
-            toggleSupportedDeviceTypeSection();
-
-            checkbox.addEventListener('change', toggleSupportedDeviceTypeSection);
-        });
-
-
-        $(document).ready(function() {
-            const $discountToggle = $('#discount-toggle');
-            const $discountPercentageSection = $('#discountPercentageSection');
-            const $totalPriceSection = $('#totalPriceSection');
-            const $discountPercentageInput = $('#discount_percentage');
-            const $priceInput = $('#price');
-            const $totalPriceInput = $('#total_price');
-            const $form = $('#form-submit');
-            const $discountError = $('#discount-error'); // Error for invalid percentage
-            const $discountMaxError = $('#discount-max-error'); // Error for max percentage
-
-
-            function updateSections() {
-                const price = parseFloat($priceInput.val()) || 0;
-
-                if ($discountToggle.is(':checked')) {
-                    $discountPercentageSection.removeClass('d-none');
-                    $totalPriceSection.removeClass('d-none');
-                    $discountPercentageInput.prop('required', true);
-                } else {
-                    $discountPercentageSection.addClass('d-none');
-                    $totalPriceSection.addClass('d-none');
-                    $discountPercentageInput.prop('required', false);
-
-                    $discountPercentageInput.val(0);  // Set discount to 0 when off
-                    $totalPriceInput.val(price.toFixed(2)); // Reset total price to match price when discount is off
-                }
-            }
-
-            $discountToggle.change(updateSections);
-            updateSections();
-
-
-
-
-
-
-
-
-
-
-            $discountPercentageInput.on('input', function() {
-                const price = parseFloat($priceInput.val()) || 0;
-                let discountPercentage = parseFloat($(this).val()) || 0;
-
-                // Prevent negative input
-                if (discountPercentage < 0) {
-                    $(this).val(0);
-                    discountPercentage = 0;
-                }
-
-                // Check if discount exceeds 99%
-                if (discountPercentage > 99) {
-                    discountPercentage = 0;
-                    $(this).val(discountPercentage);
-                    $discountMaxError.show();
-                } else {
-                    $discountMaxError.hide();
-                }
-
-                // Validate if discount percentage is empty or less than 1
-                if (discountPercentage < 1 && discountPercentage > 0) {
-                    $(this).addClass('is-invalid');
-                    $discountError.show();
-                } else {
-                    $(this).removeClass('is-invalid'); // Remove invalid class if valid
-                    $discountError.hide(); // Hide validation message
-                }
-
-                const discountAmount = (price * discountPercentage) / 100;
-                const totalPrice = price - discountAmount;
-                $totalPriceInput.val(totalPrice.toFixed(2));
-            });
-
-            $form.on('submit', function(e) {
-                // Check if discount is active and percentage is empty
-                if ($discountToggle.is(':checked') && !$discountPercentageInput.val()) {
-                    e.preventDefault();
-                    $discountError.show();
-                }
-            });
-
-            // Handle price input change to recalculate total price if discount is active
-            $priceInput.on('input', function() {
-                const price = parseFloat($(this).val()) || 0;
-                const discountPercentage = parseFloat($discountPercentageInput.val()) || 0;
-                const discountAmount = (price * discountPercentage) / 100;
-                const totalPrice = $discountToggle.is(':checked') ? (price - discountAmount) : price;
-                $totalPriceInput.val(totalPrice.toFixed(2));
-            });
-        });
-
-            function toggleProfileSection() {
-                var enableProfileCheckbox = document.getElementById('profile-limit');
-                var enableProfileSection = document.getElementById('profileLimitInput');
-                const profileLimitInput = document.getElementById('profile_limit_value');
-                if (enableProfileCheckbox.checked) {
-                    enableProfileSection.classList.remove('d-none');
-                    profileLimitInput.setAttribute('min', '1');
-                    profileLimitInput.setAttribute('required', 'required');
-
-                } else {
-                    enableProfileSection.classList.add('d-none');
-                    profileLimitInput.removeAttribute('min');
-                    profileLimitInput.removeAttribute('required');
-
-                }
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-                toggleProfileSection();
-            });
-
-            document.getElementById('profile-limit').addEventListener('change', toggleProfileSection);
-
-            
-
-   </script>
+    document.getElementById('profile-limit').addEventListener('change', toggleProfileSection);
+</script>
 @endpush

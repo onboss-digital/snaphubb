@@ -17,9 +17,18 @@ use App\Http\Controllers\Backend\API\SettingController;
 use App\Http\Controllers\WebHookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Modules\Subscriptions\Models\Plan;
 
 Route::get('user-detail', [AuthController::class, 'userDetails']);
-
+Route::get('get-plans',  function (Request $request) {
+    $data = Plan::with('orderBumps')->get();
+    $response =
+        [
+            "status" => $data ? true : false,
+            "data" => $data
+        ];
+    return $response;
+});
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

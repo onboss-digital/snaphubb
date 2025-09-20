@@ -31,6 +31,11 @@ class Plan extends BaseModel
         'custom_gateway',
         'external_product_id',
         'external_url',
+        'pages_product_external_id',
+        'pages_upsell_url',
+        'pages_upsell_succes_url',
+        'pages_downsell_url',
+        'pages_upsell_fail_url',
     ];
 
     const CUSTOM_FIELD_MODEL = 'Modules\Subscriptions\Models\Plan';
@@ -53,6 +58,8 @@ class Plan extends BaseModel
         return $this->belongsTo(User::class, 'created_by', 'id')->withTrashed();
     }
 
-
+    public function orderBumps()
+    {
+        return $this->hasMany(OrderBump::class, 'plan_id');
+    }
 }
-

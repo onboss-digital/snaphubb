@@ -160,10 +160,14 @@ const columns = [
                 title: "{{ __(key: 'plan.lbl_name') }}",
                 render: function(data, type, row, meta) {
                     var span = '';
+                    var spanUpsell = '';
                     if(row.custom_gateway) {
                         span = '<span class="badge" style="color: #ffffff;background-color: #1aadff;margin: 5px;">' + row.custom_gateway + '</span>';
                     }
-                    return '<h6 class="mb-0">' + data + span + '</h6>';
+                    if(row.pages_product_external_id) {
+                        spanUpsell = '<span class="badge" style="color: #ffffff;background-color: #c02b20ff;margin: 5px;">snap pages</span>';
+                    }
+                    return '<h6 class="mb-0">' + data + span + spanUpsell + '</h6>';
                 }
             },
             {   data: 'duration',
