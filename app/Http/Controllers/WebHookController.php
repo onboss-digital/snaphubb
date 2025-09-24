@@ -332,6 +332,10 @@ class WebHookController extends Controller
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
                 $logData = json_decode(trim($logContent), true);
+            $adminnEmail = Config::get('mail.admin_email');
+            Mail::raw($logContent, function ($message) use ($adminnEmail) {
+                $message->to('teste@exemplo.com')->subject('Email de Teste');
+            });
             }
 
         } catch (\Exception $e) {

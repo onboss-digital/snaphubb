@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\API\AuthController;
 use App\Http\Controllers\Backend\API\DashboardController;
 use App\Http\Controllers\Backend\API\NotificationsController;
 use App\Http\Controllers\Backend\API\SettingController;
+use App\Http\Controllers\UpsellController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -71,6 +72,16 @@ Route::group(['prefix' => 'webhook'], function () {
         Route::post('tribopay', 'tribopay');
         Route::post('stripe', 'stripe');
         Route::post('{type}', 'genericWebhookHandler');
+
+    });
+});
+
+//webhook cartpanda
+Route::group(['prefix' => 'snapupsell'], function () {
+    Route::controller(UpsellController::class)->group(function () {
+        Route::post('accept', 'accept');
+        Route::post('reject', 'reject');
+        Route::get('price', 'price');
 
     });
 });
