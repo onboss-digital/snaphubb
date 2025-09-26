@@ -71,6 +71,7 @@ Route::group(['prefix' => 'webhook'], function () {
         Route::post('cartpanda', 'cartpanda');
         Route::post('tribopay', 'tribopay');
         Route::post('stripe', 'stripe');
+        Route::post('stripepages', 'stripepages');
         Route::post('{type}', 'genericWebhookHandler');
 
     });

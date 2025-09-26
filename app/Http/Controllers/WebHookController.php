@@ -332,12 +332,124 @@ class WebHookController extends Controller
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
                 $logData = json_decode(trim($logContent), true);
-            $adminnEmail = Config::get('mail.admin_email');
-            Mail::raw($logContent, function ($message) use ($adminnEmail) {
-                $message->to('teste@exemplo.com')->subject('Email de Teste');
+                $adminnEmail = Config::get('mail.admin_email');
+
+
+                // Mail::raw($logContent, function ($message) use ($adminnEmail) {
+                //     $message->to('teste@exemplo.com')->subject('Email de Teste');
+                // });
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+
+            $adminEmail = Config::get('mail.admin_email');
+            Mail::raw('An error occurred: ' . $e->getMessage(), function ($message) use ($adminEmail) {
+                $message->to($adminEmail)
+                    ->subject('Error Notification');
             });
+
+            if (file_exists($logFile)) {
+                $failDir = storage_path('logs/stripe/fail');
+                if (!is_dir($failDir)) {
+                    mkdir($failDir, 0755, true);
+                }
+                rename($logFile, $failDir . '/' . basename($logFile));
+            }
+        }
+
+        if (file_exists($logFile)) {
+            $successDir = storage_path('logs/stripe/success');
+            if (!is_dir($successDir)) {
+                mkdir($successDir, 0755, true);
+            }
+            rename($logFile, $successDir . '/' . basename($logFile));
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function stripepages(Request $request, $logFile = false)
+    {
+        $data = $request->all();
+        $logFile = $logFile == false ? $this->logData($data, 'stripepages') : $logFile;
+
+        try {
+            if (file_exists($logFile)) {
+                $logContent = file_get_contents($logFile);
+                $logData = json_decode(trim($logContent), true);
+                $adminnEmail = Config::get('mail.admin_email');
             }
 
+            if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_succeeded') {
+                if (($logData['object']['status'] ?? null) === 'paid') {
+                    $productId = $logData['data']['object']['lines']['data'][0]['metadata']['product_id'] ?? null;
+                    $email = $logData['data']['object']['customer_email'] ?? null;
+                    $name = $logData['data']['object']['customer_name'] ?? null;
+
+                    $user = User::firstOrCreate([
+                        'email' => $email ?? null
+                    ], [
+                        'first_name' => $name ?? null,
+                        'last_name' => null,
+                        'email' => $email ?? null,
+                        'password' => bcrypt('P@55w0rd'),
+                        'user_type' => 'user',
+                    ]);
+
+
+                    if ($productId) {
+                        $plan = Plan::where('pages_product_external_id', '=', $productId)
+                            ->firstOrFail();
+                    }
+
+
+                    $amount = $plan->total_price;
+                    $transaction_id = $logData['id'] ?? null;
+
+                    $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
+
+                    $user->password_decrypted = 'P@55w0rd';
+
+                    event(new Registered($user));
+                }
+            } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.deleted') {
+                // Lógica para assinatura cancelada
+                $upsell = new UpsellController();
+                $customer = $upsell->request('get', '/customers' . '/' . $logData['object']['customer']);
+                $userupdate = User::where('email', $customer->email)->first();
+                $planupdate = Plan::where('pages_product_external_id', $logData['object']['items']['data']['plan']['product'])->first();
+                $transaction = Subscription::where('user_id', $userupdate->id)->where('plan_id', $planupdate->id)->first();
+
+                if ($transaction) {
+                    // Atualiza os campos desejados
+                    $transaction->update([
+                        'status' => 'inactive',
+                    ]);
+                }
+            } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_failed') {
+                // Lógica para pagamento falhou
+            } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.updated') {
+                if (($logData['object']['status'] ?? null) === 'unpaid') {
+                    // Lógica para assinatura expirada Ocorre após múltiplas tentativas de pagamento falharem 
+                    //Após 7 dias no status unpaid, a assinatura é automaticamente cancelada
+                }
+                if (($logData['object']['status'] ?? null) === 'active') {
+                    $upsell = new UpsellController();
+                    $customer = $upsell->request('get', '/customers' . '/' . $logData['object']['customer']);
+                    $userupdate = User::where('email', $customer->email)->first();
+                    $planupdate = Plan::where('pages_product_external_id', $logData['object']['items']['data']['plan']['product'])->first();
+                    $transaction = Subscription::where('user_id', $userupdate->id)->where('plan_id', $planupdate->id)->first();
+                    $end_date = $this->get_plan_expiration_date(now(), $planupdate->duration, $planupdate->duration_value);
+                    if ($transaction) {
+                        // Atualiza os campos desejados
+                        $transaction->update([
+                            'status' => 'active',
+                            'start_date' => now(),
+                            'end_date' => $end_date
+                        ]);
+                    }
+                }
+            }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
 
