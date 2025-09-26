@@ -479,6 +479,6 @@ class WebHookController extends Controller
             rename($logFile, $successDir . '/' . basename($logFile));
         }
 
-        return response()->json(['status' => 'success']);
+        return response()->json(['status' => $e->getMessage()]);
     }
 }
