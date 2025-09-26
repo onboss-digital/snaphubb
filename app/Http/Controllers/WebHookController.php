@@ -372,14 +372,14 @@ class WebHookController extends Controller
     {
         $data = $request->all();
         $logFile = $logFile == false ? $this->logData($data, 'stripepages') : $logFile;
-
+         $logData = [];
         try {
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
                 $logData = json_decode(trim($logContent), true);
                 $adminnEmail = Config::get('mail.admin_email');
             }
-
+             
             if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_succeeded') {
                 if (($logData['object']['status'] ?? null) === 'paid') {
                     $productId = $logData['data']['object']['lines']['data'][0]['metadata']['product_id'] ?? null;
@@ -415,10 +415,10 @@ class WebHookController extends Controller
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.deleted') {
                 // Lógica para assinatura cancelada
                 $upsell = new UpsellController();
-                $customer = $upsell->request('get', '/customers' . '/' . $logData['object']['customer']);
-                $userupdate = User::where('email', $customer->email)->first();
-                $planupdate = Plan::where('pages_product_external_id', $logData['object']['items']['data']['plan']['product'])->first();
-                $transaction = Subscription::where('user_id', $userupdate->id)->where('plan_id', $planupdate->id)->first();
+                $customer = $upsell->request('get', '/customers' . '/' . $logData['data']['object']['customer']);
+                $userupdate = User::where('email', $customer['email'])->first();
+                $planupdate = Plan::where('pages_product_external_id', $logData['data']['object']['items']['data'][0]['plan']['product'])->first();
+                $transaction = Subscription::where('user_id', $userupdate['id'])->where('plan_id', $planupdate['id'])->first();
 
                 if ($transaction) {
                     // Atualiza os campos desejados
@@ -435,10 +435,10 @@ class WebHookController extends Controller
                 }
                 if (($logData['object']['status'] ?? null) === 'active') {
                     $upsell = new UpsellController();
-                    $customer = $upsell->request('get', '/customers' . '/' . $logData['object']['customer']);
-                    $userupdate = User::where('email', $customer->email)->first();
-                    $planupdate = Plan::where('pages_product_external_id', $logData['object']['items']['data']['plan']['product'])->first();
-                    $transaction = Subscription::where('user_id', $userupdate->id)->where('plan_id', $planupdate->id)->first();
+                    $customer = $upsell->request('get', '/customers' . '/' . $logData['data']['object']['customer']);
+                    $userupdate = User::where('email', $customer['email'])->first();
+                    $planupdate = Plan::where('pages_product_external_id', $logData['data']['object']['items']['data'][0]['plan']['product'])->first();
+                    $transaction = Subscription::where('user_id', $userupdate['id'])->where('plan_id', $planupdate['id'])->first();
                     $end_date = $this->get_plan_expiration_date(now(), $planupdate->duration, $planupdate->duration_value);
                     if ($transaction) {
                         // Atualiza os campos desejados

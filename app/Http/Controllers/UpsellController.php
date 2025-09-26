@@ -29,7 +29,7 @@ class UpsellController extends Controller
         ]);
     }
 
-    private function request(string $method, string $endpoint, array $params = [])
+    public function request(string $method, string $endpoint, array $params = [])
     {
         try {
             $options = [];
