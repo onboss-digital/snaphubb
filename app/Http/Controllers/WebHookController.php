@@ -372,7 +372,10 @@ class WebHookController extends Controller
     {
         $data = $request->all();
         $logFile = $logFile == false ? $this->logData($data, 'stripepages') : $logFile;
-         $logData = [];
+        $logData = [];
+
+        app()->setLocale(env('APP_LOCALE', 'br'));
+
         try {
             if (file_exists($logFile)) {
                 $logContent = file_get_contents($logFile);
