@@ -1,6 +1,8 @@
 // public/js/snapupsell.js
 ;(function (window, document) {
   class Snapupsell {
+    static yes = null
+    static no = null
     static productId = null
     static customerId = null
     static upsell_productId = null
@@ -22,7 +24,8 @@
         border: '1px solid #ccc',
         borderRadius: '4px',
         backgroundColor: '#fff',
-        width: '100%'
+        width: '100%',
+        display: 'none'
       },
       priceText: {
         fontSize: '24px',
@@ -68,6 +71,8 @@
     }
 
     static init() {
+      Snapupsell.yes = 'Aceitar';
+      Snapupsell.no = 'Recusar';
       localStorage.setItem('isbuy', false)
       Snapupsell.preventClose(true)
       Snapupsell.scriptTag = document.getElementById('snapupsellScript')
@@ -80,10 +85,12 @@
       const url = new URL(window.location.href)
       const customerId = url.searchParams.get('customerId')
       const upsell_productId = url.searchParams.get('upsell_productId')
+      const currency = url.searchParams.get('currency')
       // 🔹 Se vier pela URL, salva no storage e seta na classe
       if (customerId && upsell_productId) {
         Snapupsell.customerId = customerId
         Snapupsell.upsell_productId = upsell_productId
+        Snapupsell.currency = currency
 
         // salva no localStorage
         localStorage.setItem('snapupsell_customerId', customerId)
@@ -129,7 +136,7 @@
     static createButtons(container) {
       // Aceitar
       let btnAccept = document.createElement('button')
-      btnAccept.textContent = 'Aceitar'
+      btnAccept.textContent = Snapupsell.yes;
       btnAccept.addEventListener('click', () => Snapupsell.accept())
       Snapupsell.applyStyles(btnAccept, {
         ...Snapupsell.styles.button,
@@ -139,7 +146,7 @@
 
       // Recusar
       let btnReject = document.createElement('button')
-      btnReject.textContent = 'Recusar'
+      btnReject.textContent = Snapupsell.no;
       btnReject.addEventListener('click', () => Snapupsell.reject())
       Snapupsell.applyStyles(btnReject, {
         ...Snapupsell.styles.button,
@@ -150,7 +157,7 @@
 
     static async setProduct(productId, currency) {
       Snapupsell.productId = productId
-      Snapupsell.currency = currency
+      //Snapupsell.currency = currency
 
       const prices = await this.getPrices(productId)
 
