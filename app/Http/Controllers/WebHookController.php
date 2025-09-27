@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\BulkNotification;
+use App\Mail\ExpiringSubscriptionEmail;
 use App\Mail\SubscriptionDetail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -214,10 +215,10 @@ class WebHookController extends Controller
                 rename($logFile, $successDir . '/' . basename($logFile));
             }
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            Log::error($e->getMessage());
 
-            $adminEmail = \Config::get('mail.admin_email');
-            \Mail::raw('An error occurred: ' . $e->getMessage(), function ($message) use ($adminEmail) {
+            $adminEmail = Config::get('mail.admin_email');
+            Mail::raw('An error occurred: ' . $e->getMessage(), function ($message) use ($adminEmail) {
                 $message->to($adminEmail)
                     ->subject('Error Notification');
             });
@@ -371,23 +372,55 @@ class WebHookController extends Controller
     public function stripepages(Request $request, $logFile = false)
     {
         $data = $request->all();
-        $logFile = $logFile == false ? $this->logData($data, 'stripepages') : $logFile;
+        $logFile = $logFile == false ? $this->logData($data, 'tribopay') : $logFile;
         $logData = [];
+
+        if (file_exists($logFile)) {
+            $logContent = file_get_contents($logFile);
+            $logData = json_decode(trim($logContent), true);
+        }
+
+        if (!isset($logData) || $logData == null) {
+            $exploded = explode(' {', trim($logContent));
+            if (strtotime($exploded[0]) !== false) {
+                unset($exploded[0]);
+                $logContent = '{' . implode(' {', $exploded);
+            }
+            $logContent = str_replace('}{', '},{', $logContent);
+            $logData = json_decode(trim($logContent), true);
+        }
+
+        if (!isset($logData) || $logData == null) {
+            $logData = $data;
+        }
 
         app()->setLocale(env('APP_LOCALE', 'br'));
 
+        //                     return response()->json([
+        //     'received_data' => $data,
+        //     'raw_content' => $request->getContent(),
+        //     'content_type' => $request->header('Content-Type'),
+        //     'log_file' => $logFile,
+        //     'request' => $request,
+        //      'logData' => $logData
+        // ]);
+
         try {
-            if (file_exists($logFile)) {
-                $logContent = file_get_contents($logFile);
-                $logData = json_decode(trim($logContent), true);
-                $adminnEmail = Config::get('mail.admin_email');
-            }
-             
+
             if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_succeeded') {
-                if (($logData['object']['status'] ?? null) === 'paid') {
+                if (($logData['data']['object']['status'] ?? null) === 'paid') {
+
                     $productId = $logData['data']['object']['lines']['data'][0]['metadata']['product_id'] ?? null;
                     $email = $logData['data']['object']['customer_email'] ?? null;
                     $name = $logData['data']['object']['customer_name'] ?? null;
+                    $plan = [];
+
+                    if ($productId) {
+                        $plan = Plan::where('pages_product_external_id', '=', $productId)
+                            ->firstOrFail();
+                    }
+
+                    if (!$plan) return response()->json(['status' => 'success']);
 
                     $user = User::firstOrCreate([
                         'email' => $email ?? null
@@ -399,15 +432,34 @@ class WebHookController extends Controller
                         'user_type' => 'user',
                     ]);
 
-
-                    if ($productId) {
-                        $plan = Plan::where('pages_product_external_id', '=', $productId)
-                            ->firstOrFail();
-                    }
-
-
                     $amount = $plan->total_price;
-                    $transaction_id = $logData['id'] ?? null;
+                    $transaction_id = $logData['data']['object']['parent']['subscription_details']['subscription'] ?? null;
+
+                    if ($user->wasRecentlyCreated) {
+                        // Usuário FOI CRIADO AGORA (não existia)
+                    } else {
+                        // ja existia
+                        $upsell = new UpsellController();
+                        $customer = $upsell->request('get', '/customers' . '/' . $logData['data']['object']['customer']);
+                        $userupdate = User::where('email', $customer['email'])->first();
+                        $planupdate = Plan::where('pages_product_external_id', $logData['data']['object']['items']['data'][0]['plan']['product'])->first();
+                        $transaction = Subscription::where('user_id', $userupdate['id'])->where('plan_id', $planupdate['id'])->first();
+                        $subtransaction = SubscriptionTransactions::where('transaction_id', $transaction_id);
+
+                        if (!$transaction) {
+                            $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
+
+                            $user->password_decrypted = 'P@55w0rd';
+
+                            event(new Registered($user));
+                        } else {
+                            if ($subtransaction) {
+                                $transaction->update([
+                                    'status' => 'active',
+                                ]);
+                            }
+                        }
+                    }
 
                     $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
 
@@ -422,13 +474,18 @@ class WebHookController extends Controller
                 $userupdate = User::where('email', $customer['email'])->first();
                 $planupdate = Plan::where('pages_product_external_id', $logData['data']['object']['items']['data'][0]['plan']['product'])->first();
                 $transaction = Subscription::where('user_id', $userupdate['id'])->where('plan_id', $planupdate['id'])->first();
+                $subtransaction = SubscriptionTransactions::where('transaction_id', $logData['data']['object']['id']);
 
-                if ($transaction) {
+                if ($subtransaction) {
                     // Atualiza os campos desejados
                     $transaction->update([
                         'status' => 'inactive',
                     ]);
+                    $subtransaction->update([
+                        'payment_status' => $logData['data']['object']['status'],
+                    ]);
                 }
+                Mail::to($userupdate->email)->send(new ExpiringSubscriptionEmail($userupdate));
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_failed') {
                 // Lógica para pagamento falhou
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.updated') {
