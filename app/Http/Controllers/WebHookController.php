@@ -404,7 +404,7 @@ class WebHookController extends Controller
         //     'request' => $request,
         //      'logData' => $logData
         // ]);
-
+        
         try {
 
             if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_succeeded') {
@@ -419,9 +419,9 @@ class WebHookController extends Controller
                         $plan = Plan::where('pages_product_external_id', '=', $productId)
                             ->firstOrFail();
                     }
-
-                    if (!$plan) return response()->json(['status' => 'success']);
-
+                    
+                    if (!$plan) return response()->json(['status' => 'ppp']);
+                    
                     $user = User::firstOrCreate([
                         'email' => $email ?? null
                     ], [
@@ -434,18 +434,17 @@ class WebHookController extends Controller
 
                     $amount = $plan->total_price;
                     $transaction_id = $logData['data']['object']['parent']['subscription_details']['subscription'] ?? null;
-
+                    
                     if ($user->wasRecentlyCreated) {
                         // Usuário FOI CRIADO AGORA (não existia)
                     } else {
                         // ja existia
                         $upsell = new UpsellController();
-                        $customer = $upsell->request('get', '/customers' . '/' . $logData['data']['object']['customer']);
-                        $userupdate = User::where('email', $customer['email'])->first();
-                        $planupdate = Plan::where('pages_product_external_id', $logData['data']['object']['items']['data'][0]['plan']['product'])->first();
+                        $customer = $upsell->request('get', '/customers' . '/' . $logData['data']['object']['customer']);                        
+                        $userupdate = User::where('email', $customer['email'])->first();       
+                        $planupdate = Plan::where('pages_product_external_id', $logData['data']['object']['items']['data'][0]['plan']['product'] ??  $logData['data']['object']['parent']['subscription_details']['metadata']['product_id'])->first();
                         $transaction = Subscription::where('user_id', $userupdate['id'])->where('plan_id', $planupdate['id'])->first();
-                        $subtransaction = SubscriptionTransactions::where('transaction_id', $transaction_id);
-
+                        $subtransaction = SubscriptionTransactions::where('transaction_id', $transaction_id)->first();;
                         if (!$transaction) {
                             $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
 
@@ -457,15 +456,18 @@ class WebHookController extends Controller
                                 $transaction->update([
                                     'status' => 'active',
                                 ]);
+                                $subtransaction->update([
+                                    'payment_status' => $logData['data']['object']['status'],
+                                ]);
                             }
                         }
                     }
 
-                    $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
+                    // $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
 
-                    $user->password_decrypted = 'P@55w0rd';
+                    // $user->password_decrypted = 'P@55w0rd';
 
-                    event(new Registered($user));
+                    // event(new Registered($user));
                 }
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.deleted') {
                 // Lógica para assinatura cancelada
