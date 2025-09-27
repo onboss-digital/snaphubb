@@ -463,11 +463,11 @@ class WebHookController extends Controller
                         }
                     }
 
-                    // $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
+                    $this->handleSubscrible($plan->id, $amount, 'stripepages', $transaction_id, $user);
 
-                    // $user->password_decrypted = 'P@55w0rd';
+                    $user->password_decrypted = 'P@55w0rd';
 
-                    // event(new Registered($user));
+                    event(new Registered($user));
                 }
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.deleted') {
                 // Lógica para assinatura cancelada
