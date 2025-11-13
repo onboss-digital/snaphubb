@@ -39,6 +39,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('social-login', 'socialLogin');
     Route::post('forgot-password', 'forgotPassword');
+    Route::post('check-user-exists', 'checkUserExists');
     Route::get('logout', 'logout');
 });
 Route::post('/store-access-token', [SettingController::class, 'storeToken']);
