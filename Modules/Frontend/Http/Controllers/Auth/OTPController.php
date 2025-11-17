@@ -105,4 +105,31 @@ class OTPController extends Controller
 
         return response()->json(['is_user_exists' => $flag, 'url' => route('user.login')]);
     }
+
+    /**
+     * API endpoint for frontend to check if a user exists by email or mobile.
+     * Returns JSON: { "exists": true|false }
+     */
+    public function checkUserExistsApi(Request $request)
+    {
+        $email = $request->input('email');
+        $mobile = $request->input('mobile');
+
+        // Prefer email when provided
+        if (!empty($email)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(['exists' => false, 'error' => 'invalid_email'], 400);
+            }
+
+            $exists = User::where('email', $email)->exists();
+            return response()->json(['exists' => (bool)$exists], 200);
+        }
+
+        if (!empty($mobile)) {
+            $exists = User::where('mobile', $mobile)->exists();
+            return response()->json(['exists' => (bool)$exists], 200);
+        }
+
+        return response()->json(['exists' => false, 'error' => 'missing_parameter'], 400);
+    }
 }

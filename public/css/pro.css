@@ -31,19 +31,20 @@ hr {
   opacity: 0.25;
 }
 
-.iq-scroller-effect {
-  /* Scroll Track */
-  /* Scroll Handle */
-  /* Scroll Handle on hover */
-}
 .iq-scroller-effect ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   border-radius: 20px;
 }
+.iq-scroller-effect {
+  /* Scroll Track */
+}
 .iq-scroller-effect ::-webkit-scrollbar-track {
   background: var(--bs-body-bg);
   border-radius: 20px;
+}
+.iq-scroller-effect {
+  /* Scroll Handle */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb {
   background: #D8D9D9;
@@ -51,6 +52,9 @@ hr {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
   cursor: pointer;
+}
+.iq-scroller-effect {
+  /* Scroll Handle on hover */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb:hover {
   background: rgb(219.9, 220.8, 220.8);
@@ -214,11 +218,11 @@ body {
   opacity: 1;
   margin-bottom: 1.5rem;
 }
-.sidebar.sidebar-base.sidebar-mini.sidebar-hover:hover .sidebar-profile-card .sidebar-profile-action .btn-action {
-  margin-bottom: unset;
-}
 .sidebar.sidebar-base.sidebar-mini.sidebar-hover:hover .sidebar-profile-card .sidebar-profile-action .btn-action:not(:last-child) {
   margin-right: 1rem;
+}
+.sidebar.sidebar-base.sidebar-mini.sidebar-hover:hover .sidebar-profile-card .sidebar-profile-action .btn-action {
+  margin-bottom: unset;
 }
 .sidebar.sidebar-base.sidebar-mini.sidebar-hover:hover .sidebar-border-profile-card {
   padding: 1.5rem;
@@ -417,16 +421,16 @@ body {
     transition-timing-function: var(--sidebar-transition-function-ease-in-out);
     padding: 0.5rem 1.25rem 0.5rem 1.25rem;
   }
+  .iq-nav-menu > li > a {
+    padding: 0.5rem 1rem;
+    margin: 0.125rem;
+    border-radius: 0.5rem;
+  }
   .iq-nav-menu > li {
     flex: 0 0 auto;
     position: relative;
     flex: 0 0 auto;
     position: relative;
-  }
-  .iq-nav-menu > li > a {
-    padding: 0.5rem 1rem;
-    margin: 0.125rem;
-    border-radius: 0.5rem;
   }
   .iq-nav-menu > li:hover {
     border-color: transparent;
@@ -1453,8 +1457,7 @@ table.dataTable.table-striped > tbody > tr.odd > * {
 }
 
 #product-viewer360.show {
-  -webkit-backdrop-filter: blur(3px);
-          backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 }
 
 .btnDiv {
@@ -2407,7 +2410,6 @@ table.dataTable.table-striped > tbody > tr.odd > * {
   top: 0;
   width: 100%;
   transform: scale(0);
-  top: 100%;
 }
 .ovrlay-3-a .ovrlay-3-b {
   position: absolute;
@@ -2435,6 +2437,9 @@ table.dataTable.table-striped > tbody > tr.odd > * {
   left: 0;
   width: 100%;
 }
+.ovrlay-3-a {
+  top: 100%;
+}
 
 .ovrlay-5 {
   position: absolute;
@@ -2454,6 +2459,9 @@ table.dataTable.table-striped > tbody > tr.odd > * {
   color: var(--bs-white);
 }
 
+.ovrlay-6 h4 {
+  color: var(--bs-white);
+}
 .ovrlay-6 {
   background: var(--bs-primary);
   width: 100%;
@@ -2467,13 +2475,13 @@ table.dataTable.table-striped > tbody > tr.odd > * {
   transform: perspective(600px) rotateX(-90deg);
   transition: all 0.3s ease-in-out;
 }
-.ovrlay-6 h4 {
-  color: var(--bs-white);
-}
 .ovrlay-6 p {
   color: var(--bs-white);
 }
 
+.ovrlay-8 h4 {
+  color: var(--bs-white);
+}
 .ovrlay-8 {
   background: var(--bs-primary);
   width: 40%;
@@ -2484,9 +2492,6 @@ table.dataTable.table-striped > tbody > tr.odd > * {
   right: -40%;
   overflow: auto;
   padding: 0 10px;
-}
-.ovrlay-8 h4 {
-  color: var(--bs-white);
 }
 .ovrlay-8 .i-btn {
   position: absolute;
@@ -2975,18 +2980,18 @@ table.dataTable.table-striped > tbody > tr.odd > * {
   width: 50px !important;
   min-width: 50px !important;
 }
+.storiesWrapper .story .info strong.name {
+  color: var(--bs-gray-800);
+  font-family: var(--bs-heading-font-family);
+  font-size: 1em;
+  font-weight: 500 !important;
+}
 .storiesWrapper .story {
   max-height: 100% !important;
   min-height: 100% !important;
   width: auto !important;
   max-width: 60px !important;
   white-space: normal !important;
-}
-.storiesWrapper .story .info strong.name {
-  color: var(--bs-gray-800);
-  font-family: var(--bs-heading-font-family);
-  font-size: 1em;
-  font-weight: 500 !important;
 }
 
 .stories.carousel {
@@ -3293,16 +3298,10 @@ table#datatable.dataTable tbody tr td.description-column > span {
 }
 .card-transparent .card.card-folder:before {
   border: 1px solid var(--bs-gray-900);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border-bottom: unset;
 }
 
-.card-glass {
-  background-image: url(/images/glass-card.webp?1059074d9503dbbbb574933516a8bc02);
-  background-attachment: fixed;
-  background-size: cover;
-}
 .card-glass .card,
 .card-glass .card-header,
 .card-glass .card-footer,
@@ -3312,14 +3311,17 @@ table#datatable.dataTable tbody tr td.description-column > span {
 }
 .card-glass .card {
   border: 1px solid var(--bs-gray-900);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 .card-glass .card.card-folder:before {
   border: 1px solid var(--bs-gray-900);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border-bottom: unset;
+}
+.card-glass {
+  background-image: url(/images/glass-card.webp?1059074d9503dbbbb574933516a8bc02);
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .snackbar {

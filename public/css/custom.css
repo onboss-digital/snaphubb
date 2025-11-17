@@ -31,19 +31,20 @@ hr {
   opacity: 0.25;
 }
 
-.iq-scroller-effect {
-  /* Scroll Track */
-  /* Scroll Handle */
-  /* Scroll Handle on hover */
-}
 .iq-scroller-effect ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   border-radius: 20px;
 }
+.iq-scroller-effect {
+  /* Scroll Track */
+}
 .iq-scroller-effect ::-webkit-scrollbar-track {
   background: var(--bs-body-bg);
   border-radius: 20px;
+}
+.iq-scroller-effect {
+  /* Scroll Handle */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb {
   background: #D8D9D9;
@@ -51,6 +52,9 @@ hr {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
   cursor: pointer;
+}
+.iq-scroller-effect {
+  /* Scroll Handle on hover */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb:hover {
   background: rgb(219.9, 220.8, 220.8);
@@ -167,10 +171,12 @@ body {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  border-radius: 0.125rem;
 }
 .card .card-body .iq-media-1:hover {
   text-decoration: none;
+}
+.card .card-body .iq-media-1 {
+  border-radius: 0.125rem;
 }
 
 .pricing .table thead tr {
@@ -513,8 +519,7 @@ body {
     overflow-x: hidden;
     transition: visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
     background: var(--bs-gray-900);
-    -webkit-backdrop-filter: blur(0.5rem);
-            backdrop-filter: blur(0.5rem);
+    backdrop-filter: blur(0.5rem);
   }
   .mobile-offcanvas.show {
     visibility: visible;
@@ -600,18 +605,21 @@ body.uikit .btn-download {
 .elem-list {
   max-height: calc(80vh + 4rem);
   overflow: auto;
-  /* Scroll Track */
-  /* Scroll Handle */
-  /* Scroll Handle on hover */
 }
 .elem-list::-webkit-scrollbar {
   width: 4px;
   height: 4px;
   border-radius: 10px;
 }
+.elem-list {
+  /* Scroll Track */
+}
 .elem-list::-webkit-scrollbar-track {
   background: var(--bs-body-bg);
   border-radius: 10px;
+}
+.elem-list {
+  /* Scroll Handle */
 }
 .elem-list::-webkit-scrollbar-thumb {
   background: var(--bs-border-color);
@@ -619,6 +627,9 @@ body.uikit .btn-download {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
   cursor: pointer;
+}
+.elem-list {
+  /* Scroll Handle on hover */
 }
 .elem-list::-webkit-scrollbar-thumb:hover {
   background: var(--bs-border-color);

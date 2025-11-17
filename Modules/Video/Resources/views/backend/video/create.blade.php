@@ -704,6 +704,29 @@ $('#GenrateDescription').on('click', function(e) {
 
     </script>
 
+    <script>
+        // Ensure select2 controls are initialized on this page and dropdowns render inside cards
+        (function () {
+            if (typeof window.$ !== 'undefined' && window.$.fn && window.$.fn.select2) {
+                $(function () {
+                    $('.select2').each(function () {
+                        // Use closest container as dropdown parent to avoid z-index/overflow issues
+                        var $parent = $(this).closest('.card');
+                        try {
+                            $(this).select2({
+                                width: '100%',
+                                dropdownParent: $parent.length ? $parent : $(document.body)
+                            });
+                        } catch (e) {
+                            // If select2 fails, silently continue
+                            console.warn('select2 init failed', e);
+                        }
+                    });
+                });
+            }
+        })();
+    </script>
+
     <style>
         .position-relative {
             position: relative;

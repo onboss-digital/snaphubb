@@ -15,8 +15,13 @@ class LanguageDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Disable foreign key checks!
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Disable foreign key checks (driver-aware)
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        } elseif ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        }
 
         /*
          * Languages Seed
@@ -30,7 +35,11 @@ class LanguageDatabaseSeeder extends Seeder
         $rows = Language::all();
         echo " Insert: languages \n\n";
 
-        // Enable foreign key checks!
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // Enable foreign key checks (driver-aware)
+        if ($driver === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } elseif ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        }
     }
 }

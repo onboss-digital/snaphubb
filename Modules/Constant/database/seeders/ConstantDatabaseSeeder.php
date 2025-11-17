@@ -15,15 +15,24 @@ class ConstantDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // Disable foreign key checks!
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Disable foreign key checks (driver-aware)
+        $driver = DB::connection()->getDriverName();
+        if ($driver === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        } elseif ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        }
 
         /*
          * Constants Seed
          * ------------------
          */
-        // Enable foreign key checks!
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // Enable foreign key checks (driver-aware)
+        if ($driver === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } elseif ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        }
 
         $arr1 = [
          

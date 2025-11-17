@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Modules\Frontend\Http\Controllers\DashboardController;
+use Modules\Frontend\Http\Controllers\Auth\OTPController;
 
 /*
     |--------------------------------------------------------------------------
@@ -34,6 +35,9 @@ Route::get('favorite-genres', [DashboardController::class, 'FavoriteGenres']);
 Route::get('user-favorite-personality', [DashboardController::class, 'UserfavoritePersonality']);
 
 Route::get('web-continuewatch-list', [DashboardController::class, 'ContinuewatchList']);
+
+// Check user exists (compatible API endpoint used by frontend)
+Route::post('check-user-exists', [OTPController::class, 'checkUserExistsApi']);
 
 
 

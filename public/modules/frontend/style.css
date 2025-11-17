@@ -84,19 +84,20 @@ img {
   max-width: 100%;
 }
 
-.iq-scroller-effect {
-  /* Scroll Track */
-  /* Scroll Handle */
-  /* Scroll Handle on hover */
-}
 .iq-scroller-effect ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   border-radius: 20px;
 }
+.iq-scroller-effect {
+  /* Scroll Track */
+}
 .iq-scroller-effect ::-webkit-scrollbar-track {
   background: #f5f6fa;
   border-radius: 20px;
+}
+.iq-scroller-effect {
+  /* Scroll Handle */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb {
   background: #D8D9D9;
@@ -104,6 +105,9 @@ img {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
   cursor: pointer;
+}
+.iq-scroller-effect {
+  /* Scroll Handle on hover */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb:hover {
   background: rgb(219.9, 220.8, 220.8);
@@ -834,12 +838,14 @@ legend {
   padding: 0;
   margin-bottom: 0.5rem;
   font-size: calc(1.275rem + 0.3vw);
-  line-height: inherit;
 }
 @media (min-width: 1200px) {
   legend {
     font-size: 1.5rem;
   }
+}
+legend {
+  line-height: inherit;
 }
 legend + * {
   clear: left;
@@ -913,74 +919,86 @@ progress {
 
 .display-1 {
   font-size: calc(1.625rem + 4.5vw);
-  font-family: var(--bs-font-monospace);
-  font-weight: 400;
-  line-height: 1.4;
 }
 @media (min-width: 1200px) {
   .display-1 {
     font-size: 5rem;
   }
 }
-
-.display-2 {
-  font-size: calc(1.575rem + 3.9vw);
+.display-1 {
   font-family: var(--bs-font-monospace);
   font-weight: 400;
   line-height: 1.4;
+}
+
+.display-2 {
+  font-size: calc(1.575rem + 3.9vw);
 }
 @media (min-width: 1200px) {
   .display-2 {
     font-size: 4.5rem;
   }
 }
-
-.display-3 {
-  font-size: calc(1.525rem + 3.3vw);
+.display-2 {
   font-family: var(--bs-font-monospace);
   font-weight: 400;
   line-height: 1.4;
+}
+
+.display-3 {
+  font-size: calc(1.525rem + 3.3vw);
 }
 @media (min-width: 1200px) {
   .display-3 {
     font-size: 4rem;
   }
 }
-
-.display-4 {
-  font-size: calc(1.475rem + 2.7vw);
+.display-3 {
   font-family: var(--bs-font-monospace);
   font-weight: 400;
   line-height: 1.4;
+}
+
+.display-4 {
+  font-size: calc(1.475rem + 2.7vw);
 }
 @media (min-width: 1200px) {
   .display-4 {
     font-size: 3.5rem;
   }
 }
-
-.display-5 {
-  font-size: calc(1.425rem + 2.1vw);
+.display-4 {
   font-family: var(--bs-font-monospace);
   font-weight: 400;
   line-height: 1.4;
+}
+
+.display-5 {
+  font-size: calc(1.425rem + 2.1vw);
 }
 @media (min-width: 1200px) {
   .display-5 {
     font-size: 3rem;
   }
 }
-
-.display-6 {
-  font-size: calc(1.375rem + 1.5vw);
+.display-5 {
   font-family: var(--bs-font-monospace);
   font-weight: 400;
   line-height: 1.4;
+}
+
+.display-6 {
+  font-size: calc(1.375rem + 1.5vw);
 }
 @media (min-width: 1200px) {
   .display-6 {
     font-size: 2.5rem;
   }
+}
+.display-6 {
+  font-family: var(--bs-font-monospace);
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 .list-unstyled {
@@ -5946,12 +5964,14 @@ textarea.form-control-lg {
 }
 .modal.fade .modal-dialog {
   transition: transform 0.3s ease-out;
-  transform: translate(0, -50px);
 }
 @media (prefers-reduced-motion: reduce) {
   .modal.fade .modal-dialog {
     transition: none;
   }
+}
+.modal.fade .modal-dialog {
+  transform: translate(0, -50px);
 }
 .modal.show .modal-dialog {
   transform: none;
@@ -14393,8 +14413,7 @@ header {
   position: relative;
   display: inline-block;
   background: var(--bs-body-bg);
-  -webkit-backdrop-filter: blur(0);
-          backdrop-filter: blur(0);
+  backdrop-filter: blur(0);
   width: 100%;
   z-index: 999;
   transition: all 0.3s ease-out 0s;
@@ -14427,8 +14446,7 @@ header.sticky {
   top: 0;
   left: 0;
   right: 0;
-  -webkit-backdrop-filter: blur(0.625em);
-          backdrop-filter: blur(0.625em);
+  backdrop-filter: blur(0.625em);
   animation: header-slide-down 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   animation-fill-mode: initial;
   transition: all 0.3s ease-out 0s;
@@ -14440,8 +14458,7 @@ header .header-absolute {
   right: 0;
   top: 0;
   background: rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(0.625em);
-          backdrop-filter: blur(0.625em);
+  backdrop-filter: blur(0.625em);
 }
 header .navbar-toggler-icon {
   background-image: none;
@@ -15980,19 +15997,20 @@ img {
   max-width: 100%;
 }
 
-.iq-scroller-effect {
-  /* Scroll Track */
-  /* Scroll Handle */
-  /* Scroll Handle on hover */
-}
 .iq-scroller-effect ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   border-radius: 20px;
 }
+.iq-scroller-effect {
+  /* Scroll Track */
+}
 .iq-scroller-effect ::-webkit-scrollbar-track {
   background: #f5f6fa;
   border-radius: 20px;
+}
+.iq-scroller-effect {
+  /* Scroll Handle */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb {
   background: #D8D9D9;
@@ -16000,6 +16018,9 @@ img {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
   cursor: pointer;
+}
+.iq-scroller-effect {
+  /* Scroll Handle on hover */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb:hover {
   background: rgb(219.9, 220.8, 220.8);
@@ -16283,8 +16304,7 @@ img {
 .user-login-card {
   padding: 2.5em;
   margin: 0 auto;
-  -webkit-backdrop-filter: blur(1.5625em);
-          backdrop-filter: blur(1.5625em);
+  backdrop-filter: blur(1.5625em);
 }
 .user-login-card .auth-heading {
   margin-bottom: 2rem;
@@ -17694,19 +17714,20 @@ img {
   max-width: 100%;
 }
 
-.iq-scroller-effect {
-  /* Scroll Track */
-  /* Scroll Handle */
-  /* Scroll Handle on hover */
-}
 .iq-scroller-effect ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
   border-radius: 20px;
 }
+.iq-scroller-effect {
+  /* Scroll Track */
+}
 .iq-scroller-effect ::-webkit-scrollbar-track {
   background: #f5f6fa;
   border-radius: 20px;
+}
+.iq-scroller-effect {
+  /* Scroll Handle */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb {
   background: #D8D9D9;
@@ -17714,6 +17735,9 @@ img {
   -webkit-transition: all 400ms ease;
   transition: all 400ms ease;
   cursor: pointer;
+}
+.iq-scroller-effect {
+  /* Scroll Handle on hover */
 }
 .iq-scroller-effect ::-webkit-scrollbar-thumb:hover {
   background: rgb(219.9, 220.8, 220.8);

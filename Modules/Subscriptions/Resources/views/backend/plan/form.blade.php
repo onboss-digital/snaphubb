@@ -185,7 +185,8 @@
                 <div class="col-md-6 col-lg-4">
                     {{ html()->label(__('plan.lbl_external_url'), 'external_url')->class('form-label') }}
                     {{
-                        html()->url('external_url', old('external_url'))
+                        // Use input type="url" because html()->url() is not available on the Html builder
+                        html()->input('url', 'external_url', old('external_url'))
                             ->class('form-control')
                             ->id('external_url')
                             ->attribute('placeholder', __('plan.lbl_external_url_placeholder'))
