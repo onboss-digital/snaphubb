@@ -22,4 +22,34 @@ return [
     'you_are_receiving_this_email' => 'Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta.',
     'this_password_reset_link_will_expire' => 'Este link de redefinição de senha expirará em :count minutos.',
     'if_you_did_not_request' => 'Se você não solicitou uma redefinição de senha, nenhuma ação adicional é necessária.',
+    'subscription_detail' => [
+        'title' => 'Detalhes da Assinatura',
+        'user' => 'Usuário',
+        'email' => 'E-mail',
+        'contact_no' => 'Contato',
+        'table' => [
+            'plan' => 'Plano',
+            'end_date' => 'Data de Término',
+            'amount' => 'Valor',
+            'tax_amount' => 'Valor do Imposto',
+            'total_amount' => 'Valor Total',
+            'duration' => 'Duração',
+            'status' => 'Status',
+        ],
+    ],
+    'expiring_subscription' => [
+        'title' => 'Assinatura Próxima do Vencimento',
+        'greeting' => 'Olá :name,',
+        'body' => 'Seu plano de assinatura expirará em breve. Por favor, renove seu plano nos próximos :days dias para continuar aproveitando os nossos serviços.',
+    ],
+    'continue_watch' => [
+        'title' => 'Continue Assistindo',
+        'greeting' => 'Olá :name,',
+        'body' => 'Não perca! Continue assistindo seu filme ou episódio e retome exatamente de onde parou.',
+    ],
+    'reminder' => [
+        'title' => 'Lembrete de Lançamento',
+        'greeting' => 'Olá :name,',
+        'body' => 'Um novo filme ou série que você salvou será lançado em breve! Faltam apenas :days dias. Marque na sua agenda e não perca!',
+    ],
 ];

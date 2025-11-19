@@ -41,9 +41,16 @@ class SendSubscriptionNotifications extends Command
         // Get users with the retrieved user IDs
         $users = User::with('subscriptionPackage')->whereIn('id', $userIds)->get();
         foreach ($users as $user) {
-            // Customize email send
-            if (isSmtpConfigured()) {
-            Mail::to($user->email)->send(new ExpiringSubscriptionEmail($user));
+            // Customize email send (locale-aware, queued)
+            try {
+                if (function_exists('isSmtpConfigured') && isSmtpConfigured()) {
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new ExpiringSubscriptionEmail($user));
+                }
+            } catch (\Exception $e) {
+                \Log::error('subscriptions:notify: failed to queue expiring email - ' . $e->getMessage());
             }
             $notification_data = [
                 'id' => optional($user->subscriptionPackage)->id ?? null,

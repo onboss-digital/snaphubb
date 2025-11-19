@@ -22,4 +22,34 @@ return [
     'you_are_receiving_this_email' => 'You are receiving this email because we received a password reset request for your account.',
     'this_password_reset_link_will_expire' => 'This password reset link will expire in :count minutes.',
     'if_you_did_not_request' => 'If you did not request a password reset, no further action is required.',
+    'subscription_detail' => [
+        'title' => 'Subscription Details',
+        'user' => 'User',
+        'email' => 'Email',
+        'contact_no' => 'Contact No',
+        'table' => [
+            'plan' => 'Plan',
+            'end_date' => 'End Date',
+            'amount' => 'Amount',
+            'tax_amount' => 'Tax Amount',
+            'total_amount' => 'Total Amount',
+            'duration' => 'Duration',
+            'status' => 'Status',
+        ],
+    ],
+    'expiring_subscription' => [
+        'title' => 'Subscription Expiring',
+        'greeting' => 'Hello :name,',
+        'body' => 'Your subscription plan is expiring soon. Please renew your subscription plan within the next :days days to continue enjoying our services.',
+    ],
+    'continue_watch' => [
+        'title' => 'Continue Watching',
+        'greeting' => 'Hello :name,',
+        'body' => "Don't miss out! Continue watching your movie or episode and pick up right where you left off.",
+    ],
+    'reminder' => [
+        'title' => 'Upcoming Reminder',
+        'greeting' => 'Hello :name,',
+        'body' => 'A new movie or TV show you saved is releasing soon! It\'s just :days days away. Mark your calendar and get ready for some great entertainment!',
+    ],
 ];

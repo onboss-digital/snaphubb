@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continue Watch Email</title>
+    <title>{{ __('email.continue_watch.title') }}</title>
 </head>
 <body>
-    <p>Hello {{ $user->first_name }} {{$user->last_name}},</p>
+    <p>{{ __('email.continue_watch.greeting', ['name' => $user->first_name ?? '']) }}</p>
 
-    <p>Don't miss out! Continue watching your movie or episode and pick up right where you left off. Enjoy the rest of your entertainment experience!</p>
+    <p>{{ __('email.continue_watch.body') }}</p>
     
-    <p>Thank you,</p>
+    <p>{{ __('email.best_regards') }}</p>
 </body>
 </html>

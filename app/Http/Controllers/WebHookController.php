@@ -487,7 +487,18 @@ class WebHookController extends Controller
                         'payment_status' => $logData['data']['object']['status'],
                     ]);
                 }
-                Mail::to($userupdate->email)->send(new ExpiringSubscriptionEmail($userupdate));
+                try {
+                    if (function_exists('isSmtpConfigured') && isSmtpConfigured()) {
+                        $sendLocale = $userupdate->locale ?? config('app.locale');
+                        Mail::to($userupdate->email)
+                            ->locale($sendLocale)
+                            ->queue(new ExpiringSubscriptionEmail($userupdate));
+                    } else {
+                        Log::info('webhook: SMTP not configured, skipping expiring subscription email', ['user' => $userupdate->id ?? null]);
+                    }
+                } catch (\Exception $e) {
+                    Log::error('webhook: failed to queue expiring subscription email - ' . $e->getMessage());
+                }
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'invoice.payment_failed') {
                 // Lógica para pagamento falhou
             } else if (($logData['object'] ?? null) === 'event' && ($logData['type'] ?? null) === 'customer.subscription.updated') {

@@ -71,11 +71,13 @@ Route::group(['prefix' => 'webhook'], function () {
     Route::controller(WebHookController::class)->group(function () {
         Route::post('cartpanda', 'cartpanda');
         Route::post('tribopay', 'tribopay');
-        Route::post('stripe', 'stripe');
         Route::post('stripepages', 'stripepages');
         Route::post('{type}', 'genericWebhookHandler');
-
     });
+    
+    // Dedicated webhook controllers
+    Route::post('stripe', [\App\Http\Controllers\StripeWebhookController::class, 'handle']);
+    Route::post('mercadopago', [\App\Http\Controllers\MercadoPagoWebhookController::class, 'handle']);
 });
 
 //webhook cartpanda

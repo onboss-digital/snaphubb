@@ -41,8 +41,15 @@ class ReminderNotification extends Command
             $user = User::where('id', $reminder->user_id)->first();
             
             $entertainment = $reminder->entertainment;
-            if (isSmtpConfigured()) {
-            Mail::to($user->email)->send(new ReminderEmail($user));
+            try {
+                if (function_exists('isSmtpConfigured') && isSmtpConfigured()) {
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new ReminderEmail($user));
+                }
+            } catch (\Exception $e) {
+                \Log::error('reminder:notify: failed to queue reminder email - ' . $e->getMessage());
             }
             $notification_data = [
                 'id' => $entertainment->id ?? null,

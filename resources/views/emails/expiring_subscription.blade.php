@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expiring Subscription Email</title>
-</head>
+    <title>{{ __('email.expiring_subscription.title') }}</title>
+    </head>
 <body>
-    <p>Hello {{ $user->first_name }} {{$user->last_name}},</p>
+    <p>{{ __('email.expiring_subscription.greeting', ['name' => $user->first_name ?? '']) }}</p>
 
-    <p>Your subscription plan is expiring soon. Please renew your subscription plan within the next {{ setting('expiry_plan') }} days to continue enjoying our services.</p>
+    <p>{!! __('email.expiring_subscription.body', ['days' => setting('expiry_plan')]) !!}</p>
     
-    <p>Thank you,</p>
+    <p>{{ __('email.best_regards') }}</p>
 </body>
 </html>

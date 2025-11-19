@@ -385,12 +385,17 @@ class UsersController extends Controller
 
         // Send email to each user
         foreach ($users as $user) {
-            // Customize email send
-            if (isSmtpConfigured()) {
-                Mail::to($user->email)->send(new ExpiringSubscriptionEmail($user));
-            }else{
-            return response()->json(['message' => 'There is an issue with mail service please check configurations.', 'status' => true], 200);
-
+            try {
+                if (function_exists('isSmtpConfigured') && isSmtpConfigured()) {
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new ExpiringSubscriptionEmail($user));
+                } else {
+                    return response()->json(['message' => 'There is an issue with mail service please check configurations.', 'status' => true], 200);
+                }
+            } catch (\Exception $e) {
+                \Log::error('users:sendEmail: failed to queue expiring email - ' . $e->getMessage());
             }
         }
 
