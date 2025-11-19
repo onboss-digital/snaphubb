@@ -139,10 +139,13 @@ class SubscriptionController extends Controller
         if (isSmtpConfigured()) {
             if ($user) {
                 try {
-                    Mail::to($user->email)->send(new SubscriptionDetail($response));
-                    Log::info('Subscription detail email sent successfully to ' . $user->email);
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new SubscriptionDetail($response));
+                    Log::info('Subscription detail email queued successfully to ' . $user->email);
                 } catch (\Exception $e) {
-                    Log::error('Failed to send email to ' . $user->email . ': ' . $e->getMessage());
+                    Log::error('Failed to queue email to ' . $user->email . ': ' . $e->getMessage());
                 }
             } else {
                 Log::info('User object is not set. Email not sent.');
@@ -192,10 +195,13 @@ class SubscriptionController extends Controller
         if (isSmtpConfigured()) {
             if ($user) {
                 try {
-                    Mail::to($user->email)->send(new SubscriptionDetail($response));
-                    Log::info('Subscription detail email sent successfully to ' . $user->email);
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new SubscriptionDetail($response));
+                    Log::info('Subscription detail email queued successfully to ' . $user->email);
                 } catch (\Exception $e) {
-                    Log::error('Failed to send email to ' . $user->email . ': ' . $e->getMessage());
+                    Log::error('Failed to queue email to ' . $user->email . ': ' . $e->getMessage());
                 }
             } else {
                 Log::info('User object is not set. Email not sent.');

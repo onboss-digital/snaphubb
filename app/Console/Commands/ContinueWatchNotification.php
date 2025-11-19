@@ -49,8 +49,15 @@ class ContinueWatchNotification extends Command
             else if($continuewatch->entertainment_type == 'video'){
                 $entertainment = $continuewatch->video;
             }
-            if (isSmtpConfigured()) {
-            Mail::to($user->email)->send(new ContinueWatchEmail($user));
+            try {
+                if (function_exists('isSmtpConfigured') && isSmtpConfigured()) {
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new ContinueWatchEmail($user));
+                }
+            } catch (\Exception $e) {
+                \Log::error('continuewatch:notify: failed to queue continue-watch email - ' . $e->getMessage());
             }
             $notification_data = [
                 'id' => $entertainment->id ?? null,

@@ -227,4 +227,17 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     {
         return $this->hasMany(UserWatchHistory::class, 'user_id', 'id');
     }
+
+    /**
+     * Preferred locale for notifications.
+     * This ensures queued Notifications (e.g. email verification)
+     * are rendered using the user's locale when available.
+     *
+     * @param  \Illuminate\Notifications\Notification|null  $notification
+     * @return string|null
+     */
+    public function preferredLocale($notification = null)
+    {
+        return $this->locale ?? config('app.locale');
+    }
 }

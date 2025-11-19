@@ -42,6 +42,7 @@ class PaymentController extends Controller
         'airtel' => 'AirtelPayment',
         'phonepe' => 'PhonePePayment',
         'midtrans' => 'MidtransPayment',
+        'mercadopago' => 'MercadoPagoPayment',
     ];
 
     private $settings;
@@ -453,10 +454,12 @@ class PaymentController extends Controller
         if (isSmtpConfigured()) {
             if ($user) {
                 try {
-                    Mail::to($user->email)->send(new SubscriptionDetail($response));
-
+                    $sendLocale = $user->locale ?? config('app.locale');
+                    Mail::to($user->email)
+                        ->locale($sendLocale)
+                        ->queue(new SubscriptionDetail($response));
                 } catch (\Exception $e) {
-                    Log::error('Failed to send email to ' . $user->email . ': ' . $e->getMessage());
+                    Log::error('Failed to queue email to ' . $user->email . ': ' . $e->getMessage());
                 }
             } else {
                 Log::info('User object is not set. Email not sent.');
@@ -749,6 +752,72 @@ class PaymentController extends Controller
     public function edit($id)
     {
         return view('frontend::edit');
+    }
+
+    /**
+     * Mercado Pago Payment Method
+     */
+    protected function MercadoPagoPayment(Request $request)
+    {
+        $accessToken = env('MERCADOPAGO_ACCESS_TOKEN');
+        $notificationUrl = env('MERCADOPAGO_NOTIFICATION_URL', env('APP_URL') . '/api/webhook/mercadopago');
+        
+        if (!$accessToken) {
+            return redirect()->back()->withErrors('Mercado Pago não configurado.');
+        }
+
+        $this->plan->currency = $this->plan->currency ?? 'BRL';
+        
+        $preferenceData = [
+            'items' => [
+                [
+                    'title' => "Plano: {$this->plan->name}",
+                    'description' => $this->plan->description ?? "Assinatura {$this->plan->name}",
+                    'quantity' => 1,
+                    'currency_id' => $this->plan->currency,
+                    'unit_price' => (float) $this->plan->price,
+                ]
+            ],
+            'payer' => [
+                'email' => auth()->user()->email,
+                'name' => auth()->user()->first_name ?? auth()->user()->name,
+            ],
+            'back_urls' => [
+                'success' => env('APP_URL') . '/payment/success?gateway=mercadopago',
+                'failure' => env('APP_URL') . '/payment/failure?gateway=mercadopago',
+                'pending' => env('APP_URL') . '/payment/pending?gateway=mercadopago',
+            ],
+            'auto_return' => 'approved',
+            'notification_url' => $notificationUrl,
+            'external_reference' => "plan:{$this->plan->id}",
+            'metadata' => [
+                'plan_id' => $this->plan->id,
+                'user_id' => auth()->id(),
+            ],
+        ];
+
+        try {
+            $response = Http::withToken($accessToken)
+                ->acceptJson()
+                ->post('https://api.mercadopago.com/checkout/preferences', $preferenceData);
+
+            if (!$response->successful()) {
+                Log::error('MercadoPago API Error', ['response' => $response->body()]);
+                return redirect()->back()->withErrors('Erro ao criar preferência no Mercado Pago.');
+            }
+
+            $preference = $response->json();
+            $checkoutUrl = $preference['init_point'] ?? $preference['sandbox_init_point'] ?? null;
+
+            if (!$checkoutUrl) {
+                return redirect()->back()->withErrors('URL de checkout não retornada pelo Mercado Pago.');
+            }
+
+            return response()->json(['redirect' => $checkoutUrl]);
+        } catch (\Exception $e) {
+            Log::error('MercadoPago Payment Error: ' . $e->getMessage());
+            return redirect()->back()->withErrors('Erro ao processar pagamento com Mercado Pago.');
+        }
     }
 
     /**

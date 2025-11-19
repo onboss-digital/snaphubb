@@ -22,4 +22,34 @@ return [
     'you_are_receiving_this_email' => 'Estás recibiendo este correo electrónico porque recibimos una solicitud de restablecimiento de contraseña para tu cuenta.',
     'this_password_reset_link_will_expire' => 'Este enlace de restablecimiento de contraseña expirará en :count minutos.',
     'if_you_did_not_request' => 'Si no solicitaste un restablecimiento de contraseña, no se requiere ninguna acción adicional.',
+    'subscription_detail' => [
+        'title' => 'Detalles de la Suscripción',
+        'user' => 'Usuario',
+        'email' => 'Correo',
+        'contact_no' => 'Contacto',
+        'table' => [
+            'plan' => 'Plan',
+            'end_date' => 'Fecha de Finalización',
+            'amount' => 'Importe',
+            'tax_amount' => 'Impuesto',
+            'total_amount' => 'Importe Total',
+            'duration' => 'Duración',
+            'status' => 'Estado',
+        ],
+    ],
+    'expiring_subscription' => [
+        'title' => 'Suscripción a Punto de Vencer',
+        'greeting' => 'Hola :name,',
+        'body' => 'Tu plan de suscripción expirará pronto. Por favor, renueva tu plan en los próximos :days días para seguir disfrutando de nuestros servicios.',
+    ],
+    'continue_watch' => [
+        'title' => 'Continuar Viendo',
+        'greeting' => 'Hola :name,',
+        'body' => '¡No te lo pierdas! Continúa viendo tu película o episodio y retoma exactamente donde lo dejaste.',
+    ],
+    'reminder' => [
+        'title' => 'Recordatorio de Estreno',
+        'greeting' => 'Hola :name,',
+        'body' => '¡Una nueva película o serie que guardaste se estrenará pronto! Falta solo :days días. Anótalo en tu agenda y no te lo pierdas.',
+    ],
 ];
