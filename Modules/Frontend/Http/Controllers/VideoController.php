@@ -43,6 +43,13 @@ class VideoController extends Controller
                 ->where('id', $videoId)
                 ->firstOrFail();
 
+            // Get the entertainment reviews for this video
+            $entertainment = Entertainment::where('id', $video->entertainment_id)
+                ->with('entertainmentReviews.user')
+                ->first();
+
+            $reviews = $entertainment->entertainmentReviews ?? collect();
+
             if ($userId) {
                 $continueWatch = ContinueWatch::where('entertainment_id', $video->entertainment_id)
                     ->where('user_id', $userId)
@@ -78,6 +85,16 @@ class VideoController extends Controller
                     ->where('entertainment_type', 'movie')
                     ->where('is_download', 1)
                     ->exists();
+
+                // Handle reviews for video
+                $yourReview = $reviews->where('user_id', $userId)->first();
+                $video['your_review'] = $yourReview;
+                $video['reviews'] = $yourReview ? $reviews->where('user_id', '!=', $userId) : $reviews;
+                $video['total_review'] = $reviews->count();
+        } else {
+            $video['your_review'] = null;
+            $video['reviews'] = $reviews;
+            $video['total_review'] = $reviews->count();
         }
 
         $data = new VideoDetailResource($video);
@@ -87,6 +104,10 @@ class VideoController extends Controller
     }
 
     $data = $data->toArray($request);
+
+    // Add three_reviews and your_review for the view
+    $data['three_reviews'] = collect($data['reviews'] ?? [])->take(3);
+    $data['your_review'] = isset($data['your_review']) ? $data['your_review'] : null;
 
 
 

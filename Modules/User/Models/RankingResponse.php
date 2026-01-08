@@ -13,6 +13,7 @@ class RankingResponse extends BaseModel
     protected $fillable = [
         'user_id',
         'ranking_id',
+        'content_slug',
         'response_date',
         'sugestion_name',
         'sugestion_link',

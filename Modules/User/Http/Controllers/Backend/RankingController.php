@@ -66,7 +66,7 @@ class RankingController extends Controller
         //set slug
         $data['contents'] = collect($data['contents'])->
             map(function ($item) {
-                $item['slug'] = str_slug($item['title']);
+                $item['slug'] = str_slug($item['name']);
                 return $item;
             })->toJson();
 

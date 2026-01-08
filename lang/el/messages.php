@@ -216,5 +216,7 @@ return [
     'lbl_messaging_sender_id' => 'Ταυτότητα Αποστολέα Μηνυμάτων',
     'lbl_app_id' => 'Ταυτότητα Εφαρμογής',
     'lbl_measurement_id' => 'Ταυτότητα Μετρήσεων',
+    'submit' => 'Υποβολή',
+    'cancel' => 'Ακύρωση',
 
 ];

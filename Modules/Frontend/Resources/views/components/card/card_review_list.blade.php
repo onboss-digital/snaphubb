@@ -15,7 +15,7 @@
             @if(!empty($data->user['first_name']))
             <h6 class="line-count-1 font-size-18">{{($data->user['first_name'] . ' ' . $data->user['last_name'])}}</h6>
             @else
-            <h6 class="line-count-1 font-size-18">Streamit User</h6>
+            <h6 class="line-count-1 font-size-18">Snaphubb User</h6>
 
             @endif
             <p class="mb-0 font-size-14-0">   {{ $data['created_at'] ? formatDate(\Carbon\Carbon::parse($data['created_at'])->format('Y-m-d'))  : '-' }}  </p>

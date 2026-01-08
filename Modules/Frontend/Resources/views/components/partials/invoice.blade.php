@@ -104,7 +104,7 @@
 
   <div class="header">
     <div class="main-logo" style="float: left">
-        <img class="logo-mini img-fluid" src="https://apps.iqonic.design/streamit-laravel/img/logo/dark_logo.png" height="30" alt="logo">
+        <img class="logo-mini img-fluid" src="{{ asset(setting('dark_logo')) }}" height="30" alt="logo">
     </div>
     <div style="float: right">
         <p>{{ __('frontend.invoice_date') }} - <span class="text-black">{{ now()->format('d/m/Y') }}</span> <span style="padding-left: 10px;">{{ __('frontend.invoice_id') }} -  <span class="text-black">#{{ $data->id }}</span></span></p>

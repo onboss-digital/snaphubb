@@ -7,30 +7,26 @@ class EntertainmentRequest extends FormRequest
 {
    public function rules()
     {
-
-
-        return [
+        $rules = [
             'name' => ['required'],
             'movie_access' => 'required',
             'plan_id' => 'required_if:movie_access,paid',
             'language'=> ['required'],
             'genres'=> ['required'],
-            // 'content_rating'=>'required|string',
+            'content_rating'=>'required|string',
             'actors'=> ['required'],
             'directors'=> ['required'],
             // 'IMDb_rating' => 'required|numeric|min:1|max:10',
             'duration'=> ['required'],
             'release_date' => ['required'],
             'description' => ['required', 'string'],
-
         ];
 
-
         if ($this->input('type') == 'movie') {
-            $rules['duration'] = 'required';
-            $rules['video_upload_type']='required';
+            $rules['video_upload_type'] = 'required';
         }
 
+        return $rules;
     }
 
 
@@ -42,6 +38,7 @@ class EntertainmentRequest extends FormRequest
             'name.required' => 'Name is required.',
             'language.required' => 'Language is required.',
             'genres.required' => 'Genres is required.',
+            'content_rating.required' => 'Content Rating is required.',
             'actors.required' => 'Actors is required.',
             'directors.required' => 'Directors is required.',
             'duration.required' => 'Duration is required.',

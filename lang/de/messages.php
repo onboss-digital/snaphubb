@@ -91,7 +91,7 @@ return [
     'user_details_successfull' => 'Benutzerdetails erfolgreich abgerufen',
     'delete_account' => 'Ihr Konto wurde zur Löschung vorgesehen.',
     'data_not_available' => 'Daten nicht verfügbar',
-    'unknown_user' => 'Streamit-Nutzer',
+    'unknown_user' => 'Snaphubb-Nutzer',
     'myprofile' => 'Mein Profil',
     'logout' => 'Abmelden',
     'change_language' => 'Sprache ändern',
@@ -216,7 +216,7 @@ return [
     'lbl_messaging_sender_id' => 'Messaging-Absender-ID',
     'lbl_app_id' => 'App-ID',
     'lbl_measurement_id' => 'Mess-ID',
-
-
+    'submit' => 'Absenden',
+    'cancel' => 'Abbrechen',
 
 ];

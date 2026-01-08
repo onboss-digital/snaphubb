@@ -81,7 +81,7 @@
                 @endphp
 
 
-                <img class="img-fluid logo" src="{{ $logo }}" alt="streamit">
+                <img class="img-fluid logo" src="{{ $logo }}" alt="snaphubb">
 
                 <!-- Language Selector -->
                 <div class="flex items-center space-x-4">

@@ -173,7 +173,7 @@ class TVshowController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->store($request);
     }
 
     /**
@@ -181,7 +181,7 @@ class TVshowController extends Controller
      */
     public function show($id)
     {
-        return view('entertainment::show');
+        return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->show($id);
     }
 
     /**
@@ -236,7 +236,7 @@ class TVshowController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->update($request, $id);
     }
 
     /**
@@ -244,7 +244,7 @@ class TVshowController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->destroy($id);
     }
 
     public function ImportTVshow($id)

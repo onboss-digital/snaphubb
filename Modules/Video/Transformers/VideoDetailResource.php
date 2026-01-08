@@ -73,9 +73,9 @@ class VideoDetailResource extends JsonResource
             'is_download' => $this->is_download ?? false,
             'download_quality' => $downloadMappings,
             'download_id' => !empty($download) ? $download->id: null,
-            'is_device_supported' => $deviceTypeResponse['isDeviceSupported']
-
-
+            'is_device_supported' => $deviceTypeResponse['isDeviceSupported'],
+            'reviews' => $this->reviews ?? [],
+            'your_review' => $this->your_review ?? null,
         ];
     }
 }

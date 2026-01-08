@@ -399,6 +399,11 @@ if(form){
                 tinymce.triggerSave();
             }
 
+            // Remove required attribute from hidden fields to avoid validation errors
+            form.querySelectorAll('.d-none [required]').forEach(function(field) {
+                field.removeAttribute('required');
+            });
+
             // Reset all previous validation states
             // form.querySelectorAll('input[type="email"]').forEach(emailField => {
             //     emailField.classList.remove('is-invalid');

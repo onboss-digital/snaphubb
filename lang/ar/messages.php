@@ -216,6 +216,7 @@ return [
     'lbl_messaging_sender_id' => 'معرف مرسل الرسائل',
     'lbl_app_id' => 'معرف التطبيق',
     'lbl_measurement_id' => 'معرف القياس',
-
+    'submit' => 'إرسال',
+    'cancel' => 'إلغاء',
 
 ];

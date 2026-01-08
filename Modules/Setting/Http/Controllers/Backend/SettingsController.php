@@ -643,7 +643,7 @@ class SettingsController extends Controller
             $value = $setting->val;
 
             if (in_array($field, ['logo', 'mini_logo', 'dark_logo', 'dark_mini_logo', 'favicon'])) {
-                $value = asset($value);
+                $value = !empty($value) ? asset($value) : $value;
             }
 
             $data[$field] = $value;

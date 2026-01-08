@@ -440,7 +440,7 @@
         // Create customization_json object
         const customizationObject = {
             saveLocal: 'sessionStorage',
-            storeKey: 'streamit-setting',
+            storeKey: 'snaphubb-setting',
             setting: dataToSend,
         };
 

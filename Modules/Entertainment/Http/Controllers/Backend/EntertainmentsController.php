@@ -70,8 +70,8 @@ class EntertainmentsController extends Controller
     public function store(EntertainmentRequest $request)
     {
         $data = $request->all();
-        $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] : extractFileNameFromUrl($data['thumbnail_url']);
-        $data['poster_url'] = !empty($data['tmdb_id']) ? $data['poster_url'] : extractFileNameFromUrl($data['poster_url']);
+        $data['thumbnail_url'] = !empty($data['tmdb_id']) ? $data['thumbnail_url'] : (!empty($data['thumbnail_url']) ? extractFileNameFromUrl($data['thumbnail_url']) : null);
+        $data['poster_url'] = !empty($data['tmdb_id']) ? $data['poster_url'] : (!empty($data['poster_url']) ? extractFileNameFromUrl($data['poster_url']) : null);
 
         // dd('oi');
 
@@ -193,10 +193,10 @@ class EntertainmentsController extends Controller
     public function update(EntertainmentRequest $request, $id)
     {
         $request_data = $request->all();
-        $request_data['thumbnail_url'] = !empty($request_data['tmdb_id']) ? $request_data['thumbnail_url'] : extractFileNameFromUrl($request_data['thumbnail_url']);
-        $request_data['poster_url'] = !empty($request_data['tmdb_id']) ? $request_data['poster_url'] : extractFileNameFromUrl($request_data['poster_url']);
-        $request_data['trailer_video'] = extractFileNameFromUrl($request_data['trailer_video']);
-        $request_data['video_file_input'] = isset($request_data['video_file_input']) ? extractFileNameFromUrl($request_data['video_file_input']) : null;
+        $request_data['thumbnail_url'] = !empty($request_data['tmdb_id']) ? $request_data['thumbnail_url'] : (!empty($request_data['thumbnail_url']) ? extractFileNameFromUrl($request_data['thumbnail_url']) : null);
+        $request_data['poster_url'] = !empty($request_data['tmdb_id']) ? $request_data['poster_url'] : (!empty($request_data['poster_url']) ? extractFileNameFromUrl($request_data['poster_url']) : null);
+        $request_data['trailer_video'] = !empty($request_data['trailer_video']) ? extractFileNameFromUrl($request_data['trailer_video']) : null;
+        $request_data['video_file_input'] = isset($request_data['video_file_input']) && !empty($request_data['video_file_input']) ? extractFileNameFromUrl($request_data['video_file_input']) : null;
 
 
 

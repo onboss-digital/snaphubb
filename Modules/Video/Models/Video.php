@@ -22,9 +22,11 @@ class Video extends BaseModel
         'trailer_url',
         'access',
         'plan_id',
+        'genre_id',
         'status',
         'duration',
         'release_date',
+        'content_rating',
         'is_restricted',
         'video_upload_type',
         'video_url_input',
@@ -79,6 +81,11 @@ class Video extends BaseModel
     public function plan()
     {
         return $this->hasOne(Plan::class, 'id', 'plan_id');
+    }
+
+    public function genre()
+    {
+        return $this->belongsTo(Genres::class, 'genre_id', 'id');
     }
 
     public function Watchlist()

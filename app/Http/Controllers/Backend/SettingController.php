@@ -53,7 +53,7 @@ class SettingController extends Controller
 
             // Process specific fields, like asset URLs
             if (in_array($field, ['logo', 'mini_logo', 'dark_logo', 'dark_mini_logo','light_logo', 'favicon'])) {
-                $value = asset($value);
+                $value = !empty($value) ? asset($value) : $value;
             }
 
             $responseData[$field] = $value;

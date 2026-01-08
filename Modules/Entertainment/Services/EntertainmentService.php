@@ -227,7 +227,11 @@ class EntertainmentService
             return '<input type="checkbox" class="form-check-input select-table-row"  id="datatable-row-'.$data->id.'"  name="datatable_ids[]" value="'.$data->id.'" data-type="entertainment" onclick="dataTableRowCheck('.$data->id.',this)">';
         })
         ->addColumn('action', function ($data) {
-            return view('entertainment::backend.entertainment.action', compact('data'));
+            try {
+                return view('entertainment::backend.entertainment.action', compact('data'))->render();
+            } catch (\Exception $e) {
+                return '<span class="text-danger">Error loading actions</span>';
+            }
         })
         ->editColumn('status', function ($row) {
             $checked = $row->status ? 'checked="checked"' : '';
@@ -250,14 +254,20 @@ class EntertainmentService
     public function getFilteredData($filter, $type)
     {
         $query = $this->entertainmentRepository->query();
+        
+        // Ensure filter is always an array
+        $filter = is_array($filter) ? $filter : [];
 
         if($type!=null){
 
             $query = $query->where('type',$type);
         }
 
-        if (isset($filter['moive_name'])) {
-            $query->where('name', 'like', '%' . $filter['moive_name'] . '%');
+        if (isset($filter['movie_name']) || isset($filter['moive_name'])) {
+            $movieName = $filter['movie_name'] ?? $filter['moive_name'];
+            if (!empty($movieName)) {
+                $query->where('name', 'like', '%' . $movieName . '%');
+            }
         }
 
 

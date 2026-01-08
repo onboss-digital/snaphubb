@@ -75,28 +75,38 @@ class ConstantDatabaseSeeder extends Seeder
 
             [
                 'type' => 'upload_type',
-                'name' => 'Local',
+                'name' => 'Local Upload',
                 'value' => 'Local',
             ],
             [
                 'type' => 'upload_type',
-                'name' => 'URL',
-                'value' => 'URL',
+                'name' => 'External URL',
+                'value' => 'External',
             ],
             [
                 'type' => 'upload_type',
-                'name' => 'YouTube',
+                'name' => 'YouTube Video',
                 'value' => 'YouTube',
             ],
             [
                 'type' => 'upload_type',
-                'name' => 'HLS',
-                'value' => 'HLS',
+                'name' => 'Vimeo Video',
+                'value' => 'Vimeo',
             ],
             [
                 'type' => 'upload_type',
-                'name' => 'Vimeo',
-                'value' => 'Vimeo',
+                'name' => 'Bunny CDN (HLS)',
+                'value' => 'Bunny',
+            ],
+            [
+                'type' => 'upload_type',
+                'name' => 'Google Drive',
+                'value' => 'GoogleDrive',
+            ],
+            [
+                'type' => 'upload_type',
+                'name' => 'Embedded Content',
+                'value' => 'Embedded',
             ],
 
             [

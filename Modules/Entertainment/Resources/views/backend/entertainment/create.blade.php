@@ -24,7 +24,7 @@
 
 @endif
 
-    {{ html()->form('POST' ,route('backend.entertainments.store'))
+    {{ html()->form('POST' ,route('backend.movies.store'))
     ->attribute('enctype', 'multipart/form-data')
     ->attribute('data-toggle', 'validator')
     ->attribute('id', 'form-submit')
@@ -227,7 +227,7 @@
     @error('genres')
         <span class="text-danger">{{ $message }}</span>
     @enderror
-    <div class="invalid-feedback" id="name-error">Genres field is required</div>
+    <div class="invalid-feedback" id="genres-error">Genres field is required</div>
 
 </div>
 
@@ -256,17 +256,21 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="invalid-feedback" id="imdb-error">IMDB Rating field is required</div>
-                    </div> --}}
-                    {{-- <div class="col-md-6 col-lg-4">
+                    </div>
+                    <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_content_rating') . '<span class="text-danger">*</span>', 'content_rating')->class('form-label') }}
-
-                        {{ html()->text('content_rating')->attribute('value', old('content_rating'))->placeholder(__('placeholder.lbl_content_rating'))->class('form-control')->attribute('required','required') }}
-
+                        {{ html()->select('content_rating', [
+                            'NC-17' => __('placeholder.content_rating_nc17'),
+                            '18+' => __('placeholder.content_rating_18'),
+                            'Explicit Content' => __('placeholder.content_rating_explicit'),
+                            'Sexual Content' => __('placeholder.content_rating_sexual'),
+                            'Strong Language' => __('placeholder.content_rating_language')
+                        ], old('content_rating'))->placeholder(__('movie.lbl_content_rating'))->class('form-control select2')->attribute('required','required')->id('content_rating') }}
                         @error('content_rating')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
-                        <div class="invalid-feedback" id="name-error">Content Rating field is required</div>
-                    </div> --}}
+                        <div class="invalid-feedback" id="content_rating-error">Content Rating field is required</div>
+                    </div>
                     <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_duration') . ' <span class="text-danger">*</span>', 'duration')->class('form-label') }}
                         {{ html()->time('duration')->attribute('value', old('duration'))->placeholder(__('movie.lbl_duration'))->class('form-control  min-datetimepicker-time')->attribute('required', 'required')->id('duration') }}
@@ -510,6 +514,12 @@ $(document).ready(function() {
         width: '100%',
         placeholder: "{{ __('movie.lbl_directors') }}",  // Set the placeholder text here
         allowClear: true  // Allows clearing the selection
+    });
+
+    $('#content_rating').select2({
+        width: '100%',
+        placeholder: "{{ __('movie.lbl_content_rating') }}",
+        allowClear: true
     });
 });
 

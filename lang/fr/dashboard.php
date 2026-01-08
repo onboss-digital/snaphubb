@@ -28,7 +28,7 @@ return [
     'lbl_total_movies' => 'Nombre Total de Films',
     'lbl_total_shows' => 'Nombre Total de Spectacles',
     'lbl_total_videos' => 'Nombre Total de Vidéos',
-    'lbl_top_genres' => 'Top 5 des genres',
+    'lbl_top_categories' => 'Top 5 des catégories',
     'total_revenue_subscribers' => 'Revenu Total des Abonnements',
     'new_subscribers' => 'Nouveaux Abonnés',
     'lbl_top_rated' => 'Les Mieux Notés',

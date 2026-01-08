@@ -55,13 +55,20 @@ return [
     'lbl_select_imdb_rating' => 'Επιλέξτε IMDb Rating',
     'lbl_select_type' => 'Επιλέξτε Τύπο',
     'lbl_select_language' => 'Επιλέξτε Γλώσσα',
-    'lbl_select_genre' => 'Επιλέξτε Είδος',
+    'lbl_select_category' => 'Επιλέξτε Κατηγορία',
     'lbl_select_actor' => 'Επιλέξτε Ηθοποιό',
     'lbl_select_director' => 'Επιλέξτε Σκηνοθέτη',
     'lbl_select_video_type' => 'Επιλέξτε Τύπο Βίντεο',
     'lbl_select_quality' => 'Επιλέξτε Ποιότητα',
     'lbl_select_tvcategory'=>'Επιλέξτε κατηγορία τηλεόρασης',
     'lbl_select_country' => 'Επιλέξτε χώρα',
+
+    // Content Rating Options
+    'content_rating_nc17' => 'NC-17 (Κανένα άτομο κάτω των 17)',
+    'content_rating_18' => '18+ (Περιορισμένο στους ενήλικες)',
+    'content_rating_explicit' => 'Ρητό Περιεχόμενο',
+    'content_rating_sexual' => 'Σεξουαλικό Περιεχόμενο',
+    'content_rating_language' => 'Ισχυρή Γλώσσα',
 
     // Subscription Expired Modal
     'lbl_subscription_expired_modal_title' => 'Η Συνδρομή Έληξε',
@@ -75,5 +82,12 @@ return [
     'lbl_subscription_expired_modal_benefit_3' => 'Εμπειρία χωρίς διαφημίσεις',
     'lbl_subscription_expired_modal_benefit_4' => 'Λήψη περιεχομένου για offline προβολή',
     'lbl_subscription_expired_modal_renew_button' => 'Ανανέωση Συνδρομής',
-    'lbl_subscription_expired_modal_later_button' => 'Ίσως Αργότερα'
+    'lbl_subscription_expired_modal_later_button' => 'Ίσως Αργότερα',
+    
+    // Subscription Status Banner Messages
+    'subscription_active' => 'Είστε προστατευμένος έως :date',
+    'subscription_7_days' => 'Η συνδρομή σας λήγει σε 7 ημέρες',
+    'subscription_3_days' => 'ΠΡΟΣΟΧΗ: 3 ημέρες απομένουν',
+    'subscription_1_day' => 'ΕΠΕΙΓΟΝ: Τελευταία ευκαιρία σήμερα!',
+    'subscription_expired' => 'Η συνδρομή έληξε - Ανανεώστε τώρα'
 ];

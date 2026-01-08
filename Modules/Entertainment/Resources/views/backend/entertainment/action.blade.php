@@ -24,7 +24,7 @@
         @hasPermission('delete_movies')
 
             <a href="{{ route('backend.entertainments.destroy', $data->id) }}"
-                id="delete-{{ $module_name }}-{{ $data->id }}" class="btn btn-secondary-subtle btn-sm fs-4"
+                id="delete-entertainment-{{ $data->id }}" class="btn btn-secondary-subtle btn-sm fs-4"
                 data-type="ajax" data-method="DELETE" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip"
                 title="{{ __('messages.delete') }}" data-confirm="{{ __('messages.are_you_sure?') }}">
                 <i class="ph ph-trash align-middle"></i>
@@ -44,7 +44,7 @@
         @hasPermission('force_delete_movies')
 
             <a href="{{ route('backend.entertainments.force_delete', $data->id) }}"
-                id="delete-{{ $module_name }}-{{ $data->id }}" class="btn btn-danger-subtle btn-sm fs-4"
+                id="delete-entertainment-{{ $data->id }}" class="btn btn-danger-subtle btn-sm fs-4"
                 data-type="ajax" data-method="DELETE" data-token="{{ csrf_token() }}" data-bs-toggle="tooltip"
                 title="{{ __('messages.force_delete') }}" data-confirm="{{ __('messages.are_you_sure?') }}">
                 <i class="ph ph-trash align-middle"></i>

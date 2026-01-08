@@ -139,27 +139,44 @@
 
   <script type="text/javascript">
      window.onload = function() {
-        getSelectedOption();
+        if (document.getElementById('SelectUser')) {
+            getSelectedOption();
+        }
     };
 
     $(document).ready(function() {
-            $('#SelectUser').select2({
-                placeholder: "Select Role",
-                minimumResultsForSearch: Infinity
-
-            });
+            if ($('#SelectUser').length) {
+                $('#SelectUser').select2({
+                    placeholder: "Select Role",
+                    minimumResultsForSearch: Infinity
+                });
+            }
         });
 
- function disableButton(){
-document.getElementById('submit-btn').classList.add('disabled');
-document.getElementById('submit-btn').innerText = 'Login...';
 
+ function disableButton(){
+    var btn = document.getElementById('submit-btn');
+    btn.disabled = false;
+    btn.innerText = 'Login...';
+    // Submeter o formulário manualmente
+    btn.form.submit();
+    // Desabilitar após submissão
+    setTimeout(() => {
+        btn.disabled = true;
+    }, 100);
+    return true;
 }
 
 
 
     function getSelectedOption() {
         var selectElement = document.getElementById("SelectUser");
+        
+        // Verificar se o elemento existe antes de acessá-lo
+        if (!selectElement) {
+            return;
+        }
+        
         var selectedOption = selectElement.options[selectElement.selectedIndex];
 
         if (selectedOption  && selectedOption.value !== "") {

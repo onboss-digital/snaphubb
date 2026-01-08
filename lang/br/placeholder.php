@@ -55,14 +55,19 @@ return [
     'lbl_select_imdb_rating'=>'Select IMDb Rating',
     'lbl_select_type'=>'Select Type',
     'lbl_select_language'=>'Select Language',
-    'lbl_select_genre'=>'Select Genre',
+    'lbl_select_category'=>'Select Category',
     'lbl_select_actor'=>'Select Actor',
     'lbl_select_director'=>'Select Director',
     'lbl_select_video_type'=>'Select Video Type',
     'lbl_select_quality'=>'Select Quality',
     'lbl_select_tvcategory'=>'Select TV Category',
     'lbl_select_country'=>'Select Country',
-
+    // Content Rating Options
+    'content_rating_nc17' => 'NC-17 (Nenhum menor de 17 anos)',
+    'content_rating_18' => '18+ (Restrito a adultos)',
+    'content_rating_explicit' => 'Conteúdo Explícito',
+    'content_rating_sexual' => 'Conteúdo Sexual',
+    'content_rating_language' => 'Linguagem Forte',
     // Subscription Expired Modal
     'lbl_subscription_expired_modal_title' => 'Assinatura Expirada',
     'lbl_subscription_expired_modal_message' => 'Sua assinatura expirou e você não tem mais acesso ao conteúdo premium.',
@@ -75,6 +80,13 @@ return [
     'lbl_subscription_expired_modal_benefit_3' => 'Experiência sem anúncios',
     'lbl_subscription_expired_modal_benefit_4' => 'Download de conteúdo para visualização offline',
     'lbl_subscription_expired_modal_renew_button' => 'Renovar Assinatura',
-    'lbl_subscription_expired_modal_later_button' => 'Talvez Mais Tarde'
+    'lbl_subscription_expired_modal_later_button' => 'Talvez Mais Tarde',
+    
+    // Subscription Status Banner Messages
+    'subscription_active' => 'Você está protegido até :date',
+    'subscription_7_days' => 'Sua assinatura vence em 7 dias',
+    'subscription_3_days' => 'ATENÇÃO: 3 dias restantes',
+    'subscription_1_day' => 'URGENTE: Última chance hoje!',
+    'subscription_expired' => 'Assinatura expirada - Renove agora'
    
 ];

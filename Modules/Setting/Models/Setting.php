@@ -30,7 +30,7 @@ class Setting extends BaseModel implements HasMedia
             $existingRecord = self::where('name', $key)->where('datatype', $datatype)->where('created_by',$currentUser->id)->first();
 
             if ($existingRecord) {
-                return self::set($key, $val, $type,$currentUser,$datatype);
+                return self::set($key, $val, $currentUser, $type, $datatype);
             }
             return self::create([
                 'name' => $key,
@@ -42,7 +42,7 @@ class Setting extends BaseModel implements HasMedia
             ]);
         }else{
             if (self::has($key)) {
-                return self::set($key, $val, $type,$currentUser,$datatype);
+                return self::set($key, $val, $currentUser, $type, $datatype);
             }
         }
 
@@ -78,13 +78,22 @@ class Setting extends BaseModel implements HasMedia
     /**
      * Set a value for setting.
      *
+     * @param  string  $key
+     * @param  mixed   $val
+     * @param  User    $currentUser
      * @param  string  $type
+     * @param  string  $datatype
      * @return bool
      */
-    public static function set($key, $val, $type = 'string',$currentUser,$datatype)
+    public static function set($key, $val, $currentUser, $type = 'string', $datatype = '')
     {
         $datatype = $datatype ? $datatype : null;
-        $userId = $currentUser ? $currentUser->id : auth()->id();
+        // Handle if $currentUser is a string ID instead of User object
+        if (is_string($currentUser)) {
+            $userId = (int) $currentUser;
+        } else {
+            $userId = $currentUser ? $currentUser->id : auth()->id();
+        }
         if($datatype == 'bussiness' || $datatype == 'misc' || $datatype =='notificationconfig'|| $datatype =='appconfig'){
 
             $setting = self::getAllSettings($userId,$datatype)->where('name', $key)->where('created_by',$userId)->first();

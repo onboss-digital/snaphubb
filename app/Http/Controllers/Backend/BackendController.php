@@ -105,7 +105,7 @@ class BackendController extends Controller
         $collection = collect($subscriptionData);
         $totals = $collection->groupBy('plan.currency')->map(function($group){
             return $group->sum(function($sub){
-                return $sub->plan->total_price;
+                return $sub->plan?->total_price ?? 0;
             });
         });
 

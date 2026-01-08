@@ -48,6 +48,21 @@
           <span class="item-name">{{__('frontend.coming_soon')}}</span>
         </a>
       </li>
+      
+      <!-- Votação da Comunidade -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('voting.index') }}">
+          <span class="item-name d-flex align-items-center gap-2">
+            @if(!userHasVotingAccess())
+              <i class="ph ph-lock"></i>
+            @else
+              <i class="ph-fill ph-heart"></i>
+            @endif
+            Votação
+          </span>
+        </a>
+      </li>
+
       @if(isenablemodule('livetv'))
       <li class="nav-item">
         <a class="nav-link"  href="{{route('livetv')}}">

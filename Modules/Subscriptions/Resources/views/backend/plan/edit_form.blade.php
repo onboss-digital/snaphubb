@@ -456,15 +456,15 @@ $bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
         <div class="row gy-3">
             @foreach($planLimits as $planLimit)
             <div class="col-md-6 ">
-                <label for="{{ $planLimit->limitation_slug }}" class="form-label">{{ $planLimit->limitation_data->title }}</label>
+                <label for="{{ $planLimit->slug }}" class="form-label">{{ $planLimit->title }}</label>
                 <div class="d-flex align-items-center justify-content-between form-control">
-                    <label for="{{ $planLimit->limitation_slug }}" class="form-label mb-0 text-body">{{ __('messages.lbl_on') }}</label>
+                    <label for="{{ $planLimit->slug }}" class="form-label mb-0 text-body">{{ __('messages.lbl_on') }}</label>
 
                     <div class="form-check form-switch">
-                        <input type="hidden" name="limits[{{ $planLimit->id }}][planlimitation_id]" value="{{ $planLimit->planlimitation_id }}">
-                        <input type="hidden" name="limits[{{ $planLimit->id }}][limitation_slug]" value="{{ $planLimit->limitation_slug }}">
+                        <input type="hidden" name="limits[{{ $planLimit->id }}][planlimitation_id]" value="{{ $planLimit->id }}">
+                        <input type="hidden" name="limits[{{ $planLimit->id }}][limitation_slug]" value="{{ $planLimit->slug }}">
                         <input type="hidden" name="limits[{{ $planLimit->id }}][value]" value="0">
-                        <input type="checkbox" name="limits[{{ $planLimit->id }}][value]" id="{{ $planLimit->limitation_slug }}" class="form-check-input" value="1" {{ old("limits.{$planLimit->id}.value", $planLimit->limitation_value) ? 'checked' : '' }} onchange="toggleQualitySection()">
+                        <input type="checkbox" name="limits[{{ $planLimit->id }}][value]" id="{{ $planLimit->slug }}" class="form-check-input" value="1" {{ isset($limits[$planLimit->slug]) ? 'checked' : '' }} onchange="toggleQualitySection()">
                     </div>
                 </div>
                 @error("limits.{$planLimit->id}.value")
@@ -473,15 +473,14 @@ $bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
             </div>
 
 
-            @if($planLimit->limitation_slug == 'device-limit')
-            <div class="col-md-6" id="deviceLimitInput">
+            @if($planLimit->slug == 'device-limit')
+            <div class="col-md-6 d-none" id="deviceLimitInput">
                 {{ html()->label(__('plan.lbl_device_limit'), 'device_limit_value')->class('form-label') }}
                 {{
-                                html()->input('number', 'device_limit_value', old('device_limit_value', $planLimit->limit))
+                                html()->input('number', 'device_limit_value', old('device_limit_value', isset($limits[$planLimit->slug]) ? $limits[$planLimit->slug]['limit'] ?? 0 : 0))
                                     ->class('form-control')
                                     ->id('device_limit_value')
                                     ->attribute('placeholder', __('placeholder.lbl_device_limit'))
-                                    ->attribute('value', $planLimit->limit ?? '0')
                             }}
                 @error('device_limit_value')
                 <span class="text-danger">{{ $message }}</span>
@@ -490,11 +489,11 @@ $bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
             </div>
             @endif
 
-            @if($planLimit->limitation_slug == 'download-status')
+            @if($planLimit->slug == 'download-status')
             <div class="row gy-4 d-none" id="DownloadStatus">
                 <label class="form-label">{{ __('messages.lbl_quality_option') }}</label>
                 @php
-                $downloadOptions = json_decode($planLimit->limit, true) ?? [];
+                $downloadOptions = isset($limits[$planLimit->slug]) ? $limits[$planLimit->slug] : [];
                 @endphp
                 @foreach($downloadoptions as $option)
                 <div class="col-md-4">
@@ -510,15 +509,14 @@ $bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
             </div>
             @endif
 
-            @if($planLimit->limitation_slug == 'profile-limit')
-            <div class="col-md-6" id="profileLimitInput">
+            @if($planLimit->slug == 'profile-limit')
+            <div class="col-md-6 d-none" id="profileLimitInput">
                 {{ html()->label(__('plan.lbl_profile_limit'), 'profile_limit_value')->class('form-label') }}
                 {{
-                            html()->input('number', 'profile_limit_value', old('profile_limit_value', $planLimit->limit))
+                            html()->input('number', 'profile_limit_value', old('profile_limit_value', isset($limits[$planLimit->slug]) ? $limits[$planLimit->slug]['limit'] ?? 0 : 0))
                                 ->class('form-control')
                                 ->id('profile_limit_value')
                                 ->attribute('placeholder', __('placeholder.lbl_device_limit'))
-                                ->attribute('value', $planLimit->limit ?? '0')
                         }}
                 @error('profile_limit_value')
                 <span class="text-danger">{{ $message }}</span>
@@ -527,14 +525,14 @@ $bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
             </div>
             @endif
 
-            @if($planLimit->limitation_slug =='supported-device-type')
-            <div class="col-md-6" id="supportedDeviceTypeInput">
+            @if($planLimit->slug =='supported-device-type')
+            <div class="col-md-6 d-none" id="supportedDeviceTypeInput">
                 <label class="form-label">{{ __('plan.lbl_supported_device_type_options') }}</label>
                 <div class="d-flex flex-wrap gap-3">
                     @foreach(['tablet', 'laptop', 'mobile'] as $option)
                     <div class="form-check form-check-inline">
                         <input type="hidden" name="supported_device_types[{{ $option }}]" value="0">
-                        <input type="checkbox" name="supported_device_types[{{ $option }}]}" id="{{ $option }}" value="1" {{ isset($limits['supported-device-type'][$option]) && $limits['supported-device-type'][$option] ? 'checked' : '' }}>
+                        <input type="checkbox" name="supported_device_types[{{ $option }}]" id="{{ $option }}" value="1" {{ isset($limits['supported-device-type'][$option]) && $limits['supported-device-type'][$option] ? 'checked' : '' }}>
                         <label for="{{ $option }}">{{ ucfirst($option) }}</label>
                     </div>
                     @endforeach

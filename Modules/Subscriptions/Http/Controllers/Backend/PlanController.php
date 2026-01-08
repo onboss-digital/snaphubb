@@ -446,11 +446,11 @@ class PlanController extends Controller
 
         $plan = $plan;
 
-        $planLimits = PlanLimitationMapping::where('plan_id', $id)->get();
+        $planLimits = PlanLimitation::where('status', 1)->get();
+        $planLimitsMappings = PlanLimitationMapping::where('plan_id', $id)->get();
 
-        // $planLimits=PlanLimitation::where('status',1)->get();
         $limits = [];
-        foreach ($planLimits as $mapping) {
+        foreach ($planLimitsMappings as $mapping) {
             $limits[$mapping->limitation_slug] = json_decode($mapping->limit, true);
         }
         $downloadoptions = Constant::where('type', 'video_quality')->get();

@@ -49,7 +49,7 @@ class PlanRequest extends FormRequest
             'price.numeric' => 'Price must be a number.',
             'price.min' => 'Price must be at least 0.01.',
             'language.string' => 'Language must be a valid string.',
-            'custom_gateway.in' => 'Custom gateway must be one of: CartPanda, For4pay, TriboPay.',
+            'custom_gateway.in' => 'Custom gateway must be one of: CartPanda, For4pay, TriboPay, Stripe.',
             'external_product_id.string' => 'External product ID must be a valid string.',
             'external_url.url' => 'External URL must be a valid URL.',
         ];
