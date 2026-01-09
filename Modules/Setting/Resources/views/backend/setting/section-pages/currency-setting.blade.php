@@ -73,7 +73,7 @@
     </table>
   </div>
 </div>
-@include('setting::backend.setting.section-pages.Forms.currency-form',['curr_names' => $curr_names])
+@include('setting::backend.setting.section-pages.Forms.currency-form', ['curr_names' => $curr_names])
 
 
 @endsection

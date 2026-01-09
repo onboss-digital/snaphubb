@@ -36,6 +36,9 @@ class Plan extends BaseModel
         'pages_upsell_succes_url',
         'pages_downsell_url',
         'pages_upsell_fail_url',
+        'stripe_product_id',
+        'pushinpay_product_id',
+        'gateway_config',
     ];
 
     const CUSTOM_FIELD_MODEL = 'Modules\Subscriptions\Models\Plan';
@@ -46,6 +49,7 @@ class Plan extends BaseModel
         'total_price' => 'decimal:2',
         'status' => 'boolean',
         'discount' => 'boolean',
+        'gateway_config' => 'array',
     ];
 
     public function planLimitation()

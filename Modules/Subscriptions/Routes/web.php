@@ -4,6 +4,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Subscriptions\Http\Controllers\Backend\PlanController;
 use Modules\Subscriptions\Http\Controllers\Backend\PlanLimitationController;
+use Modules\Subscriptions\Http\Controllers\Backend\PlanLimitationMappingController;
 use Modules\Subscriptions\Http\Controllers\Backend\SubscriptionController;
 
 /*
@@ -75,6 +76,17 @@ Route::group(['prefix' => 'app', 'as' => 'backend.', 'middleware' => ['auth','ad
             Route::post('update-status/{id}', [PlanLimitationController::class, 'update_status'])->name('update_status');
         });
         Route::resource('planlimitation', PlanLimitationController::class);
+
+        // Plan Limitation Mapping Routes
+        Route::group(['prefix' => '/planlimitation_mapping', 'as' => 'planlimitation_mapping.'], function () {
+            Route::get('/', [PlanLimitationMappingController::class, 'index'])->name('index');
+            Route::get('/index_data', [PlanLimitationMappingController::class, 'index_data'])->name('index_data');
+            Route::get('/plan/{plan}', [PlanLimitationMappingController::class, 'planLimitations'])->name('plan_limitations');
+            Route::post('/plan/{plan}/store', [PlanLimitationMappingController::class, 'storeLimitation'])->name('store_limitation');
+            Route::post('/toggle-status', [PlanLimitationMappingController::class, 'toggleStatus'])->name('toggle_status');
+            Route::delete('/{mapping}', [PlanLimitationMappingController::class, 'destroy'])->name('destroy');
+        });
+
 
 
     Route::group(['prefix' => 'subscription', 'as' => 'subscription.'], function () {

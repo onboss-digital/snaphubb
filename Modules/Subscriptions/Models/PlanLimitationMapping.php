@@ -3,6 +3,7 @@
 namespace Modules\Subscriptions\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class PlanLimitationMapping extends Model
 {
     use SoftDeletes;
@@ -16,5 +17,8 @@ class PlanLimitationMapping extends Model
         return $this->belongsTo(PlanLimitation::class, 'planlimitation_id', 'id')->withTrashed();
     }
 
-
+    public function plan()
+    {
+        return $this->belongsTo(Plan::class, 'plan_id', 'id')->withTrashed();
+    }
 }

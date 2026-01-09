@@ -92,16 +92,16 @@
             </div>
             <div class="col-md-3 col-lg-2">
                 {{ html()->label(__('plan.lbl_amount') . '<span class="text-danger">*</span>', 'price')->class('form-label') }}
-                {{
-                        html()->input('number', 'price', $data->price)
-                            ->class('form-control')
-                            ->id('price')
-                            ->attribute('step', '0.01')
-                            ->attribute('placeholder', __('placeholder.lbl_plan_price'))
-                            // ->attribute('oninput', "this.value = Math.abs(this.value)")
-                            // ->attribute('min', '0')
-                            ->attribute('required','required')
+                <div class="input-group">
+                    <span class="input-group-text" id="currency-symbol">$</span>
+                    {{
+                            html()->input('text', 'price', $data->price)
+                                ->class('form-control')
+                                ->id('price')
+                                ->attribute('placeholder', __('placeholder.lbl_plan_price'))
+                                ->attribute('required','required')
                     }}
+                </div>
                 @error('price')
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
@@ -194,6 +194,34 @@
                         ->attribute('placeholder', __('plan.lbl_external_product_id_placeholder'))
                 }}
                 @error('external_product_id')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- ✅ NOVO: Stripe Product ID Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label('Stripe Product ID', 'stripe_product_id')->class('form-label') }}
+                {{
+                    html()->text('stripe_product_id', old('stripe_product_id', $data->stripe_product_id))
+                        ->class('form-control')
+                        ->id('stripe_product_id')
+                        ->attribute('placeholder', 'prod_xxxxx')
+                }}
+                @error('stripe_product_id')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <!-- ✅ NOVO: Push in Pay Product ID Field -->
+            <div class="col-md-4 col-lg-2">
+                {{ html()->label('Push in Pay Product ID', 'pushinpay_product_id')->class('form-label') }}
+                {{
+                    html()->text('pushinpay_product_id', old('pushinpay_product_id', $data->pushinpay_product_id))
+                        ->class('form-control')
+                        ->id('pushinpay_product_id')
+                        ->attribute('placeholder', 'pp_xxxxx')
+                }}
+                @error('pushinpay_product_id')
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
@@ -760,5 +788,136 @@ $bumpCount = isset($data->orderBumps) ? $data->orderBumps->count() : 0;
     });
 
     document.getElementById('profile-limit').addEventListener('change', toggleProfileSection);
+
+    // Currency formatting configuration
+    const currencyFormats = {
+        USD: { symbol: '$', thousandsSeparator: ',', decimalSeparator: '.' },
+        EUR: { symbol: '€', thousandsSeparator: '.', decimalSeparator: ',' },
+        INR: { symbol: '₹', thousandsSeparator: ',', decimalSeparator: '.' },
+        BRL: { symbol: 'R$', thousandsSeparator: '.', decimalSeparator: ',' },
+        GBP: { symbol: '£', thousandsSeparator: ',', decimalSeparator: '.' },
+        JPY: { symbol: '¥', thousandsSeparator: ',', decimalSeparator: '.' },
+        CAD: { symbol: 'C$', thousandsSeparator: ',', decimalSeparator: '.' },
+        AUD: { symbol: 'A$', thousandsSeparator: ',', decimalSeparator: '.' },
+        CHF: { symbol: 'CHF', thousandsSeparator: "'", decimalSeparator: '.' },
+        CNY: { symbol: '¥', thousandsSeparator: ',', decimalSeparator: '.' },
+        MXN: { symbol: '$', thousandsSeparator: ',', decimalSeparator: '.' },
+        SGD: { symbol: 'S$', thousandsSeparator: ',', decimalSeparator: '.' },
+        HKD: { symbol: 'HK$', thousandsSeparator: ',', decimalSeparator: '.' },
+        NZD: { symbol: 'NZ$', thousandsSeparator: ',', decimalSeparator: '.' },
+        SEK: { symbol: 'kr', thousandsSeparator: ' ', decimalSeparator: ',' },
+        NOK: { symbol: 'kr', thousandsSeparator: ' ', decimalSeparator: ',' },
+        DKK: { symbol: 'kr', thousandsSeparator: ' ', decimalSeparator: ',' },
+        PLN: { symbol: 'zł', thousandsSeparator: ' ', decimalSeparator: ',' },
+        CZK: { symbol: 'Kč', thousandsSeparator: ' ', decimalSeparator: ',' },
+        THB: { symbol: '฿', thousandsSeparator: ',', decimalSeparator: '.' },
+        MYR: { symbol: 'RM', thousandsSeparator: ',', decimalSeparator: '.' },
+        PHP: { symbol: '₱', thousandsSeparator: ',', decimalSeparator: '.' },
+        ILS: { symbol: '₪', thousandsSeparator: ',', decimalSeparator: '.' },
+        ZAR: { symbol: 'R', thousandsSeparator: ' ', decimalSeparator: ',' }
+    };
+
+    const priceInputField = document.getElementById('price');
+    const currencySelectField = document.getElementById('currency');
+    const currencySymbolField = document.getElementById('currency-symbol');
+
+    // Extract only numeric value (digits and single dot)
+    function extractNumbers(value) {
+        // Remove everything except digits and one dot
+        let clean = value.replace(/[^\d.]/g, '');
+        
+        // Keep only the last dot as decimal separator
+        const parts = clean.split('.');
+        if (parts.length > 2) {
+            clean = parts.slice(0, -1).join('') + '.' + parts[parts.length - 1];
+        }
+        
+        return clean;
+    }
+
+    // Format the display value based on currency
+    function formatDisplay(numValue, currency) {
+        if (!numValue || numValue === '' || numValue === '.') return '';
+        
+        const format = currencyFormats[currency] || currencyFormats.USD;
+        
+        // Ensure value uses dot as decimal
+        const parts = numValue.split('.');
+        let integer = parts[0] || '0';
+        let decimal = parts[1] || '';
+        
+        // Limit decimal to 2 places
+        decimal = decimal.substring(0, 2);
+        
+        // Add thousands separator to integer part
+        integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, format.thousandsSeparator);
+        
+        // Combine with currency decimal separator
+        if (decimal) {
+            return integer + format.decimalSeparator + decimal;
+        }
+        return integer;
+    }
+
+    // Update currency symbol when dropdown changes
+    currencySelectField.addEventListener('change', function() {
+        const format = currencyFormats[this.value] || currencyFormats.USD;
+        currencySymbolField.textContent = format.symbol;
+        
+        // Reformat current value with new currency separators
+        if (priceInputField.value) {
+            const numValue = extractNumbers(priceInputField.value);
+            priceInputField.value = formatDisplay(numValue, this.value);
+        }
+    });
+
+    // Handle all input changes - filter out letters and format
+    priceInputField.addEventListener('input', function() {
+        const currency = currencySelectField.value || 'USD';
+        
+        // Extract only numbers and one dot
+        const numValue = extractNumbers(this.value);
+        
+        // Format for display
+        this.value = formatDisplay(numValue, currency);
+    });
+
+    // Prevent invalid key presses
+    priceInputField.addEventListener('keypress', function(e) {
+        const char = String.fromCharCode(e.which);
+        // Allow only digits and single dot
+        if (!/[\d.]/.test(char)) {
+            e.preventDefault();
+        }
+    });
+
+    // Handle paste events
+    priceInputField.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        const numValue = extractNumbers(pastedText);
+        const currency = currencySelectField.value || 'USD';
+        this.value = formatDisplay(numValue, currency);
+    });
+
+    // Before form submission, store pure numeric value
+    document.getElementById('form-submit').addEventListener('submit', function() {
+        const numValue = extractNumbers(priceInputField.value);
+        priceInputField.value = numValue;
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (currencySelectField.value) {
+            const format = currencyFormats[currencySelectField.value] || currencyFormats.USD;
+            currencySymbolField.textContent = format.symbol;
+            
+            // Format any pre-filled value
+            if (priceInputField.value) {
+                const numValue = extractNumbers(priceInputField.value);
+                priceInputField.value = formatDisplay(numValue, currencySelectField.value);
+            }
+        }
+    });
 </script>
 @endpush

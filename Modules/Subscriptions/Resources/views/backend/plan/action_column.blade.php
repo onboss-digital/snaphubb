@@ -2,6 +2,9 @@
      <div class="d-flex gap-2 align-items-center justify-content-end">
         @if(!$data->trashed())
             @hasPermission('edit_plans')
+            <a class="btn btn-primary-subtle btn-sm fs-4" data-bs-toggle="tooltip" title="Plan Limitations" href="{{ route('backend.planlimitation_mapping.plan_limitations', $data->id) }}">
+                <i class="ph ph-list align-middle"></i>
+            </a>
             <a  class="btn btn-warning-subtle btn-sm fs-4" data-bs-toggle="tooltip" title="{{__('messages.edit')}}" href="{{ route('backend.plans.edit', $data->id) }}"> <i class="ph ph-pencil-simple-line align-middle"></i></a>
             @endhasPermission
 

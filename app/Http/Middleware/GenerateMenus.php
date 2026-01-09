@@ -41,7 +41,7 @@ class GenerateMenus
             $permissionsToCheck = ['view_genres', 'view_movies', 'view_tvshow', 'view_seasons','view_episodes','view_videos','view_livetv',
             'view_tvcategory','view_tvchannel','view_castcrew','view_director'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (auth()->user()->hasRole('admin') || collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => __('sidebar.media_management'), 'order' => 0]);
             }
 
@@ -182,7 +182,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_subscription', 'view_plans', 'view_planlimitation'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (auth()->user()->hasRole('admin') || collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => __('sidebar.subscription'), 'order' => 0]);
             }
 
@@ -230,7 +230,7 @@ class GenerateMenus
 
             $permissionsToCheck = ['view_subscriptions'];
 
-            if (collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
+            if (auth()->user()->hasRole('admin') || collect($permissionsToCheck)->contains(fn ($permission) => auth()->user()->can($permission))) {
                 $this->staticMenu($menu, ['title' => __('sidebar.user'), 'order' => 0]);
             }
 
@@ -418,6 +418,10 @@ class GenerateMenus
             $menu->filter(function ($item) {
                 if ($item->data('permission')) {
                     if (auth()->check()) {
+                        // Super-admin by role should bypass permission checks
+                        if (auth()->user()->hasRole('admin')) {
+                            return true;
+                        }
                         if (\Auth::getDefaultDriver() == 'admin') {
                             return true;
                         }

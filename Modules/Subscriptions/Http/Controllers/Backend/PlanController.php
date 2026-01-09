@@ -451,8 +451,13 @@ class PlanController extends Controller
 
         $limits = [];
         foreach ($planLimitsMappings as $mapping) {
-            $limits[$mapping->limitation_slug] = json_decode($mapping->limit, true);
+            $limits[$mapping->limitation_slug] = [
+                'limit' => $mapping->limit,
+                'value' => $mapping->limit,
+                'planlimitation_id' => $mapping->planlimitation_id,
+            ];
         }
+        
         $downloadoptions = Constant::where('type', 'video_quality')->get();
         $languages = Constant::where('type', 'language')->where('status', 1)->get();
         $discount = $data->discount;
