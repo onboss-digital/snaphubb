@@ -452,21 +452,18 @@ class SettingsController extends Controller
 
     public function currencySettings()
     {
-        $currencies = Currency::all(); // Fetch all currencies, adjust query as needed
+        $currencies = Currency::all(); // Fetch all currencies
 
-        $query_data = Country::get();
-
+        // Build currency names list for the dropdown
         $curr_names = [];
-        foreach ($query_data as $row) {
+        foreach ($currencies as $row) {
             $curr_names[] = [
                 'id' => $row->id,
-                'name' => $row->name,
                 'currency_name' => $row->currency_name,
-                'symbol' => $row->symbol,
+                'currency_symbol' => $row->currency_symbol,
                 'currency_code' => $row->currency_code,
             ];
         }
-
 
         return view('setting::backend.setting.section-pages.currency-setting', compact('currencies', 'curr_names'));
     }
@@ -643,7 +640,7 @@ class SettingsController extends Controller
             $value = $setting->val;
 
             if (in_array($field, ['logo', 'mini_logo', 'dark_logo', 'dark_mini_logo', 'favicon'])) {
-                $value = asset($value);
+                $value = !empty($value) ? asset($value) : $value;
             }
 
             $data[$field] = $value;

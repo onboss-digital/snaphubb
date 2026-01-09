@@ -68,7 +68,17 @@ class ReviewController extends Controller
 
         $entertainment = Entertainment::where('id', $request->entertainment_id)->first();
 
-        $result = Review::updateOrCreate(['id' => $request->id], $rating_data);
+        // Find existing review for this user and entertainment
+        $result = Review::updateOrCreate(
+            [
+                'entertainment_id' => $request->entertainment_id,
+                'user_id' => $user->id
+            ],
+            [
+                'rating' => $request->input('rating', 0),
+                'review' => $request->input('review', '')
+            ]
+        );
 
         Cache::flush();
 

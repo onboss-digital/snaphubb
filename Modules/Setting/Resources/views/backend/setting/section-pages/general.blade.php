@@ -86,7 +86,7 @@
               <div class="card text-center">
                 <div class="card-body">
                   {{-- <img id="logoViewer" src="{{ asset('img/logo/logo.png') }}" class="img-fluid" alt="logo" /> --}}
-                  <img id="logoViewer" src={{ $data['logo'] ?? asset('img/logo/logo.png') }} class="img-fluid" alt="logo" />
+                  <img id="logoViewer" src="{{ $data['logo'] ?? asset('img/logo/logo.png') }}" class="img-fluid" alt="logo" />
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@
               <div class="card text-center">
                 <div class="card-body">
 
-                    <img id="miniLogoViewer"  src={{ $data['mini_logo'] ?? asset('img/logo/mini_logo.png')  }} class="img-fluid" alt="mini_logo" />
+                    <img id="miniLogoViewer"  src="{{ $data['mini_logo'] ?? asset('img/logo/mini_logo.png') }}" class="img-fluid" alt="mini_logo" />
                   {{-- <img id="miniLogoViewer" src="{{ asset('img/logo/mini_logo.png') }}" class="img-fluid" alt="mini_logo" /> --}}
                 </div>
               </div>
@@ -132,7 +132,7 @@
             <div class="col-lg-4">
               <div class="card text-center bg-dark">
                 <div class="card-body">
-                    <img id="darkLogoViewer"  src={{ $data['dark_logo'] ?? asset('img/logo/dark_logo.png')  }} class="img-fluid" alt="dark_logo" />
+                    <img id="darkLogoViewer"  src="{{ $data['dark_logo'] ?? asset('img/logo/dark_logo.png') }}" class="img-fluid" alt="dark_logo" />
                   {{-- <img id="darkLogoViewer" src="{{ asset('img/logo/dark_logo.png') }}" class="img-fluid" alt="dark_logo" /> --}}
                 </div>
               </div>
@@ -155,7 +155,7 @@
             <div class="col-lg-4">
               <div class="card text-center bg-light">
                 <div class="card-body">
-                    <img id="lightLogoViewer"  src={{ $data['light_logo'] ?? asset('img/logo/light_logo.png')  }} class="img-fluid" alt="light_logo" />
+                    <img id="lightLogoViewer"  src="{{ $data['light_logo'] ?? asset('img/logo/light_logo.png') }}" class="img-fluid" alt="light_logo" />
                   {{-- <img id="lightLogoViewer" src="{{ asset('img/logo/light_logo.png') }}" class="img-fluid" alt="light_logo" /> --}}
                 </div>
               </div>

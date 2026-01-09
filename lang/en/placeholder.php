@@ -55,14 +55,19 @@ return [
     'lbl_select_imdb_rating'=>'Select IMDb Rating',
     'lbl_select_type'=>'Select Type',
     'lbl_select_language'=>'Select Language',
-    'lbl_select_genre'=>'Select Genre',
+    'lbl_select_category'=>'Select Category',
     'lbl_select_actor'=>'Select Actor',
     'lbl_select_director'=>'Select Director',
     'lbl_select_video_type'=>'Select Video Type',
     'lbl_select_quality'=>'Select Quality',
     'lbl_select_tvcategory'=>'Select TV Category',
     'lbl_select_country'=>'Select Country',
-
+    // Content Rating Options
+    'content_rating_nc17' => 'NC-17 (No one under 17)',
+    'content_rating_18' => '18+ (Restricted to adults)',
+    'content_rating_explicit' => 'Explicit Content',
+    'content_rating_sexual' => 'Sexual Content',
+    'content_rating_language' => 'Strong Language',
     // Subscription Expired Modal
     'lbl_subscription_expired_modal_title' => 'Subscription Expired',
     'lbl_subscription_expired_modal_message' => 'Your subscription has expired and you no longer have access to premium content.',
@@ -75,6 +80,13 @@ return [
     'lbl_subscription_expired_modal_benefit_3' => 'Ad-free viewing experience',
     'lbl_subscription_expired_modal_benefit_4' => 'Download content for offline viewing',
     'lbl_subscription_expired_modal_renew_button' => 'Renew Subscription',
-    'lbl_subscription_expired_modal_later_button' => 'Maybe Later'
+    'lbl_subscription_expired_modal_later_button' => 'Maybe Later',
+    
+    // Subscription Status Banner Messages
+    'subscription_active' => 'You are protected until :date',
+    'subscription_7_days' => 'Your subscription expires in 7 days',
+    'subscription_3_days' => 'ATTENTION: 3 days remaining',
+    'subscription_1_day' => 'URGENT: Last chance today!',
+    'subscription_expired' => 'Subscription expired - Renew now'
    
 ];

@@ -230,5 +230,7 @@ return [
     'lbl_messaging_sender_id'=>'Messaging Sender ID',
     'lbl_app_id'=>'App ID',
     'lbl_measurement_id'=>'Measurement ID',
+    'submit' => 'Enviar',
+    'cancel' => 'Cancelar',
 
 ];

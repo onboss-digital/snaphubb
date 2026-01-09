@@ -192,6 +192,26 @@ return[
     'because_you_watch' => 'لأنك تشاهد',
     'email_prompt' => 'لا تقلق! يحدث ذلك. يرجى إدخال البريد الإلكتروني <br> المرتبط بحسابك',
     'cancle_subscription' => 'هل أنت متأكد أنك تريد إلغاء اشتراكك؟',
-
+    'to_leave_review' => 'لترك تقييم على هذا الفيديو',
+    'load_more' => 'تحميل المزيد من التقييمات',
+    'comments' => 'التعليقات',
+    'share_your_thoughts' => 'شارك أفكارك حول هذا الفيديو',
+    'video_casting' => 'بث الفيديو',
+    'video_casting_enabled' => 'مفعل',
+    'video_casting_disabled' => 'غير متاح',
+    'ads_will_be' => 'سيتم',
+    'ads_shown' => 'عرض الإعلانات',
+    'ads_not_shown' => 'عدم عرض الإعلانات',
+    'device_limit' => 'يمكنك استخدام',
+    'device_limit_mobile' => 'جهاز محمول واحد فقط',
+    'device_limit_simultaneously' => 'جهاز متزامن',
+    'download_resolutions' => 'دقة التنزيل:',
+    'video_quality' => 'جودة الفيديو',
+    'mobile_only' => 'للاستمرار في الاستمتاع بالوصول غير المحدود إلى محتوياتنا، يرجى الاشتراك في أحد خططنا. قم بالترقية الآن لتجربة مشاهدة محسّنة!',
+    'streaming_quality' => 'جودة البث',
+    'simultaneous_streams' => 'البثوث المتزامنة',
+    'offline_download' => 'التنزيل بدون اتصال',
+    'profile_limit' => 'يمكنك إنشاء حتى',
+    'profile_limit_text' => 'ملفات تعريف في هذه الخطة لمستخدمين مختلفين.'
 
 ];

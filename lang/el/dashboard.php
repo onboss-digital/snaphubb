@@ -30,7 +30,7 @@ return [
     'lbl_total_movies' => 'Συνολικές Ταινίες',
     'lbl_total_shows' => 'Συνολικές Εκπομπές',
     'lbl_total_videos' => 'Συνολικά Βίντεο',
-    'lbl_top_genres' => 'Top 5 είδη',
+    'lbl_top_categories' => 'Top 5 κατηγορίες',
     'total_revenue_subscribers' => 'Συνολικά Έσοδα από Συνδρομές',
     'new_subscribers' => 'Νέοι Συνδρομητές',
     'lbl_top_rated' => 'Κορυφαία Βαθμολογία',

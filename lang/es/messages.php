@@ -103,7 +103,7 @@ return [
     'user_details_successfull' => 'User details retrieved successfully!',
     'delete_account' => 'Your account has been scheduled for deletion.',
     'data_not_available'=>'Data Not avaible',
-    'unknown_user'=>'Streamit User',
+    'unknown_user'=>'Usuario Snaphubb',
     'myprofile'=>'My Profile',
     'logout'=>'Logout',
     'change_language'=>'Change Language',
@@ -230,5 +230,7 @@ return [
     'lbl_messaging_sender_id'=>'Messaging Sender ID',
     'lbl_app_id'=>'App ID',
     'lbl_measurement_id'=>'Measurement ID',
+    'submit' => 'Enviar',
+    'cancel' => 'Cancelar',
 
 ];

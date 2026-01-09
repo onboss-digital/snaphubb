@@ -217,5 +217,7 @@ return [
     'lbl_messaging_sender_id' => 'ID de l\'expéditeur de messages',
     'lbl_app_id' => 'ID de l\'application',
     'lbl_measurement_id' => 'ID de mesure',
+    'submit' => 'Soumettre',
+    'cancel' => 'Annuler',
 
 ];

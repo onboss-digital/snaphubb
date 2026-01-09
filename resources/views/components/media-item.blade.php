@@ -1,7 +1,7 @@
 <div class="media-item d-flex align-items-center gap-3">
-    <img src="{{ $thumbnail ?  $thumbnail : setDefaultImage($thumbnail)}}" alt="{{ $name }}" class="media-thumbnail avatar avatar-100">
+    <img src="{{ $thumbnail ?: setDefaultImage() }}" alt="{{ $name }}" class="media-thumbnail avatar avatar-100">
     <div class="media-details">
-        <h4 class="media-name mb-1">{{ $name }}</h3>
+        <h4 class="media-name mb-1">{{ $name }}</h4>
         @if($type == 'episode')
             <p class="media-genre mb-1">{{ $seasonName }}</p>
         @endif

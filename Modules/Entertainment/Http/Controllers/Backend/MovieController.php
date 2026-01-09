@@ -120,7 +120,8 @@ class MovieController extends Controller
 
     public function index_data(Datatables $datatable, Request $request)
     {
-        $filter = $request->filter;
+        $filter = $request->filter ?? [];
+        $filter = is_array($filter) ? $filter : [];
         $type='movie';
         return $this->entertainmentService->getDataTable($datatable, $filter, $type);
     }
@@ -203,6 +204,44 @@ class MovieController extends Controller
              ], 200);
          }
 
+         /**
+          * Store a newly created resource in storage.
+          */
+         public function store(Request $request)
+         {
+             return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->store($request);
+         }
+
+         /**
+          * Display the specified resource.
+          */
+         public function show($id)
+         {
+             return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->show($id);
+         }
+
+         /**
+          * Show the form for editing the specified resource.
+          */
+         public function edit($id)
+         {
+             return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->edit($id);
+         }
+
+         /**
+          * Update the specified resource in storage.
+          */
+         public function update(Request $request, $id)
+         {
+             return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->update($request, $id);
+         }
+
+         /**
+          * Remove the specified resource from storage.
+          */
+         public function destroy($id)
+         {
+             return app('Modules\\Entertainment\\Http\\Controllers\\Backend\\EntertainmentsController')->destroy($id);
+         }
+
 }
-
-

@@ -100,7 +100,7 @@
             <label class="form-label">{{ __('setting_mail_page.lbl_from_name') }} <span class="text-danger">*</span></label>
             {!! html()->text('from_name')
                 ->class('form-control')
-                ->placeholder('Streamit-Laravel')
+                ->placeholder('Snaphubb-Laravel')
                 ->value(old('from_name', $data['from_name'] ?? ''))
                 ->required() !!}
             @error('from_name')

@@ -18,6 +18,7 @@ use Modules\Tax\Models\Tax;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 
 class WebHookController extends Controller
@@ -71,7 +72,7 @@ class WebHookController extends Controller
     }
 
 
-    protected function handleSubscrible($plan_id, $amount, $payment_type, $transaction_id, $user)
+    protected function handleSubscrible($plan_id, $amount, $payment_type, $transaction_id, $user, $bumps = [])
     {
         $plan = Plan::findOrFail($plan_id);
         $limitation_data = PlanlimitationMappingResource::collection($plan->planLimitation);
@@ -106,6 +107,24 @@ class WebHookController extends Controller
             'plan_type' => $limitation_data ? json_encode($limitation_data) : null,
             'payment_id' => null,
         ]);
+
+        // NOVO: Registrar bumps adquiridos
+        if (!empty($bumps)) {
+            foreach ($bumps as $bump_id) {
+                // Armazenar qual bump o usuário comprou
+                DB::table('user_purchased_bumps')->updateOrInsert(
+                    [
+                        'user_id' => $user->id,
+                        'bump_id' => $bump_id,
+                    ],
+                    [
+                        'plan_id' => $plan_id,
+                        'purchased_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
+            }
+        }
 
         // Create a subscription transaction
         SubscriptionTransactions::create([
@@ -187,9 +206,12 @@ class WebHookController extends Controller
                 if ($product_hash) {
                     $plan = Plan::where('custom_gateway', '=', 'TriboPay')
                         ->where('external_product_id', '=', $product_hash)
-                        ->firstOrFail();
+                        ->first();
                 }
 
+                if (!$plan) {
+                    return response()->json(['status' => 'error', 'message' => 'Plan not found']);
+                }
 
                 $amount = $plan->total_price;
                 $transaction_id = $logData['transaction']['id'] ?? null;
@@ -420,7 +442,9 @@ class WebHookController extends Controller
                             ->firstOrFail();
                     }
                     
-                    if (!$plan) return response()->json(['status' => 'ppp']);
+                    if (!$plan) {
+                        return response()->json(['status' => 'error', 'message' => 'Plan not found']);
+                    }
                     
                     $user = User::firstOrCreate([
                         'email' => $email ?? null

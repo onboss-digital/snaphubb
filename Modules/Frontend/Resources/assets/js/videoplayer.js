@@ -26,9 +26,20 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  async function checkSimultaneousAccess() {
+    try {
+      const response = await fetch(`${baseUrl}/check-simultaneous-access`)
+      const data = await response.json()
+      return data.allowed
+    } catch (error) {
+      return true // Allow by default on error
+    }
+  }
+
   async function checkAuthenticationAndDeviceSupport() {
-    const isDeviceSupported = await CheckDeviceType()
-    return isAuthenticated && isDeviceSupported
+    // Check if user can access from multiple devices simultaneously
+    const canAccessSimultaneously = await checkSimultaneousAccess()
+    return isAuthenticated && canAccessSimultaneously
   }
 
   async function loadVideoIfAuthenticated() {
@@ -53,7 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
           player.load()
           player.one('loadedmetadata', async function () {
             player.currentTime(0)
-            player.muted(true) // Mute the player for autoplay
             try {
               await player.play()
             } catch (error) {
@@ -241,7 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (isDeviceSupported) {
               player.currentTime(lastWatchedTime)
               if (document.querySelector('#videoPlayer').getAttribute('data-movie-access') === 'free') {
-                player.muted(true) // Mute the player for autoplay
                 try {
                   await player.play() // Attempt to autoplay
                 } catch (error) {
@@ -356,9 +365,18 @@ document.addEventListener('DOMContentLoaded', function () {
       player.src({ type: 'video/vimeo', src: `https://vimeo.com/${videoId}` })
     } else if (platform === 'hls') {
       player.src({ type: 'application/x-mpegURL', src: url })
+    } else if (platform === 'bunny') {
+      // For Bunny CDN, embed as iframe
+      player.src({ type: 'text/html', src: url })
+    } else if (platform === 'googledrive') {
+      // For Google Drive, create an iframe player
+      player.src({ type: 'text/html', src: url })
+    } else if (platform === 'external') {
+      // For external URLs (embedded content)
+      player.src({ type: 'text/html', src: url })
     } else if (platform === 'local') {
 
-      player.src({ type: mimeType, src: url })
+      player.src({ type: mimeType || 'video/mp4', src: url })
     }
 
     const existingQualitySelector = document.querySelector('.vjs-quality-selector')
@@ -412,6 +430,12 @@ document.addEventListener('DOMContentLoaded', function () {
                             player.src({ type: 'video/vimeo', src: `https://vimeo.com/${videoId}` })
                           } else if (platform === 'hls') {
                             player.src({ type: 'application/x-mpegURL', src: url })
+                          } else if (platform === 'bunny') {
+                            player.src({ type: 'text/html', src: data.url })
+                          } else if (platform === 'googledrive') {
+                            player.src({ type: 'text/html', src: data.url })
+                          } else if (platform === 'external') {
+                            player.src({ type: 'text/html', src: data.url })
                           }
                         })
                         .catch((error) => console.error('Error playing video:', error))

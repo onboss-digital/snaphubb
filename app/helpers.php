@@ -13,86 +13,89 @@ use Stichoza\GoogleTranslate\GoogleTranslate;
 use Illuminate\Support\Facades\Artisan;
 use Modules\Currency\Models\Currency;
 
-function mail_footer($type)
-{
-    return [
-        'notification_type' => $type,
-        'logged_in_user_fullname' => auth()->user() ? auth()->user()->full_name ?? default_user_name() : '',
-        'logged_in_user_role' => auth()->user() ? auth()->user()->getRoleNames()->first()->name ?? '-' : '',
-        'company_name' => setting('app_name'),
-        'company_contact_info' => implode('', [
-            setting('helpline_number') . PHP_EOL,
-            setting('inquriy_email'),
-        ]),
-    ];
+if (!function_exists('mail_footer')) {
+    function mail_footer($type)
+    {
+        return [
+            'notification_type' => $type,
+            'logged_in_user_fullname' => auth()->user() ? auth()->user()->full_name ?? default_user_name() : '',
+            'logged_in_user_role' => auth()->user() ? auth()->user()->getRoleNames()->first()->name ?? '-' : '',
+            'company_name' => setting('app_name'),
+            'company_contact_info' => implode('', [
+                setting('helpline_number') . PHP_EOL,
+                setting('inquriy_email'),
+            ]),
+        ];
+    }
 }
 
+if (!function_exists('sendNotification')) {
+    function sendNotification($data)
+    {
+        $mailable = \Modules\NotificationTemplate\Models\NotificationTemplate::where('type', $data['notification_type'])->with('defaultNotificationTemplateMap')->first();
+        if ($mailable != null && $mailable->to != null) {
+            $mails = json_decode($mailable->to);
 
-function sendNotification($data)
-{
-    $mailable = \Modules\NotificationTemplate\Models\NotificationTemplate::where('type', $data['notification_type'])->with('defaultNotificationTemplateMap')->first();
-    if ($mailable != null && $mailable->to != null) {
-        $mails = json_decode($mailable->to);
+            foreach ($mails as $key => $mailTo) {
+                $data['type'] = $data['notification_type'];
+                $subscription = isset($data['subscription']) ? $data['subscription'] : null;
+                if (isset($subscription) && $subscription != null) {
+                    $data['id'] = $subscription['id'];
+                    $data['user_id'] = $subscription['user_id'];
+                    $data['plan_id'] = $subscription['plan_id'];
+                    $data['name'] = $subscription['name'];
+                    $data['identifier'] = $subscription['identifier'];
+                    $data['type'] = $subscription['type'];
+                    $data['status'] = $subscription['status'];
+                    $data['amount'] = $subscription['amount'];
+                    $data['plan_type'] = $subscription['plan_type'];
+                    $data['username'] = $subscription['user']->full_name;
+                    $data['notification_group'] = 'subscription';
+                    $data['site_url'] = env('APP_URL');
 
-        foreach ($mails as $key => $mailTo) {
-            $data['type'] = $data['notification_type'];
-            $subscription = isset($data['subscription']) ? $data['subscription'] : null;
-            if (isset($subscription) && $subscription != null) {
-                $data['id'] = $subscription['id'];
-                $data['user_id'] = $subscription['user_id'];
-                $data['plan_id'] = $subscription['plan_id'];
-                $data['name'] = $subscription['name'];
-                $data['identifier'] = $subscription['identifier'];
-                $data['type'] = $subscription['type'];
-                $data['status'] = $subscription['status'];
-                $data['amount'] = $subscription['amount'];
-                $data['plan_type'] = $subscription['plan_type'];
-                $data['username'] = $subscription['user']->full_name;
-                $data['notification_group'] = 'subscription';
-                $data['site_url'] = env('APP_URL');
+                    unset($data['subscription']);
 
-                unset($data['subscription']);
+                }
 
-            }
+                switch ($mailTo) {
+                    case 'admin':
 
-            switch ($mailTo) {
-                case 'admin':
+                        $admin = \App\Models\User::role('admin')->first();
 
-                    $admin = \App\Models\User::role('admin')->first();
-
-                    if (isset($admin->email)) {
-                        try {
-                            $admin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
-                        } catch (\Exception $e) {
-                            Log::error($e);
+                        if (isset($admin->email)) {
+                            try {
+                                $admin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
+                            } catch (\Exception $e) {
+                                Log::error($e);
+                            }
                         }
-                    }
 
-                    break;
-                // case 'demo_admin':
+                        break;
+                    // case 'demo_admin':
 
-                //     $demoadmin = \App\Models\User::role('demo_Admin')->first();
+                    //     $demoadmin = \App\Models\User::role('demo_Admin')->first();
 
-                //     if (isset($demoadmin->email)) {
-                //         try {
-                //             $demoadmin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
-                //         } catch (\Exception $e) {
-                //             Log::error($e);
-                //         }
-                //     }
+                    //     if (isset($demoadmin->email)) {
+                    //         try {
+                    //             $demoadmin->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
+                    //         } catch (\Exception $e) {
+                    //             Log::error($e);
+                    //         }
+                    //     }
 
-                //     break;
-                case 'user':
-                    if (isset($data['user_id'])) {
-                        $user = \App\Models\User::find($data['user_id']);
-                        try {
-                            $user->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
-                        } catch (\Exception $e) {
-                            Log::error($e);
+                    //     break;
+                    case 'user':
+                        if (isset($data['user_id'])) {
+                            $user = \App\Models\User::find($data['user_id']);
+                            try {
+                                $user->notify(new \App\Notifications\CommonNotification($data['notification_type'], $data));
+                            } catch (\Exception $e) {
+                                Log::error($e);
+                            }
                         }
-                    }
 
-                    break;
+                        break;
+                }
             }
         }
     }
@@ -769,9 +772,25 @@ function decryptVideoUrl($encryptedUrl)
             return ['platform' => 'vimeo', 'videoId' => $vimeoMatches[1]];
         }
 
+        // Check if the URL is a Bunny CDN link (iframe or embed)
+        if (strpos($decryptedUrl, 'iframe.mediadelivery.net') !== false || strpos($decryptedUrl, 'b-cdn.net') !== false) {
+            return ['platform' => 'bunny', 'url' => $decryptedUrl, 'mimeType' => 'text/html'];
+        }
+
         // Check if the URL is an HLS stream (m3u8)
         if (preg_match('/\.m3u8$/', $decryptedUrl)) {
-            return ['platform' => 'hls', 'url' => $decryptedUrl];
+            return ['platform' => 'hls', 'url' => $decryptedUrl, 'mimeType' => 'application/x-mpegURL'];
+        }
+
+        // Check if it's a Google Drive link
+        if (strpos($decryptedUrl, 'drive.google.com') !== false || strpos($decryptedUrl, 'docs.google.com/file') !== false) {
+            return ['platform' => 'googledrive', 'url' => $decryptedUrl, 'mimeType' => 'text/html'];
+        }
+
+        // Check if it's an Embedded/iframe URL (generic external URL for embedding)
+        if (filter_var($decryptedUrl, FILTER_VALIDATE_URL) && !Storage::exists(str_replace(url('/storage'), 'public', $decryptedUrl))) {
+            // It's an external URL that's not a known platform and not a local file
+            return ['platform' => 'external', 'url' => $decryptedUrl, 'mimeType' => 'text/html'];
         }
 
         // Check if it's a local file
@@ -779,11 +798,10 @@ function decryptVideoUrl($encryptedUrl)
         if (Storage::exists($filePath)) {
             $actualPath = Storage::path($filePath);
             $fileMimeType = mime_content_type($actualPath);
-            return ['platform' => 'local', 'url' => $actualPath, 'mimeType' => $fileMimeType];
+            return ['platform' => 'local', 'url' => $decryptedUrl, 'mimeType' => $fileMimeType];
         }
 
         // If file not found
-
         return ['error' => 'File not found'];
     } catch (\Exception $e) {
 
@@ -793,6 +811,16 @@ function decryptVideoUrl($encryptedUrl)
 
 function extractFileNameFromUrl($url = '')
 {
+    // Return empty string if URL is null or empty
+    if ($url === null || empty($url)) {
+        return '';
+    }
+
+    // Ensure $url is a string
+    if (!is_string($url)) {
+        return '';
+    }
+
     return basename(parse_url($url, PHP_URL_PATH));
 }
 
@@ -837,8 +865,13 @@ function extractFileNameFromUrl($url = '')
 
 function setBaseUrlWithFileName($url = '')
 {
-    // Return a default image if the URL is empty
-    if (empty($url)) {
+    // Return a default image if the URL is null or empty
+    if ($url === null || empty($url)) {
+        return setDefaultImage();
+    }
+
+    // Ensure $url is a string
+    if (!is_string($url)) {
         return setDefaultImage();
     }
 
@@ -1051,4 +1084,27 @@ if (!function_exists('getFooterData')) {
         }
     }
 
+if (!function_exists('userHasVotingAccess')) {
+    function userHasVotingAccess()
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return false;
+        }
 
+        try {
+            return \Modules\Subscriptions\Models\Subscription::where('user_id', $user->id)
+                ->where('status', 'active')
+                ->whereHas('plan', function ($query) {
+                    $query->where('identifier', 'community-voting')
+                        ->orWhere('identifier', 'voting')
+                        ->orWhere('identifier', 'voting-community')
+                        ->orWhere('name', 'like', '%Voting%')
+                        ->orWhere('name', 'like', '%Community%');
+                })
+                ->exists();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+}

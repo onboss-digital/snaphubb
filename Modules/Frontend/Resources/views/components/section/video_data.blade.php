@@ -106,7 +106,15 @@
                                 </button>
                             </li> -->
                             <li>
-                            <x-like-button :entertainmentId="$data['id']" :isLiked="$data['is_likes']" :type="$data['type']"/>
+                                <x-like-button :entertainmentId="$data['id']" :isLiked="$data['is_likes']" :type="$data['type']"/>
+                            </li>
+                            <li>
+                                <button type="button" class="action-btn btn btn-dark comment-btn" id="commentButton" data-bs-toggle="modal" data-bs-target="#rattingModal" data-entertainment-id="{{ $data['id'] }}" title="{{ __('frontend.comments') }}">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                    <span class="comment-count badge bg-danger rounded-pill position-absolute" style="font-size: 9px; padding: 3px 6px; top: -8px; right: -8px; min-width: auto;">0</span>
+                                </button>
                             </li>
                         </ul>
                     </div>

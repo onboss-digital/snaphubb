@@ -391,19 +391,39 @@ class FrontendController extends Controller
     public function checkSubscription($planId)
    {
     $user = auth()->user();
+    \Log::info('CheckSubscription Debug', [
+        'user_id' => $user->id,
+        'user_email' => $user->email,
+        'planId' => $planId
+    ]);
+
     $currentSubscription = Subscription::where('user_id', $user->id)->where('status', 'active')->get();
 
-    $planData=Plan::Where('id',$planId)->first();
+    \Log::info('Active subscriptions found: ' . $currentSubscription->count());
 
-    $level=$planData->level;
+    $planData = Plan::where('id', $planId)->first();
+
+    if (!$planData) {
+        \Log::error('Plan not found for ID: ' . $planId);
+        return response()->json(['isActive' => false]);
+    }
+
+    $level = $planData->level;
 
     foreach($currentSubscription as $plan)
     {
+        \Log::info('Comparing levels', [
+            'subscription_level' => $plan->plan->level ?? 'NULL',
+            'required_level' => $level,
+            'comparison' => ($plan->plan->level ?? 0) >= $level
+        ]);
 
-        if ($plan->level >= $level) {
+        if ($plan->plan && $plan->plan->level >= $level) {
+            \Log::info('✅ RETURNING TRUE - Access granted');
             return response()->json(['isActive' => true]);
         }
     }
+    \Log::info('❌ RETURNING FALSE - No matching subscription');
     return response()->json(['isActive' => false]);
    }
 
@@ -411,6 +431,12 @@ class FrontendController extends Controller
    public function checkDeviceType() {
         $checkDeviceType = Subscription::checkPlanSupportDevice(auth()->id());
         return $checkDeviceType;
+    }
+
+    public function checkSimultaneousAccess() {
+        $userId = auth()->id();
+        $result = Subscription::checkSimultaneousDeviceAccess($userId);
+        return response()->json($result);
     }
 
 

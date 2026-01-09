@@ -56,6 +56,7 @@
 
 <body class="{{ Route::currentRouteName() == 'search' ? 'search-page' : '' }}">
 
+    <x-subscription-status-banner />
     <x-ranking-modal />
     <x-subscription-expired-modal />
     

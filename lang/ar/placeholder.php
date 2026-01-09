@@ -55,13 +55,20 @@ return [
     'lbl_select_imdb_rating' => 'اختر تقييم IMDb',
     'lbl_select_type' => 'اختر النوع',
     'lbl_select_language' => 'اختر اللغة',
-    'lbl_select_genre' => 'اختر النوع',
+    'lbl_select_category' => 'اختر الفئة',
     'lbl_select_actor' => 'اختر الممثل',
     'lbl_select_director' => 'اختر المخرج',
     'lbl_select_video_type' => 'اختر نوع الفيديو',
     'lbl_select_quality' => 'اختر الجودة',
     'lbl_select_tvcategory'=>'اختر فئة التلفزيون',
     'lbl_select_country' => 'اختر البلد',
+
+    // Content Rating Options
+    'content_rating_nc17' => 'NC-17 (لا يسمح لأي شخص أقل من 17 سنة)',
+    'content_rating_18' => '18+ (مقيد للبالغين)',
+    'content_rating_explicit' => 'محتوى صريح',
+    'content_rating_sexual' => 'محتوى جنسي',
+    'content_rating_language' => 'لغة قاسية',
 
     // Subscription Expired Modal
     'lbl_subscription_expired_modal_title' => 'انتهت صلاحية الاشتراك',
@@ -75,6 +82,13 @@ return [
     'lbl_subscription_expired_modal_benefit_3' => 'تجربة مشاهدة بدون إعلانات',
     'lbl_subscription_expired_modal_benefit_4' => 'تحميل المحتوى للمشاهدة دون اتصال',
     'lbl_subscription_expired_modal_renew_button' => 'تجديد الاشتراك',
-    'lbl_subscription_expired_modal_later_button' => 'ربما لاحقاً'
+    'lbl_subscription_expired_modal_later_button' => 'ربما لاحقاً',
+    
+    // Subscription Status Banner Messages
+    'subscription_active' => 'أنت محمي حتى :date',
+    'subscription_7_days' => 'تنتهي اشتراكك في 7 أيام',
+    'subscription_3_days' => 'تحذير: 3 أيام متبقية',
+    'subscription_1_day' => 'عاجل: فرصة أخيرة اليوم!',
+    'subscription_expired' => 'انتهت الاشتراك - جدد الآن'
    
 ];

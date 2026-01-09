@@ -17,7 +17,21 @@ class OrderBump extends Model
         'title',
         'text_button',
         'description',
+        'title_en',
+        'text_button_en',
+        'description_en',
+        'title_es',
+        'text_button_es',
+        'description_es',
         'plan_id',
+        'original_price',
+        'discount_percentage',
+        'icon',
+        'badge',
+        'badge_color',
+        'social_proof_count',
+        'urgency_text',
+        'recommended',
     ];
 
     public function plan()

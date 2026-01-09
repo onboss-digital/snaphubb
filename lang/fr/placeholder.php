@@ -55,13 +55,20 @@ return [
     'lbl_select_imdb_rating' => 'Sélectionner une note IMDb',
     'lbl_select_type' => 'Sélectionner un type',
     'lbl_select_language' => 'Sélectionner une langue',
-    'lbl_select_genre' => 'Sélectionner un genre',
+    'lbl_select_category' => 'Sélectionner une catégorie',
     'lbl_select_actor' => 'Sélectionner un acteur',
     'lbl_select_director' => 'Sélectionner un réalisateur',
     'lbl_select_video_type' => 'Sélectionner un type de vidéo',
     'lbl_select_quality' => 'Sélectionner une qualité',
     'lbl_select_tvcategory'=>'Sélectionner la catégorie TV',
     'lbl_select_country' => 'Sélectionner un pays',
+
+    // Content Rating Options
+    'content_rating_nc17' => 'NC-17 (Aucun mineur de 17 ans)',
+    'content_rating_18' => '18+ (Réservé aux adultes)',
+    'content_rating_explicit' => 'Contenu Explicite',
+    'content_rating_sexual' => 'Contenu Sexuel',
+    'content_rating_language' => 'Langage Grossier',
 
     // Subscription Expired Modal
     'lbl_subscription_expired_modal_title' => 'Abonnement Expiré',
@@ -75,5 +82,12 @@ return [
     'lbl_subscription_expired_modal_benefit_3' => 'Expérience sans publicité',
     'lbl_subscription_expired_modal_benefit_4' => 'Téléchargement de contenu pour visionnage hors ligne',
     'lbl_subscription_expired_modal_renew_button' => 'Renouveler l\'Abonnement',
-    'lbl_subscription_expired_modal_later_button' => 'Peut-être Plus Tard'
+    'lbl_subscription_expired_modal_later_button' => 'Peut-être Plus Tard',
+    
+    // Subscription Status Banner Messages
+    'subscription_active' => 'Vous êtes protégé jusqu\'au :date',
+    'subscription_7_days' => 'Votre abonnement expire dans 7 jours',
+    'subscription_3_days' => 'ATTENTION: 3 jours restants',
+    'subscription_1_day' => 'URGENT: Dernière chance aujourd\'hui!',
+    'subscription_expired' => 'Abonnement expiré - Renouvelez maintenant'
 ];

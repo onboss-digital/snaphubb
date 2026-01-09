@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="card-data">
                                     <h1 class="">
-                                        {{ Number::currency($totals['BRL'] ?? 0, 'BRL') }}
+                                        R$ {{ number_format($totals['BRL'] ?? 0, 2, ',', '.') }}
                                     </h1>
                                     <p class="mb-0 fs-6">{{ __('dashboard.lbl_total_revenue') }}</p>
                                 </div>
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="card-data">
                                     <h1 class="">
-                                        {{ Number::currency($totals['USD'] ?? 0, 'USD') }}
+                                        $ {{ number_format($totals['USD'] ?? 0, 2) }}
                                     </h1>
                                     <p class="mb-0 fs-6">{{ __('dashboard.lbl_total_revenue') }}</p>
                                 </div>
@@ -185,10 +185,10 @@
         <div class="col-lg-4">
             <div class="card card-stats">
                 <div class="card-header">
-                    <h3 class="card-title">{{ __('dashboard.lbl_top_genres') }}</h3>
+                    <h3 class="card-title">{{ __('dashboard.lbl_top_categories') }}</h3>
                 </div>
                 <div class="card-body">
-                    <div id="chart-top-genres"></div>
+                    <div id="chart-top-categories"></div>
                 </div>
             </div>
         </div>
@@ -394,7 +394,7 @@ const formatCurrencyvalue = (value) => {
             method: "GET",
             data: {},
             success: function(response) {
-                if (document.querySelectorAll('#chart-top-genres').length) {
+                if (document.querySelectorAll('#chart-top-categories').length) {
                     const chartData = response.data.chartData;
                     const category = response.data.category;
                     const options = {
@@ -422,7 +422,7 @@ const formatCurrencyvalue = (value) => {
 
                     };
 
-                    var chart = new ApexCharts(document.querySelector("#chart-top-genres"), options);
+                    var chart = new ApexCharts(document.querySelector("#chart-top-categories"), options);
                     chart.render();
                 }
             }

@@ -28,7 +28,7 @@ return [
     'lbl_total_movies' => 'إجمالي الأفلام',
     'lbl_total_shows' => 'إجمالي العروض',
     'lbl_total_videos' => 'إجمالي الفيديوهات',
-    'lbl_top_genres' => 'أفضل 5 أنواع',
+    'lbl_top_categories' => 'أفضل 5 فئات',
     'total_revenue_subscribers' => 'إجمالي الإيرادات من الاشتراكات',
     'new_subscribers' => 'مشتركون جدد',
     'lbl_top_rated' => 'أعلى تقييم',

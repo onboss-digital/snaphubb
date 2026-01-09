@@ -55,13 +55,20 @@ return [
     'lbl_select_imdb_rating' => 'IMDb-Bewertung auswählen',
     'lbl_select_type' => 'Typ auswählen',
     'lbl_select_language' => 'Sprache auswählen',
-    'lbl_select_genre' => 'Genre auswählen',
+    'lbl_select_category' => 'Kategorie auswählen',
     'lbl_select_actor' => 'Schauspieler auswählen',
     'lbl_select_director' => 'Regisseur auswählen',
     'lbl_select_video_type' => 'Videotyp auswählen',
     'lbl_select_quality' => 'Qualität auswählen',
     'lbl_select_tvcategory'=>'Wählen Sie die TV-Kategorie',
     'lbl_select_country' => 'Land auswählen',
+
+    // Content Rating Options
+    'content_rating_nc17' => 'NC-17 (Keine Personen unter 17 Jahren)',
+    'content_rating_18' => '18+ (Nur für Erwachsene)',
+    'content_rating_explicit' => 'Expliziter Inhalt',
+    'content_rating_sexual' => 'Sexuelle Inhalte',
+    'content_rating_language' => 'Derbe Sprache',
 
     // Subscription Expired Modal
     'lbl_subscription_expired_modal_title' => 'Abonnement Abgelaufen',
@@ -75,5 +82,12 @@ return [
     'lbl_subscription_expired_modal_benefit_3' => 'Werbefreies Seherlebnis',
     'lbl_subscription_expired_modal_benefit_4' => 'Inhalte für Offline-Ansicht herunterladen',
     'lbl_subscription_expired_modal_renew_button' => 'Abonnement Erneuern',
-    'lbl_subscription_expired_modal_later_button' => 'Vielleicht Später'
+    'lbl_subscription_expired_modal_later_button' => 'Vielleicht Später',
+    
+    // Subscription Status Banner Messages
+    'subscription_active' => 'Sie sind bis :date geschützt',
+    'subscription_7_days' => 'Ihr Abonnement läuft in 7 Tagen ab',
+    'subscription_3_days' => 'ACHTUNG: 3 Tage verbleibend',
+    'subscription_1_day' => 'DRINGEND: Letzte Chance heute!',
+    'subscription_expired' => 'Abonnement abgelaufen - Jetzt erneuern'
 ];

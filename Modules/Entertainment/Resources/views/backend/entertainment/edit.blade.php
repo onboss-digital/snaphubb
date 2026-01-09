@@ -289,7 +289,13 @@
 
                     <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_content_rating') , 'content_rating')->class('form-label') }}
-                        {{ html()->text('content_rating')->attribute('value', $data->content_rating)->placeholder(__('placeholder.lbl_content_rating'))->class('form-control') }}
+                        {{ html()->select('content_rating', [
+                            'NC-17' => __('placeholder.content_rating_nc17'),
+                            '18+' => __('placeholder.content_rating_18'),
+                            'Explicit Content' => __('placeholder.content_rating_explicit'),
+                            'Sexual Content' => __('placeholder.content_rating_sexual'),
+                            'Strong Language' => __('placeholder.content_rating_language')
+                        ], $data->content_rating)->placeholder(__('movie.lbl_content_rating'))->class('form-control select2')->id('content_rating') }}
                         @error('content_rating')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -310,19 +316,6 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                         <div class="invalid-feedback" id="release_date-error">Release Date field is required</div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_age_restricted'), 'is_restricted')->class('form-label') }}
-                        <div class="d-flex justify-content-between align-items-center form-control">
-                            {{ html()->label(__('movie.lbl_child_content'), 'is_restricted')->class('form-label mb-0 text-body') }}
-                            <div class="form-check form-switch">
-                                {{ html()->hidden('is_restricted', 0) }}
-                                {{ html()->checkbox('is_restricted', $data->is_restricted)->class('form-check-input')->id('is_restricted') }}
-                            </div>
-                        </div>
-                        @error('is_restricted')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
                     </div>
                     <div class="col-md-6 col-lg-4">
                         {{ html()->label(__('movie.lbl_download_status'), 'download_status')->class('form-label') }}

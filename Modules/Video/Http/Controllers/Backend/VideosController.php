@@ -123,10 +123,11 @@ class VideosController extends Controller
         $upload_url_type = $constants->get('upload_type', collect());
         $video_quality = $constants->get('video_quality', collect());
         $plan = Plan::where('status', 1)->get();
+        $genres = Genres::where('status', 1)->get();
         $module_title = __('video.add_title');
         $mediaUrls = getMediaUrls();
         $assets = ['textarea'];
-        return view('video::backend.video.create', compact('upload_url_type','assets', 'plan', 'video_quality', 'module_title', 'mediaUrls'));
+        return view('video::backend.video.create', compact('upload_url_type','assets', 'plan', 'genres', 'video_quality', 'module_title', 'mediaUrls'));
 
 
     }
@@ -203,6 +204,7 @@ class VideosController extends Controller
 
         $upload_url_type=Constant::where('type','upload_type')->get();
         $plan = Plan::where('status', 1)->get();
+        $genres = Genres::where('status', 1)->get();
 
         $numberOptions = collect(range(1, 10))->mapWithKeys(function ($number) {
             return [$number => $number];
@@ -213,7 +215,7 @@ class VideosController extends Controller
         $assets = ['textarea'];
         $module_title = __('video.edit_title');
 
-        return view('video::backend.video.edit', compact('data','assets','upload_url_type', 'plan', 'numberOptions', 'video_quality', 'module_title', 'mediaUrls'));
+        return view('video::backend.video.edit', compact('data','assets','upload_url_type', 'plan', 'genres', 'numberOptions', 'video_quality', 'module_title', 'mediaUrls'));
 
     }
 

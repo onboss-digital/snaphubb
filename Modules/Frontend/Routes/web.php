@@ -120,11 +120,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/edit-profile', [UserController::class, 'editProfile'])->name('edit-profile');
     Route::post('/device-logout', [FrontendController::class, 'deviceLogout'])->name('device-logout');
     Route::post('/ranking/vote', [RankingModal::class, 'vote'])->name('ranking.vote');
+    
+    // Voting routes
+    Route::get('/voting', [\Modules\Voting\Http\Controllers\VotingController::class, 'index'])->name('voting.index');
+    Route::get('/voting/check-access', [\Modules\Voting\Http\Controllers\VotingController::class, 'checkAccess'])->name('voting.check-access');
 });
 
 Route::get('/video/stream/{encryptedUrl}', [TvShowController::class, 'stream'])->name('video.stream');
 Route::get('/video/1/{encryptedUrl}', [TvShowController::class, 'streamLocal'])->name('video.1');
 Route::get('/check-device-type', [FrontendController::class, 'checkDeviceType'])->middleware('auth');
+Route::get('/check-simultaneous-access', [FrontendController::class, 'checkSimultaneousAccess'])->middleware('auth');
 Route::get('/check-subscription/{planId}', [FrontendController::class, 'checkSubscription'])->middleware('auth');
 
 

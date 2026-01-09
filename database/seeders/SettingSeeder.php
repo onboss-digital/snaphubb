@@ -100,7 +100,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 6,
                 'name' => 'app_name',
-                'val' => 'Streamit: Your Ultimate Entertainment Hub',
+                'val' => 'Snaphubb: Your Ultimate Entertainment Hub',
                 'type' => 'bussiness',
                 'datatype' => 'bussiness',
                 'created_by' => 2,
@@ -114,7 +114,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 7,
                 'name' => 'user_app_name',
-                'val' => 'Streamit: Your Ultimate Entertainment Hub',
+                'val' => 'Snaphubb: Your Ultimate Entertainment Hub',
                 'type' => 'bussiness',
                 'datatype' => 'bussiness',
                 'created_by' => 2,
@@ -156,7 +156,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 10,
                 'name' => 'short_description',
-                'val' => 'StreamIt: Your Ultimate Destination for Unlimited Movies and Shows!',
+                'val' => 'Snaphubb: Your Ultimate Destination for Unlimited Movies and Shows!',
                 'type' => 'bussiness',
                 'datatype' => 'bussiness',
                 'created_by' => 2,
@@ -704,7 +704,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 48,
                 'name' => 'firebase_key',
-                'val' => 'streamit-laravel-flutter',
+                'val' => 'snaphubb-laravel-flutter',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -760,7 +760,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 52,
                 'name' => 'android_url',
-                'val' => 'https://play.google.com/store/apps/details?id=com.iqonic.streamitlaravel&pcampaignid=web_share',
+                'val' => 'https://play.google.com/store/apps/details?id=com.iqonic.snaphubblaravel&pcampaignid=web_share',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -886,7 +886,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 61,
                 'name' => 'authDomain',
-                'val' => 'streamit-laravel-flutter.firebaseapp.com',
+                'val' => 'snaphubb-laravel-flutter.firebaseapp.com',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -900,7 +900,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 62,
                 'name' => 'databaseURL',
-                'val' => 'https://streamit-laravel-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
+                'val' => 'https://snaphubb-laravel-flutter-default-rtdb.asia-southeast1.firebasedatabase.app',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -914,7 +914,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 63,
                 'name' => 'projectId',
-                'val' => 'streamit-laravel-flutter',
+                'val' => 'snaphubb-laravel-flutter',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,
@@ -928,7 +928,7 @@ class SettingSeeder extends Seeder
             array (
                 'id' => 64,
                 'name' => 'storageBucket',
-                'val' => 'streamit-laravel-flutter.appspot.com',
+                'val' => 'snaphubb-laravel-flutter.appspot.com',
                 'type' => 'appconfig',
                 'datatype' => NULL,
                 'created_by' => 2,

@@ -1,11 +1,21 @@
 const mix = require('laravel-mix')
 const path = require('path')
+const webpack = require('webpack')
 
 if (process.env.MIX_PUBLIC_PATH !== null && process.env.MIX_PUBLIC_PATH !== undefined && process.env.MIX_PUBLIC_PATH !== '') {
   mix.setPublicPath('public').webpackConfig({
     output: { publicPath: process.env.MIX_PUBLIC_PATH }
   })
 }
+
+// Configure Vue 3 feature flags
+mix.webpackConfig({
+  plugins: [
+    new webpack.DefinePlugin({
+      '__VUE_PROD_HYDRATION_MISMATCH_DETAILS__': 'false',
+    }),
+  ],
+})
 /**
  *
  * !Copy Assets

@@ -20,6 +20,7 @@ class PlanResource extends JsonResource
             'name' => $this->name,
             'identifier' => $this->identifier,
             'price' => $this->price,
+            'currency' => $this->currency,
             'discount' => $this->discount,
             'discount_percentage' => intval($this->discount_percentage),
             'total_price' => $this->total_price,
@@ -31,6 +32,19 @@ class PlanResource extends JsonResource
             'android_identifier' => $this->android_identifier,
             'apple_identifier' => $this->apple_identifier,
             'status' => $this->status,
+            
+            // ✅ NOVO: Suporte a múltiplos gateways
+            'gateways' => [
+                'stripe' => [
+                    'product_id' => $this->stripe_product_id,
+                    'supported' => !empty($this->stripe_product_id),
+                ],
+                'pushinpay' => [
+                    'product_id' => $this->pushinpay_product_id,
+                    'supported' => !empty($this->pushinpay_product_id),
+                ],
+            ],
+            
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
             'deleted_by' => $this->deleted_by,

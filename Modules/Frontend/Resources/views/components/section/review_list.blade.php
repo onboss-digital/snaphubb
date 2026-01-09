@@ -30,7 +30,7 @@
                 <div class="d-flex align-items-center justify-content-center gap-3">
                     <img src="{{ setBaseUrlWithFileName($your_review->user->file_url ?? null )}}" alt="user" class="img-fluid user-img rounded-circle">
                     <div>
-                        <h6>{{ $your_review->user->full_name ?? 'Streamit User' }}</h6>
+                        <h6>{{ $your_review->user->full_name ?? 'Snaphubb User' }}</h6>
                         <p class="mb-0">{{ $your_review->created_at->format('F j, Y') }}</p>
                     </div>
                 </div>

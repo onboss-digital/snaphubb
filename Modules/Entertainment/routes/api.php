@@ -7,6 +7,7 @@ use Modules\Entertainment\Http\Controllers\API\ReviewController;
 
 
 Route::get('get-rating', [ReviewController::class, 'getRating']);
+Route::get('reviews/rating', [ReviewController::class, 'getRating']);
 Route::get('movie-list', [EntertainmentsController::class, 'movieList']);
 Route::get('movie-details', [EntertainmentsController::class, 'movieDetails']);
 Route::get('tvshow-list', [EntertainmentsController::class, 'tvshowList']);
@@ -24,6 +25,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('save-watchlist', [WatchlistController::class, 'saveWatchList']);
     Route::post('delete-watchlist', [WatchlistController::class, 'deleteWatchList']);
 
+    Route::post('reviews/save-rating', [ReviewController::class, 'saveRating'])->name('save-rating');
     Route::post('save-rating', [ReviewController::class, 'saveRating'])->name('save-rating');
     Route::post('delete-rating', [ReviewController::class, 'deleteRating'])->name('delete-rating');
     Route::put('update-rating', [ReviewController::class, 'update'])->name('update-rating');

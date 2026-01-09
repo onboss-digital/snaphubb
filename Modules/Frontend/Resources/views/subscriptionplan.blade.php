@@ -47,7 +47,7 @@
                                 @endif
                                 <span class="subscription-price-desc">/ {{ $plan->duration_value }} {{ $plan->duration }}</span>
                             </p>
-                            <p class="line-count-3"> {!! $plan->description !!} </p>
+                            <p class="line-count-3-wrap"> {!! $plan->description !!} </p>
                         </div>
                         <div class="readmore-wrapper">
                             <ul class="list-inline subscription-details">
@@ -71,19 +71,19 @@
                                         <span class="font-size-16 text-white">
                                             @switch($limitation->limitation_slug)
                                                 @case('video-cast')
-                                                    Video Casting is {{ $limitation->limitation_value ? 'enabled' : 'not available' }}.
+                                                    {{ __('frontend.video_casting') }} {{ $limitation->limitation_value ? __('frontend.video_casting_enabled') : __('frontend.video_casting_disabled') }}.
                                                     @break
 
                                                 @case('ads')
-                                                    Ads will {{ $limitation->limitation_value ? 'be shown' : 'not be shown' }}.
+                                                    {{ __('frontend.ads_will_be') }} {{ $limitation->limitation_value ? __('frontend.ads_shown') : __('frontend.ads_not_shown') }}.
                                                     @break
 
                                                 @case('device-limit')
-                                                    You can use {{ $limitation->limit == 0 ? '**only 1 mobile device**' : "up to {$limitation->limit} device(s)" }} simultaneously.
+                                                    {{ __('frontend.device_limit') }} {{ $limitation->limit == 0 ? __('frontend.device_limit_mobile') : "up to {$limitation->limit}" }} {{ __('frontend.device_limit_simultaneously') }}.
                                                     @break
 
                                                 @case('download-status')
-                                                    Download resolutions:
+                                                    {{ __('frontend.download_resolutions') }}
                                                     @php
                                                         $availableQualities = [];
                                                         $notAvailableQualities = [];
@@ -138,15 +138,13 @@
                                                         </div>
                                                     @else
                                                         <div class="d-flex align-items-center gap-2">
-                                                            Only Mobile is supported for this plan.
+                                                            {{ __('frontend.mobile_only') }}
                                                         </div>
                                                     @endif
                                                 @break
 
-
-
                                                 @case('profile-limit')
-                                                    You can create up to {{ $limitation->limit == 0 ? 1 : $limitation->limit }} profiles on this plan for different users.
+                                                    {{ __('frontend.profile_limit') }} {{ $limitation->limit == 0 ? 1 : $limitation->limit }} {{ __('frontend.profile_limit_text') }}
                                                     @break
 
                                                 @default
@@ -158,10 +156,9 @@
                             </ul>
                         </div>
 
-                        @if($plan->custom_gateway && $plan->external_url)
+                        @if($plan->external_url)
                             <a href="{{$plan->external_url}}" class="rounded col-12 p-3 btn btn-{{ $plan->id == $currentPlanId ? 'primary' : 'dark' }}">   
                                 {{ $plan->id == $currentPlanId ? 'Renew Plan' : 'Choose Plan' }}
-                            </a>
                             </a>
                            
                         @else

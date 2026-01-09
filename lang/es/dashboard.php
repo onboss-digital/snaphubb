@@ -29,7 +29,7 @@ return [
     'lbl_total_movies' => 'Total Movies',
     'lbl_total_shows' => 'Total Shows',
     'lbl_total_videos' => 'Total Videos',
-    'lbl_top_genres' => 'Top 5 Genres',
+    'lbl_top_categories' => 'Top 5 Categorías',
     'total_revenue_subscribers' => 'Total revenue from subscriptions',
     'new_subscribers' => 'New Subscribers',
     'lbl_top_rated' => 'Top Rated',

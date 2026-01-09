@@ -1394,7 +1394,6 @@ body {
   min-height: 30px;
   height: 30px;
   opacity: 1;
-  transform: translateX(-120px);
   transition: all 0.3s ease-in-out;
 }
 .dark .sidebar .logo-main .logo-mini.dark-mini {
@@ -1419,7 +1418,6 @@ body {
   min-height: 30px;
   height: 30px;
   opacity: 1;
-  transform: translateX(-110px);
   transition: all 0.3s ease-in-out;
 }
 .dark .sidebar.sidebar-mini .dark-normal.logo-normal {

@@ -98,13 +98,20 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-md-6 {{ old('access', 'paid') == 'free' ? 'd-none' : '' }}" id="planSelection">
+                            <div class="col-md-6 {{ old('access', $data->access) == 'free' ? 'd-none' : '' }}" id="planSelection">
                                 {{ html()->label(__('movie.lbl_select_plan'). ' <span class="text-danger">*</span>', 'type')->class('form-label') }}
                                 {{ html()->select('plan_id', $plan->pluck('name', 'id')->prepend(__('placeholder.lbl_select_plan'), ''), $data->plan_id)->class('form-control select2')->id('plan_id') }}
                                 @error('plan_id')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                                 <div class="invalid-feedback" id="name-error">Plan field is required</div>
+                            </div>
+                            <div class="col-md-6">
+                                {{ html()->label(__('movie.lbl_category'), 'genre_id')->class('form-label') }}
+                                {{ html()->select('genre_id', $genres->pluck('name', 'id')->prepend(__('placeholder.lbl_select_category'), ''), $data->genre_id)->class('form-control select2')->id('genre_id')}}
+                                @error('genre_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             {{-- <div class="col-md-6">
                                 {{ html()->label(__('movie.lbl_trailer_url_type'), 'type')->class('form-label') }}
@@ -235,15 +242,15 @@
                     </div>
 
                     <div class="col-md-6 col-lg-4">
-                        {{ html()->label(__('movie.lbl_age_restricted'), 'is_restricted')->class('form-label') }}
-                        <div class="d-flex align-items-center justify-content-between form-control">
-                            {{ html()->label(__('movie.lbl_child_content'), 'is_restricted')->class('form-label mb-0 text-body') }}
-                            <div class="form-check form-switch">
-                                {{ html()->hidden('is_restricted', 0) }}
-                                {{ html()->checkbox('is_restricted', $data->is_restricted)->class('form-check-input')->id('is_restricted') }}
-                            </div>
-                        </div>
-                        @error('is_restricted')
+                        {{ html()->label(__('movie.lbl_content_rating'), 'content_rating')->class('form-label') }}
+                        {{ html()->select('content_rating', [
+                            'NC-17' => __('placeholder.content_rating_nc17'),
+                            '18+' => __('placeholder.content_rating_18'),
+                            'Explicit Content' => __('placeholder.content_rating_explicit'),
+                            'Sexual Content' => __('placeholder.content_rating_sexual'),
+                            'Strong Language' => __('placeholder.content_rating_language')
+                        ], $data->content_rating)->placeholder(__('movie.lbl_content_rating'))->class('form-control select2')->id('content_rating') }}
+                        @error('content_rating')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -285,7 +292,7 @@
 
                     <div class="col-md-6 d-none" id="video_url_input_section">
                         {{ html()->label(__('movie.video_url_input'), 'video_url_input')->class('form-label') }}
-                        {{ html()->text('video_url_input')->attribute('value', $data->video_url_input)->placeholder(__('placeholder.video_url_input'))->class('form-control') }}
+                        {{ html()->text('video_url_input')->attribute('value', $data->video_url_input)->placeholder('YouTube ID: 6kXCKOdovus ou URL: https://youtu.be/6kXCKOdovus')->class('form-control')->id('video_url_input') }}
                         @error('video_url_input')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -684,6 +691,17 @@ function handleVideoUrlTypeChange(selectedtypeValue) {
     var fileError = document.getElementById('file-error');
     var urlError = document.getElementById('url-error');
     var urlPatternError = document.getElementById('url-pattern-error');
+    
+    // Update placeholder based on video type
+    var placeholders = {
+        'YouTube': 'Ex: 6kXCKOdovus (ID) ou https://youtu.be/6kXCKOdovus',
+        'Vimeo': 'Ex: 123456789 (ID) ou https://vimeo.com/123456789',
+        'Bunny': 'Ex: https://vz-abc123.b-cdn.net/folder/playlist.m3u8',
+        'GoogleDrive': 'Ex: https://drive.google.com/file/d/1abc123xyz/view',
+        'Embedded': 'Ex: https://example.com/embed/video ou código HTML iframe',
+        'External': 'Ex: https://example.com/videos/video.mp4'
+    };
+    
     if (selectedtypeValue === 'Local') {
         VideoFileInput.classList.remove('d-none');
         VideoURLInput.classList.add('d-none');
@@ -699,14 +717,17 @@ function handleVideoUrlTypeChange(selectedtypeValue) {
         if (videourl) {
             videourl.value = '';
         }
-    } else if (selectedtypeValue === 'URL' || selectedtypeValue === 'YouTube' || selectedtypeValue ===
-        'HLS' || selectedtypeValue === 'Vimeo') {
+    } else if (selectedtypeValue === 'YouTube' || selectedtypeValue === 'Vimeo' || selectedtypeValue === 'Bunny' || selectedtypeValue === 'GoogleDrive' || selectedtypeValue === 'Embedded' || selectedtypeValue === 'External') {
         VideoURLInput.classList.remove('d-none');
         VideoFileInput.classList.add('d-none');
         videourl.setAttribute('required', 'required');
          videofile.removeAttribute('required');
         if (videourl) {
             videourl.value = videourl.value;
+            // Update placeholder
+            if (placeholders[selectedtypeValue]) {
+                videourl.placeholder = placeholders[selectedtypeValue];
+            }
         }
         if (videofile) {
             videofile.value = '';
@@ -733,17 +754,29 @@ function validateVideoUrlInput() {
         urlError.style.display = 'none';
         selectedValue = document.getElementById('video_upload_type').value;
                     if (selectedValue === 'YouTube') {
-                        urlPattern = /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/;
-                        urlPatternError.innerText = '';
-                        urlPatternError.innerText='Please enter a valid Youtube URL'
+                        // Accept YouTube URL, youtu.be URL, or just the video ID
+                        urlPattern = /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.*|^[a-zA-Z0-9_-]{11}$/;
+                        urlPatternError.innerText = 'Por favor, insira um ID válido ou URL do YouTube';
                     } else if (selectedValue === 'Vimeo') {
-                        urlPattern = /^(https?:\/\/)?(www\.vimeo\.com)\/.+$/;
-                        urlPatternError.innerText = '';
-                        urlPatternError.innerText='Please enter a valid Vimeo URL'
+                        // Accept Vimeo URL or just the video ID
+                        urlPattern = /^(https?:\/\/)?(www\.vimeo\.com)\/.*|^\d+$/;
+                        urlPatternError.innerText = 'Por favor, insira um ID válido ou URL do Vimeo';
+                    } else if (selectedValue === 'Bunny') {
+                        // Bunny CDN M3U8 playlist URL
+                        urlPattern = /^https?:\/\/.+\.b-cdn\.net\/.+\.m3u8$/;
+                        urlPatternError.innerText = 'Por favor, insira uma URL válida do Bunny CDN (deve terminar com .m3u8)';
+                    } else if (selectedValue === 'GoogleDrive') {
+                        // Google Drive link
+                        urlPattern = /^https?:\/\/(drive\.google\.com|docs\.google\.com)\/.*$/;
+                        urlPatternError.innerText = 'Por favor, insira um link válido do Google Drive';
+                    } else if (selectedValue === 'External') {
+                        // External video file
+                        urlPattern = /^https?:\/\/.+\.(mp4|avi|mov|webm|mkv)$/;
+                        urlPatternError.innerText = 'Por favor, insira uma URL válida de vídeo (MP4, AVI, MOV, WebM, MKV)';
                     } else {
                         // General URL pattern for other types
                         urlPattern = /^https?:\/\/.+$/;
-                        urlPatternError.innerText='Please enter a valid URL starting with http:// or https://.'
+                        urlPatternError.innerText = 'Por favor, insira uma URL válida começando com http:// ou https://';
                     }
         if (!urlPattern.test(videourl.value)) {
             urlPatternError.style.display = 'block';

@@ -77,8 +77,13 @@
             <div class="form-group">
 
                 <div class="form-group datatable-filter">
-                  <input type="hidden" class="form-control" name ="type" id="type" value="moive"></input>
+                  <input type="hidden" class="form-control" name ="type" id="type" value="movie"></input>
                 </div>
+
+              <div class="form-group datatable-filter">
+                <label class="form-label" for="movie_name">{{__('movie.lbl_movie_name')}}</label>
+                <input type="text" name="movie_name" id="movie_name" class="form-control" data-filter="text" placeholder="{{__('movie.lbl_movie_name')}}">
+            </div>
 
               <div class="form-group datatable-filter">
                 <label class="form-label" for="gener">{{__('movie.lbl_genres')}}</label>
@@ -257,7 +262,7 @@
                window.renderedDataTable.ajax.reload(null, false);
            });
 
-           $('#moive_name').on('input', function() {
+           $('#movie_name').on('input', function() {
                window.renderedDataTable.ajax.reload(null, false);
            });
            $('#gener').on('select', function() {
@@ -280,7 +285,7 @@
                 advanceFilter: () => {
                     return {
                         type: $('#type').val(),
-                        moive_name: $('#moive_name').val(),
+                        movie_name: $('#movie_name').val(),
                         language: $('#language').val(),
                         gener: $('#gener').val(),
                         movie_access: selectedaccess,
@@ -291,7 +296,7 @@
         })
 
         $('#reset-filter').on('click', function(e) {
-            $('#moive_name').val(''),
+            $('#movie_name').val(''),
             $('#language').val(''),
             $('#gener').val(''),
             $('#movie_access').val(''),
