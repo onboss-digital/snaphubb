@@ -162,7 +162,7 @@ return [
     |
     */
 
-    'providers' => [
+    'providers' => array_filter([
 
         /*
          * Laravel Framework Service Providers...
@@ -203,7 +203,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        // IDE Helper: only register if the package exists (dev dependency)
+        class_exists(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class) ? Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class : null,
         App\Providers\ConfigServiceProvider::class,
         App\Providers\CurrencyServiceProvider::class,
         Modules\Genres\Providers\RouteServiceProvider::class,
@@ -219,8 +220,9 @@ return [
         Modules\Frontend\Providers\FrontendServiceProvider::class,
         App\Providers\StreamContentServiceProvider::class,
         App\Providers\ChatGTPServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
-    ],
+        // Debugbar: only register if package exists (dev dependency)
+        class_exists(\Barryvdh\Debugbar\ServiceProvider::class) ? Barryvdh\Debugbar\ServiceProvider::class : null,
+    ]),
 
     /*
     |--------------------------------------------------------------------------
@@ -233,16 +235,16 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
+    'aliases' => array_filter(Facade::defaultAliases()->merge([
         'Menu' => Lavary\Menu\Facade::class,
         'AuthHelper' => App\Helpers\AuthHelper::class,
         'Currency' => App\Currency\CurrencyFacades::class,
         'MultiVendor' => App\MultiVendor\MultiVendorFacades::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar' => class_exists(\Barryvdh\Debugbar\Facade::class) ? Barryvdh\Debugbar\Facade::class : null,
         // 'ExampleClass' => App\Example\ExampleClass::class,
-    ])->toArray(),
+    ])->toArray()),
 
 
     /*|--------------------------------------------------------------------------
