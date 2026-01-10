@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Subscriptions\Database\Seeders;
+namespace Modules\Subscriptions\database\seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Subscriptions\Models\Plan;
